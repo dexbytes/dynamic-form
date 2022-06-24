@@ -1,0 +1,71 @@
+{
+  "formName" : "Registration",
+  "title": "Sign Up",
+  "description": "Hey, get on board ",
+  "image": "",
+  "formType": "single",
+  "formFields":[
+    {
+      "elementType": "input",
+      "elementConfig": {
+        "type": "text",
+        "name" : "name",
+        "label" : "Name",
+        "placeholder": "Name",
+        "class" : "form-control",
+        "resetIcon" : true
+      },
+      "help" : {
+        "text" : "",
+        "placement": "below"
+      },
+      "value": "",
+      "validation": {
+        "required": true,
+        "minLength": 2,
+        "maxLength": 20,
+        "rejex": "r'(^[a-zA-Z ]*)'",
+        "isReadOnly": false,
+        "isDisabled": false,
+        "errorMessage":{
+          "required":"Please enter name",
+          "minLength":"Please enter minimum 2 char",
+          "maxLength":"Max 2 chat allow",
+          "rejex": "Only alphabtic is allow "
+        }
+      },
+      "valid": true,
+      "onchange": true
+    },{
+      "elementType":"input",
+      "elementConfig":{
+        "type":"text",
+        "name":"first_name",
+        "label":"First Name",
+        "placeholder":"First Name",
+        "class":"form-control",
+        "resetIcon":false
+      },
+      "help":{
+        "text":"Please enter your adhar card first name",
+        "placement":"below"
+      },
+      "value":"",
+      "validation": {
+        "required":true,
+        "minLength":2,
+        "maxLength":20,
+        "rejex":"r'(^[a-zA-Z ]*)'",
+        "isReadOnly":false,
+        "isDisabled":false,
+        "errorMessage": {
+          "required":"Please enter name",
+          "minLength":"Please enter minimum 2 char",
+          "maxLength":"Max 2 chat allow",
+          "rejex": "Only alphabtic is allow "
+        }
+      },
+      "valid":true,
+      "onchange":true
+    }]
+}
