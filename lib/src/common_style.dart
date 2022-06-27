@@ -9,7 +9,7 @@ set setTextFieldModel (TextFieldModel value){
   _textFieldModel = value;
 }
 
-InputDecoration? _textDecoration;
+/*InputDecoration? _textDecoration;
 InputDecoration getTextDecoration ({TextFieldModel? textFieldModel}){
 
   if(_textDecoration!=null){
@@ -32,5 +32,5 @@ InputDecoration getTextDecoration ({TextFieldModel? textFieldModel}){
 }
 set setTextDecoration (InputDecoration value){
   _textDecoration = value;
-}
+}*/
 

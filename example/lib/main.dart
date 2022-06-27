@@ -1,6 +1,8 @@
 import 'package:dynamic_json_form/dynamic_json_form.dart';
+import 'package:example/first_screen.dart';
 import 'package:example/http_service.dart';
 import 'package:example/second_screen.dart';
+import 'package:example/time_duration.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,23 +10,21 @@ import 'package:flutter/services.dart';
 void main() async {
   // if you are using await in main function then add this line
   WidgetsFlutterBinding.ensureInitialized();
+  ConfigurationSetting.instance.textField();
+  ConfigurationSetting.instance.setLoadFromApi = true;
 
-  print("****** Start local jason from assets *** ${DateTime.now().millisecondsSinceEpoch}");
-  // String jsonStringResponse = await httpService.getPosts();
-  String jsonString = "";//jsonStringResponse;
-
-  if(jsonString.isEmpty) {
-    jsonString = await localJsonRw.localRead();
+  String? jsonString = await ConfigurationSetting.instance.getFormDataLocal();
+  if(jsonString!.isEmpty) {
+    String jsonStringResponse = await httpService.getPosts();
+    jsonString = await ConfigurationSetting.instance.storeFormDataLocal(jsonStringResponse);
   }
-  print("****** End local jason from assets ********* ${DateTime.now().millisecondsSinceEpoch}");
+
   runApp(MyApp(jsonString));
 }
 
 class MyApp extends StatelessWidget {
-
   String jsonString = "";
   MyApp(this.jsonString);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -48,8 +48,11 @@ class MyForm extends StatefulWidget {
 
 class _MyFormState extends State<MyForm> {
   String jsonString = "";
+  bool isLoading = false;
+
   _MyFormState(this.jsonString){
     print("$jsonString");
+
   }
 
   @override
@@ -62,13 +65,62 @@ class _MyFormState extends State<MyForm> {
     super.dispose();
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      appBar: AppBar(centerTitle: true,title: Text('Dynamic TextFormFields'),),
-      body:
-      DynamicForm(jsonString, finalSubmitCallBack: (Map<String, dynamic> data) async {},),
+      appBar: AppBar(centerTitle: true,title: const Text('Dynamic TextFormFields'),),
+      body: Center(
+        child: Stack(alignment: Alignment.center,
+          children: [
+            isLoading?Container():
+            SizedBox(child:
+            Column(mainAxisSize: MainAxisSize.min,
+              children: [
+                OutlinedButton(child: Text(!ConfigurationSetting.instance.getLoadFromApi?"Switch to always from API":"Switch to always from local"),
+                  onPressed: () async {
+                  setState(() {
+                    ConfigurationSetting.instance.setLoadFromApi = !ConfigurationSetting.instance.getLoadFromApi;
+                  });
+                },),
+                SizedBox(height: 20,),
+                OutlinedButton(child: const Text("Get Data"),
+                  onPressed: () async {
+                    timeDuration.startTimeDuration();
+                  setState(() {
+                    isLoading = true;
+                  });
+                    String? jsonString = await ConfigurationSetting.instance.getFormDataLocal();
+                    if(jsonString!.isEmpty) {
+                      String jsonStringResponse = await httpService.getPosts();
+                      jsonString = await ConfigurationSetting.instance.storeFormDataLocal(jsonStringResponse);
+                      // jsonString = await localJsonRw.localRead();
+                    }
+                    //String jsonStringResponse = await httpService.getPosts();
+                  setState(() {
+                    isLoading = false;
+                  });
+
+                    String time = timeDuration.endTime(message:"Api calling",reset: true);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => FirstScreen(jsonString: jsonString!,apiCallingTime: time,)),
+                    );
+                },),
+              ],
+            ),),
+            isLoading?const SizedBox(height: 50,width: 50,child: CircularProgressIndicator()):Container()
+          ],
+        ),
+      )
+      /*DynamicForm(jsonString, finalSubmitCallBack: (Map<String, dynamic> data) async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => FirstScreen(jsonString: jsonString)),
+        );
+      },)*/,
 
     );
   }

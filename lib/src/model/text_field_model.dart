@@ -11,8 +11,8 @@ class TextFieldModel {
 
   TextFieldModel.fromJson(Map<String, dynamic> json) {
     elementType = json['elementType'];
-    elementConfig = json['elementConfig'] != null ? new ElementConfig.fromJson(json['elementConfig']) : null;
-    help = json['help'] != null ? new Help.fromJson(json['help']) : null;
+    elementConfig = json['elementConfig'] != null ?  ElementConfig.fromJson(json['elementConfig']) : null;
+    help = !json.containsKey('help')?null:json['help'] != null ?  Help.fromJson(json['help']) : null;
     value = json['value'];
     validation = json['validation'] != null ? new Validation.fromJson(json['validation']) : null;
     valid = json['valid'];
@@ -20,7 +20,7 @@ class TextFieldModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['elementType'] = this.elementType;
     if (this.elementConfig != null) {
       data['elementConfig'] = this.elementConfig!.toJson();
@@ -100,15 +100,15 @@ class Validation {
   bool? isDisabled;
   ErrorMessage? errorMessage;
 
-  Validation({this.required, this.minLength, this.maxLength, this.rejex, this.isReadOnly, this.isDisabled,this.errorMessage});
+  Validation({this.required, this.minLength, this.maxLength, this.rejex, this.isReadOnly = false, this.isDisabled = false,this.errorMessage});
 
   Validation.fromJson(Map<String, dynamic> json) {
     required = json['required'];
-    minLength = json['minLength'];
-    maxLength = json['maxLength'];
-    rejex = json['rejex'];
-    isReadOnly = json['isReadOnly'];
-    isDisabled = json['isDisabled'];
+    minLength = json.containsKey('minLength')?json['minLength']:10;
+    maxLength = json.containsKey('maxLength')?json['maxLength']:50;
+    rejex = json.containsKey('rejex')?json['rejex']:"";
+    isReadOnly = json.containsKey('isReadOnly')?json['isReadOnly']:false;
+    isDisabled = json.containsKey('isDisabled')?json['isDisabled']:false;
     errorMessage = json['errorMessage'] != null ? ErrorMessage.fromJson(json['errorMessage']) : null;
   }
 

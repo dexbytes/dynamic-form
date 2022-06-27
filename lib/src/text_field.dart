@@ -15,6 +15,7 @@ class _TextFieldsState extends State<TextFieldView> {
   FocusNode f1 = FocusNode();
   FocusNode f2 = FocusNode();
   TextFieldModel? textFieldModel;
+  ConfigurationSetting configurationSetting = ConfigurationSetting.instance;
   _TextFieldsState({required this.jsonData}){
     textFieldModel ??= responseParser.textFormFiledParsing(jsonData: jsonData,updateCommon: true);
 
@@ -118,19 +119,40 @@ Widget fieldHelpText(){
 
  String? checkValidation(Validation validation,String value){
     String? errorMsg = validation.errorMessage!.required!;
-    if(value.trim().isEmpty){
-      return errorMsg;
-    }
-    if(value.length > validation.maxLength!){
-      errorMsg = validation.errorMessage!.maxLength!;
-    }
-    else if(value.length < validation.minLength!){
-      errorMsg = validation.errorMessage!.minLength!;
-    }
-    else{
-      errorMsg = null;
+    try {
+      if(value.trim().isEmpty){
+            return errorMsg;
+          }
+      if(value.length > validation.maxLength!){
+            errorMsg = validation.errorMessage!.maxLength!;
+          }
+          else if(value.length < validation.minLength!){
+            errorMsg = validation.errorMessage!.minLength!;
+          }
+          else{
+            errorMsg = null;
+          }
+    } catch (e) {
+      print(e);
     }
     return errorMsg;
+  }
+
+
+  InputDecoration getTextDecoration ({TextFieldModel? textFieldModel}){
+      Widget? suffixIcon;
+      if(textFieldModel!=null){
+        if(textFieldModel.elementConfig!.resetIcon!){
+          suffixIcon = const SuffixIconTextFiled();
+        }
+      }
+      return InputDecoration(
+          border: configurationSetting._textFieldConfiguration.border,
+          enabledBorder: configurationSetting._textFieldConfiguration.border,
+          hintText: textFieldModel?.elementConfig!.placeholder??"",hintStyle: configurationSetting._textFieldConfiguration.hintStyle,
+          label: textFieldModel?.elementConfig!.label !=null && textFieldModel!.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: configurationSetting._textFieldConfiguration.textStyle,):null,suffixIcon: suffixIcon,counterText: ""
+      );
+
   }
 
   @override
