@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class SuffixIconTextFiled extends StatefulWidget {
+class SuffixCloseIcon extends StatefulWidget {
   final TextEditingController? textController;
   final VoidCallback? iconClicked;
   final Widget? iconWidget;
-  const SuffixIconTextFiled({Key? key,this.textController,this.iconClicked,this.iconWidget}) : super(key: key);
+  const SuffixCloseIcon({Key? key,this.textController,this.iconClicked,this.iconWidget}) : super(key: key);
 
   @override
   _IconClearTextFormFiledState createState() => _IconClearTextFormFiledState(textController:textController);
 }
 
-class _IconClearTextFormFiledState extends State<SuffixIconTextFiled> {
+class _IconClearTextFormFiledState extends State<SuffixCloseIcon> {
   String enteredValue = "";
   TextEditingController? textController;
   _IconClearTextFormFiledState({this.textController}){
@@ -38,7 +38,7 @@ class _IconClearTextFormFiledState extends State<SuffixIconTextFiled> {
     super.dispose();
   }
   @override
-  void didUpdateWidget(covariant SuffixIconTextFiled oldWidget) {
+  void didUpdateWidget(covariant SuffixCloseIcon oldWidget) {
     // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
 

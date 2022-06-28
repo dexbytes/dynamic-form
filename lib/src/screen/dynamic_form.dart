@@ -16,8 +16,9 @@ class _DynamicFormState extends State<DynamicForm> {
   Stream get onVariableChanged => DataRefreshStream.instance.getFormFieldsStream.stream;
   List<dynamic> formFieldList = [];
   final _formKey = GlobalKey<FormState>();
+
   _DynamicFormState({required this.jsonEncoded}){
-   commonValidation.setFormData = jsonEncoded;
+    responseParser.setFormData = jsonEncoded;
   }
 
   //We will include the entered values in the map from field on submit click
@@ -56,7 +57,7 @@ class _DynamicFormState extends State<DynamicForm> {
         /*if(snapshot.hasData){
           formFieldList = snapshot.data;
         }*/
-        formFieldList = commonValidation.getFormData[commonValidation.getCurrentFormNumber];
+        formFieldList = responseParser.getFormData[responseParser.getCurrentFormNumber];
         return SizedBox(child:
         formFieldList.isEmpty?Container():Form(
           key: _formKey,

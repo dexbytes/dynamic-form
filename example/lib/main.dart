@@ -91,9 +91,9 @@ class _MyFormState extends State<MyForm> {
                   });
                     String? jsonString = await ConfigurationSetting.instance.getFormDataLocal();
                     if(jsonString!.isEmpty) {
-                      String jsonStringResponse = await httpService.getPosts();
+                      //String jsonStringResponse = await httpService.getPosts();
 
-                      // String jsonStringResponse = await localJsonRw.localRead();
+                      String jsonStringResponse = await localJsonRw.localRead();
                       jsonString = await ConfigurationSetting.instance.storeFormDataLocal(jsonStringResponse);
                     }
                   setState(() {

@@ -4,10 +4,11 @@ class TextFieldModel {
   Help? help;
   String? value;
   Validation? validation;
+  String? validationStr;
   bool? valid;
   bool? onchange;
 
-  TextFieldModel({this.elementType, this.elementConfig, this.help, this.value, this.validation, this.valid, this.onchange});
+  TextFieldModel({this.elementType, this.elementConfig, this.help, this.value, this.validation,this.validationStr, this.valid, this.onchange});
 
   TextFieldModel.fromJson(Map<String, dynamic> json) {
     elementType = json['elementType'];
@@ -15,6 +16,7 @@ class TextFieldModel {
     help = !json.containsKey('help')?null:json['help'] != null ?  Help.fromJson(json['help']) : null;
     value = json['value'];
     validation = json['validation'] != null ? new Validation.fromJson(json['validation']) : null;
+    validationStr = json['validation'] != null ? json['validation'].toString() : null;
     valid = json['valid'];
     onchange = json['onchange'];
   }
@@ -34,6 +36,7 @@ class TextFieldModel {
     }
     data['valid'] = this.valid;
     data['onchange'] = this.onchange;
+    data['validationStr'] = this.validationStr;
     return data;
   }
 }
