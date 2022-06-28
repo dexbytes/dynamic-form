@@ -1,11 +1,8 @@
 import 'package:dynamic_json_form/dynamic_json_form.dart';
 import 'package:example/first_screen.dart';
 import 'package:example/http_service.dart';
-import 'package:example/second_screen.dart';
 import 'package:example/time_duration.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() async {
   // if you are using await in main function then add this line
@@ -95,6 +92,7 @@ class _MyFormState extends State<MyForm> {
                     String? jsonString = await ConfigurationSetting.instance.getFormDataLocal();
                     if(jsonString!.isEmpty) {
                       String jsonStringResponse = await httpService.getPosts();
+                      // String jsonStringResponse = await localJsonRw.localRead();
                       jsonString = await ConfigurationSetting.instance.storeFormDataLocal(jsonStringResponse);
                       // jsonString = await localJsonRw.localRead();
                     }
