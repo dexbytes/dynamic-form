@@ -92,15 +92,13 @@ class _MyFormState extends State<MyForm> {
                     String? jsonString = await ConfigurationSetting.instance.getFormDataLocal();
                     if(jsonString!.isEmpty) {
                       String jsonStringResponse = await httpService.getPosts();
+
                       // String jsonStringResponse = await localJsonRw.localRead();
                       jsonString = await ConfigurationSetting.instance.storeFormDataLocal(jsonStringResponse);
-                      // jsonString = await localJsonRw.localRead();
                     }
-                    //String jsonStringResponse = await httpService.getPosts();
                   setState(() {
                     isLoading = false;
                   });
-
                     String time = timeDuration.endTime(message:"Api calling",reset: true);
                     Navigator.push(
                       context,
