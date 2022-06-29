@@ -25,71 +25,54 @@ class CommonValidation {
   }
 
 
-  String? checkValidation({required String enteredValue,required String validationStr,required String formFieldType}){
+  String? checkValidation({required String enteredValue,required Map<String, dynamic> validationStr,required String formFieldType}){
     String? errorMsg = "";
     switch(formFieldType){
       case 'text':
-        errorMsg = isValidText(enteredValue,validationStr);
-        break ;
+       return errorMsg = isValidText(enteredValue,validationStr);
+
       case 'password':
-        errorMsg = isValidPassword(enteredValue,validationStr);
-        break ;
+        return errorMsg = isValidPassword(enteredValue,validationStr);
+
       case 'name':
-        errorMsg = isValidName(enteredValue,validationStr);
-        break ;
+       return errorMsg = isValidName(enteredValue,validationStr);
+
       case 'email':
-        errorMsg = isValidEmail(enteredValue,validationStr);
-        break ;
+        return errorMsg = isValidEmail(enteredValue,validationStr);
+
       case 'tel':
-        errorMsg = isValidTel(enteredValue,validationStr);
-        break ;
+        return errorMsg = isValidTel(enteredValue,validationStr);
+
       case 'url':
-        errorMsg = isValidUrl(enteredValue,validationStr);
-        break ;
+        return errorMsg = isValidUrl(enteredValue,validationStr);
+
       case 'number':
-        errorMsg = isValidNumber(enteredValue,validationStr);
-        break ;
+        return errorMsg = isValidNumber(enteredValue,validationStr);
+
       case 'text_multiline':
-        errorMsg = isValidEmail(enteredValue,validationStr);
-        break ;
-    }
+        return errorMsg = isValidEmail(enteredValue,validationStr);
 
-   // String? errorMsg = validation.errorMessage!.required!;
-   /* try {
-      if(value.trim().isEmpty){
-        return errorMsg;
-      }
-      if(value.length > validation.maxLength!){
-        errorMsg = validation.errorMessage!.maxLength!;
-      }
-      else if(value.length < validation.minLength!){
-        errorMsg = validation.errorMessage!.minLength!;
-      }
-      else{
-        errorMsg = null;
-      }
-    } catch (e) {
-      print(e);
-    }*/
-    return errorMsg;
+    }
   }
 
-  String? isValidText(String value,String validationStr){
+  String? isValidText(String value,Map<String, dynamic> validationStr){
+
+
     String? errorMsg = "";
     try {
-      Map<String,dynamic> validation = jsonDecode(validationStr);
+      Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
 
-
-      /*    int minLine = 1;
+      /*int minLine = 1;
     int maxLine = 20;*/
-    bool required = validation.containsKey('required')?validation['required']: false;
-    int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
-    int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
-    String rejex = validation.containsKey('rejex')?validation['rejex']:"";
+
+      bool required = validation.containsKey('required')?validation['required']: false;
+      int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
+      int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
+      String rejex = validation.containsKey('rejex')?validation['rejex']:"";
 
       if(value.trim().isEmpty){
-         errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
+        errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
       }
       else if(value.length > maxLength){
         errorMsg = errorMessage.containsKey('maxLength')?errorMessage['maxLength']:"maxLength key missing";
@@ -97,76 +80,66 @@ class CommonValidation {
       else if(value.length < minLength){
         errorMsg = errorMessage.containsKey('minLength')?errorMessage['minLength']:"minLength key missing";
       }
-      else if(rejex.isNotEmpty){
-        // Pattern pattern = rejex;
-        RegExp regex = RegExp(rejex);
-        errorMsg = regex.hasMatch(value)?null:errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
+      else if(rejex.trim().isNotEmpty){
+        RegExp regex = RegExp(rejex.trim());
+        bool isMatched = regex.hasMatch(value);
+        errorMsg = isMatched?null: errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
       }
       else{
         errorMsg = null;
       }
-/*"isReadOnly":false,
-    "isUnique":false,
-    "isDisabled":false*/
-      // String? errorMsg = validation.errorMessage!.required!;
     }
     catch (e) {
       print(e);
     }
-
     return errorMsg;
   }
+  String? isValidEmail(String value,Map<String, dynamic> validationStr){
 
-
-  String? isValidEmail(String value,String validationStr){
     String? errorMsg = "";
     try {
-      Map<String,dynamic> validation = jsonDecode(validationStr);
+      Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
 
-/*    int minLine = 1;
+      /*int minLine = 1;
     int maxLine = 20;*/
 
-    bool required = validation.containsKey('required')?validation['required']: false;
-    int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
-    int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
-    String rejex = validation.containsKey('rejex')?validation['rejex']:"";
+      bool required = validation.containsKey('required')?validation['required']: false;
+      bool isEmail = validation.containsKey('isEmail')?validation['isEmail']: false;
+      int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
+      int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
+      String rejex = validation.containsKey('rejex')?validation['rejex']:"";
 
       if(value.trim().isEmpty){
-         errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
+        errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
       }
-      else if(value.length > maxLength){
-        errorMsg = errorMessage.containsKey('maxLength')?errorMessage['maxLength']:"maxLength key missing";
+      else if(rejex.trim().isNotEmpty){
+        RegExp regex = RegExp(rejex.trim());
+        bool isMatched = regex.hasMatch(value);
+        errorMsg = isMatched?null: errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
       }
-      else if(value.length < minLength){
-        errorMsg = errorMessage.containsKey('minLength')?errorMessage['minLength']:"minLength key missing";
-      }
-      else if(rejex.isNotEmpty){
-        // Pattern pattern = rejex;
-        RegExp regex = RegExp(rejex);
-        errorMsg = regex.hasMatch(value)?null:errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
+      else if(isEmail && rejex.trim().isEmpty){
+        rejex = r"^([^\.]+[a-zA-Z0-9.a-zA-Z0-9.!$%&'*+-/=?^_`{|}~!]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+[^\.-]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,}$";
+        RegExp regex = RegExp(rejex.trim());
+        bool isMatched = regex.hasMatch(value);
+        errorMsg = isMatched?null: errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
       }
       else{
         errorMsg = null;
       }
-/*    "isReadOnly":false,
-    "isUnique":false,
-    "isDisabled":false*/
-      // String? errorMsg = validation.errorMessage!.required!;
     }
     catch (e) {
       print(e);
     }
-
     return errorMsg;
   }
-  String? isValidPassword(String value,String validationStr){
+  String? isValidPassword(String value,Map<String, dynamic> validationStr){
     String? errorMsg = "";
     try {
-      Map<String,dynamic> validation = jsonDecode(validationStr);
+      Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
 
-/*    int minLine = 1;
+    /*int minLine = 1;
     int maxLine = 20;*/
 
     bool required = validation.containsKey('required')?validation['required']: false;
@@ -183,41 +156,37 @@ class CommonValidation {
       else if(value.length < minLength){
         errorMsg = errorMessage.containsKey('minLength')?errorMessage['minLength']:"minLength key missing";
       }
-      else if(rejex.isNotEmpty){
-        // Pattern pattern = rejex;
-        RegExp regex = RegExp(rejex);
-        errorMsg = regex.hasMatch(value)?null:errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
+      else if(rejex.trim().isNotEmpty){
+        RegExp regex = RegExp(rejex.trim());
+        bool isMatched = regex.hasMatch(value);
+        errorMsg = isMatched?null: errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
       }
       else{
         errorMsg = null;
       }
-/*    "isReadOnly":false,
-    "isUnique":false,
-    "isDisabled":false*/
-      // String? errorMsg = validation.errorMessage!.required!;
     }
     catch (e) {
       print(e);
     }
-
     return errorMsg;
   }
-  String? isValidName(String value,String validationStr){
+  String? isValidName(String value,Map<String, dynamic> validationStr){
+
     String? errorMsg = "";
     try {
-      Map<String,dynamic> validation = jsonDecode(validationStr);
+      Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
 
-/*    int minLine = 1;
+      /*int minLine = 1;
     int maxLine = 20;*/
 
-    bool required = validation.containsKey('required')?validation['required']: false;
-    int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
-    int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
-    String rejex = validation.containsKey('rejex')?validation['rejex']:"";
+      bool required = validation.containsKey('required')?validation['required']: false;
+      int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
+      int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
+      String rejex = validation.containsKey('rejex')?validation['rejex']:"";
 
       if(value.trim().isEmpty){
-         errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
+        errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
       }
       else if(value.length > maxLength){
         errorMsg = errorMessage.containsKey('maxLength')?errorMessage['maxLength']:"maxLength key missing";
@@ -225,42 +194,37 @@ class CommonValidation {
       else if(value.length < minLength){
         errorMsg = errorMessage.containsKey('minLength')?errorMessage['minLength']:"minLength key missing";
       }
-      else if(rejex.isNotEmpty){
-        // Pattern pattern = rejex;
-        RegExp regex = RegExp(rejex);
-        errorMsg = regex.hasMatch(value)?null:errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
+      else if(rejex.trim().isNotEmpty){
+        RegExp regex = RegExp(rejex.trim());
+        bool isMatched = regex.hasMatch(value);
+        errorMsg = isMatched?null: errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
       }
       else{
         errorMsg = null;
       }
-/*    "isReadOnly":false,
-    "isUnique":false,
-    "isDisabled":false*/
-      // String? errorMsg = validation.errorMessage!.required!;
     }
     catch (e) {
       print(e);
     }
-
     return errorMsg;
   }
+  String? isValidTel(String value,Map<String, dynamic> validationStr){
 
-  String? isValidTel(String value,String validationStr){
     String? errorMsg = "";
     try {
-      Map<String,dynamic> validation = jsonDecode(validationStr);
+      Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
 
-/*    int minLine = 1;
+      /*int minLine = 1;
     int maxLine = 20;*/
 
-    bool required = validation.containsKey('required')?validation['required']: false;
-    int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
-    int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
-    String rejex = validation.containsKey('rejex')?validation['rejex']:"";
+      bool required = validation.containsKey('required')?validation['required']: false;
+      int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
+      int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
+      String rejex = validation.containsKey('rejex')?validation['rejex']:"";
 
       if(value.trim().isEmpty){
-         errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
+        errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
       }
       else if(value.length > maxLength){
         errorMsg = errorMessage.containsKey('maxLength')?errorMessage['maxLength']:"maxLength key missing";
@@ -268,42 +232,37 @@ class CommonValidation {
       else if(value.length < minLength){
         errorMsg = errorMessage.containsKey('minLength')?errorMessage['minLength']:"minLength key missing";
       }
-      else if(rejex.isNotEmpty){
-        // Pattern pattern = rejex;
-        RegExp regex = RegExp(rejex);
-        errorMsg = regex.hasMatch(value)?null:errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
+      else if(rejex.trim().isNotEmpty){
+        RegExp regex = RegExp(rejex.trim());
+        bool isMatched = regex.hasMatch(value);
+        errorMsg = isMatched?null: errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
       }
       else{
         errorMsg = null;
       }
-/*    "isReadOnly":false,
-    "isUnique":false,
-    "isDisabled":false*/
-      // String? errorMsg = validation.errorMessage!.required!;
     }
     catch (e) {
       print(e);
     }
-
     return errorMsg;
   }
+  String? isValidUrl(String value,Map<String, dynamic> validationStr){
 
-  String? isValidUrl(String value,String validationStr){
     String? errorMsg = "";
     try {
-      Map<String,dynamic> validation = jsonDecode(validationStr);
+      Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
 
-/*    int minLine = 1;
+      /*int minLine = 1;
     int maxLine = 20;*/
 
-    bool required = validation.containsKey('required')?validation['required']: false;
-    int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
-    int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
-    String rejex = validation.containsKey('rejex')?validation['rejex']:"";
+      bool required = validation.containsKey('required')?validation['required']: false;
+      int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
+      int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
+      String rejex = validation.containsKey('rejex')?validation['rejex']:"";
 
       if(value.trim().isEmpty){
-         errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
+        errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
       }
       else if(value.length > maxLength){
         errorMsg = errorMessage.containsKey('maxLength')?errorMessage['maxLength']:"maxLength key missing";
@@ -311,42 +270,37 @@ class CommonValidation {
       else if(value.length < minLength){
         errorMsg = errorMessage.containsKey('minLength')?errorMessage['minLength']:"minLength key missing";
       }
-      else if(rejex.isNotEmpty){
-        // Pattern pattern = rejex;
-        RegExp regex = RegExp(rejex);
-        errorMsg = regex.hasMatch(value)?null:errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
+      else if(rejex.trim().isNotEmpty){
+        RegExp regex = RegExp(rejex.trim());
+        bool isMatched = regex.hasMatch(value);
+        errorMsg = isMatched?null: errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
       }
       else{
         errorMsg = null;
       }
-/*    "isReadOnly":false,
-    "isUnique":false,
-    "isDisabled":false*/
-      // String? errorMsg = validation.errorMessage!.required!;
     }
     catch (e) {
       print(e);
     }
-
     return errorMsg;
   }
+  String? isValidNumber(String value,Map<String, dynamic> validationStr){
 
-  String? isValidNumber(String value,String validationStr){
     String? errorMsg = "";
     try {
-      Map<String,dynamic> validation = jsonDecode(validationStr);
+      Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
 
-/*    int minLine = 1;
+      /*int minLine = 1;
     int maxLine = 20;*/
 
-    bool required = validation.containsKey('required')?validation['required']: false;
-    int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
-    int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
-    String rejex = validation.containsKey('rejex')?validation['rejex']:"";
+      bool required = validation.containsKey('required')?validation['required']: false;
+      int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
+      int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
+      String rejex = validation.containsKey('rejex')?validation['rejex']:"";
 
       if(value.trim().isEmpty){
-         errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
+        errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
       }
       else if(value.length > maxLength){
         errorMsg = errorMessage.containsKey('maxLength')?errorMessage['maxLength']:"maxLength key missing";
@@ -354,26 +308,20 @@ class CommonValidation {
       else if(value.length < minLength){
         errorMsg = errorMessage.containsKey('minLength')?errorMessage['minLength']:"minLength key missing";
       }
-      else if(rejex.isNotEmpty){
-        // Pattern pattern = rejex;
-        RegExp regex = RegExp(rejex);
-        errorMsg = regex.hasMatch(value)?null:errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
+      else if(rejex.trim().isNotEmpty){
+        RegExp regex = RegExp(rejex.trim());
+        bool isMatched = regex.hasMatch(value);
+        errorMsg = isMatched?null: errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
       }
       else{
         errorMsg = null;
       }
-/*    "isReadOnly":false,
-    "isUnique":false,
-    "isDisabled":false*/
-      // String? errorMsg = validation.errorMessage!.required!;
     }
     catch (e) {
       print(e);
     }
-
     return errorMsg;
   }
-
 
 }
 

@@ -4,7 +4,7 @@ class TextFieldModel {
   Help? help;
   String? value;
   Validation? validation;
-  String? validationStr;
+  Map<String, dynamic>? validationStr;
   bool? valid;
   bool? onchange;
 
@@ -16,7 +16,7 @@ class TextFieldModel {
     help = !json.containsKey('help')?null:json['help'] != null ?  Help.fromJson(json['help']) : null;
     value = json['value'];
     validation = json['validation'] != null ? new Validation.fromJson(json['validation']) : null;
-    validationStr = json['validation'] != null ? json['validation'].toString() : null;
+    validationStr = json['validation'] != null ? json['validation'] : null;
     valid = json['valid'];
     onchange = json['onchange'];
   }
@@ -49,8 +49,10 @@ class ElementConfig {
   String? classProperty;
   bool? resetIcon;
   String? nextName;
+  int? minLine;
+  int? maxLine;
 
-  ElementConfig({this.type, this.name, this.label, this.placeholder, this.classProperty, this.resetIcon,this.nextName});
+  ElementConfig({this.type, this.name, this.label, this.placeholder, this.classProperty, this.resetIcon,this.nextName,this.minLine = 1,this.maxLine = 2});
 
   ElementConfig.fromJson(Map<String, dynamic> json) {
   type = json['type'];
@@ -60,6 +62,8 @@ class ElementConfig {
   classProperty = json['class'];
   resetIcon = json['resetIcon'];
   nextName = json['nextName'];
+  maxLine = json.containsKey('maxLine')?json['maxLine']:1;
+  minLine = json.containsKey('minLine')?json['minLine']:1;
   }
 
   Map<String, dynamic> toJson() {
@@ -71,6 +75,8 @@ class ElementConfig {
   data['class'] = this.classProperty;
   data['resetIcon'] = this.resetIcon;
   data['nextName'] = this.nextName;
+  data['maxLine'] = this.maxLine;
+  data['minLine'] = this.minLine;
   return data;
   }
 }

@@ -7,12 +7,12 @@ class TextFieldView extends StatefulWidget {
   final Function (String fieldKey,String fieldValue) onChangeValue ;
    const TextFieldView({Key? key, required this.jsonData,required this.onChangeValue}) : super(key: key);
   @override
-  _TextFieldsState createState() => _TextFieldsState(jsonData: jsonData);
+  _TextFieldsState createState() => _TextFieldsState(jsonData: jsonData,onChangeValue: onChangeValue);
 }
 
 class _TextFieldsState extends State<TextFieldView> {
   String fieldKey = "";
-  bool obscureText = true;
+  bool obscureText = false;
   String formFieldType = "text";
   final _formFieldKey = GlobalKey<FormState>();
   Map<String,dynamic> jsonData;
@@ -20,24 +20,29 @@ class _TextFieldsState extends State<TextFieldView> {
   TextFieldModel? textFieldModel;
   ConfigurationSetting configurationSetting = ConfigurationSetting.instance;
   ViewConfig? viewConfig;
-
+  Function (String fieldKey,String fieldValue) onChangeValue ;
   final StreamController<bool> _fieldStreamControl = StreamController<bool>();
   Stream get onVariableChanged => _fieldStreamControl.stream;
 
-  _TextFieldsState({required this.jsonData}){
-    obscureText = true;
+  bool checkValidOnChange = false;
+  bool checkValid = true;
+  bool checkValidOnSubmit = false;
+
+  _TextFieldsState({required this.jsonData,required this.onChangeValue}){
+
     textFieldModel ??= responseParser.textFormFiledParsing(jsonData: jsonData,updateCommon: true);
 
     if(textFieldModel!=null && textFieldModel!.elementConfig!=null){
-      formFieldType = /*textFieldModel!.elementConfig!.type??*/"password";
+      formFieldType = textFieldModel!.elementConfig!.type??"text";
       formFieldType  = formFieldType.toLowerCase();
       fieldKey = textFieldModel!.elementConfig!.name!;
+      onChangeValue.call(fieldKey,"");
+      checkValidOnChange = textFieldModel!.onchange??false;
+      checkValid = textFieldModel!.valid??false;
 
       viewConfig = ViewConfig(nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
-        //setState(() {
           obscureText = value;
           _fieldStreamControl.sink.add(obscureText);
-       // });
       });
     }
   }
@@ -63,6 +68,8 @@ class _TextFieldsState extends State<TextFieldView> {
         break ;
         case 'password':
         keyBoardType = TextInputType.text;
+
+          obscureText = true;
         break ;
         case 'name':
         keyBoardType = TextInputType.name;
@@ -88,19 +95,40 @@ class _TextFieldsState extends State<TextFieldView> {
     return keyBoardType;
 }
 
-  List<TextInputFormatter> inputFormatter(){
-    String keyText = r'(^[a-zA-Z ]*$)';//textFieldModel!.validation!.rejex!;
-    List<TextInputFormatter> filter = [];
+  List<TextInputFormatter>? inputFormatter(){
+    String keyText = textFieldModel!.validation!.rejex!;
+    List<TextInputFormatter>? filter = [];
     if(keyText.isNotEmpty){
-      filter.add(FilteringTextInputFormatter.allow(RegExp(keyText)));
+      //filter = [];
+     // filter.add(FilteringTextInputFormatter.allow(RegExp(keyText)));
       return filter;
     }
     return filter;
 }
 
+//Get minLine of input field
+  int? minLine(){
+    int minLine = textFieldModel!.elementConfig!.minLine!;
+    //We are restrict input field must min 1 line not less not much in below case
+    if(obscureText || configurationSetting.singleLineInputFields.contains(formFieldType.toLowerCase())){
+      minLine = 1;
+    }
+    return minLine;
+}
+
+//Get maxLine of input field
+  int? maxLine(){
+    int maxLine = textFieldModel!.elementConfig!.maxLine!;
+    //We are restrict input field must min 1 line not less not much in below case
+    if(obscureText || configurationSetting.singleLineInputFields.contains(formFieldType.toLowerCase())){
+      maxLine = 1;
+    }
+    return maxLine;
+}
+
 
   Widget fieldHelpText(){
-    if(textFieldModel!.help!.text!.isNotEmpty){
+    if(textFieldModel!.help!=null && textFieldModel!.help!.text!.isNotEmpty){
       return Padding(
         padding: const EdgeInsets.only(top: 5.0,bottom: 5),
         child: Row(
@@ -113,43 +141,12 @@ class _TextFieldsState extends State<TextFieldView> {
     return Container();
 }
   VerticalDirection fieldHelpPosition(){
-    if(textFieldModel!.help!.text!.isEmpty){
+    if(textFieldModel!.help!=null && textFieldModel!.help!.text!.isEmpty){
       return VerticalDirection.up;
     }
     return VerticalDirection.down;
   }
 
-  /*getInputDecoration(){
-    InputDecoration inputDecoration = getTextDecoration(textFieldModel: textFieldModel);
-
-    //Add Click event on suffixIcon if suffixIcon added
-    if(inputDecoration.suffixIcon!=null){
-
-      inputDecoration =  inputDecoration.copyWith(suffixIcon: SuffixCloseIcon(textController: _nameController,iconClicked: (){
-        _nameController!.text = "";
-        debugPrint("");
-      },));
-    }
-
-    return inputDecoration;
-  }*/
-
-
-  /*InputDecoration getTextDecoration ({TextFieldModel? textFieldModel}){
-      Widget? suffixIcon;
-      if(textFieldModel!=null){
-        if(textFieldModel.elementConfig!.resetIcon!){
-          suffixIcon = const SuffixCloseIcon();
-        }
-      }
-      return InputDecoration(
-          border: configurationSetting._textFieldConfiguration.border,
-          enabledBorder: configurationSetting._textFieldConfiguration.border,
-          hintText: textFieldModel?.elementConfig!.placeholder??"",hintStyle: configurationSetting._textFieldConfiguration.hintStyle,
-          label: textFieldModel?.elementConfig!.label !=null && textFieldModel!.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: configurationSetting._textFieldConfiguration.textStyle,):null,suffixIcon: suffixIcon,counterText: ""
-      );
-
-  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -173,33 +170,56 @@ class _TextFieldsState extends State<TextFieldView> {
         if(snapshot.hasData){
           obscureText = snapshot.data;
         }
-        return TextFormField(key: _formFieldKey,
+        return TextFormField(
+        key: _formFieldKey,
         readOnly: textFieldModel!.validation!.isReadOnly!,
         enabled: !textFieldModel!.validation!.isDisabled!,
         controller: _nameController,
         textInputAction: TextInputAction.done,
         maxLength: textFieldModel!.validation!.maxLength,   //It is the length of char
-        maxLines: 1//textFieldModel!.validation!.maxLength,   // it related to input field line
-        ,minLines: 1//textFieldModel!.validation!.minLength,  // it related to input field line
-        //onChanged: (v) => _MyFormState.friendsList![widget.index] = v,
-        ,
+        maxLines: maxLine(),
+        minLines: minLine(),
         decoration: viewConfig!.getInputDecoration(),obscureText: obscureText,
         keyboardType: keyBoardType(formFieldType: formFieldType),
         inputFormatters: inputFormatter(),
         validator: (value){
-        if(textFieldModel!.valid! && textFieldModel!.validation!.required!){
+          //Check all validation on change
+          if(checkValid && checkValidOnChange){
+            return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
+          }
+          //Check all validation on submit
+          else if(checkValidOnSubmit && checkValid && !checkValidOnChange){
+            return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
+          }
+          //Check validation on submit and will not submit data on server
+          else if(value!.isNotEmpty && checkValidOnSubmit && !checkValidOnChange && !checkValid){
+            return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
+          }
+        /*if(textFieldModel!.valid! && textFieldModel!.validation!.required!){
         return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-        }
+        }*/
         return null;
         }
       ,onChanged: (value){
             if(mounted){
-              widget.onChangeValue.call(fieldKey,value);
+              onChangeValue.call(fieldKey,value);
             }
         },
           onSaved: (value){
-           /* f1.unfocus();
-            FocusScope.of(context).requestFocus(f2);*/
+            //Check all validation on submit
+            if(!checkValidOnChange && checkValid){
+              setState(() {
+                checkValidOnSubmit = true;
+              });
+              _formFieldKey.currentState!.validate();
+            }
+            //Check validation on submit and will not submit data on server
+            else if((value!.isNotEmpty && !checkValidOnChange && !checkValid)){
+              setState(() {
+                checkValidOnSubmit = true;
+              });
+              _formFieldKey.currentState!.validate();
+            }
           },
           autovalidateMode: AutovalidateMode.onUserInteraction,
         );
@@ -221,72 +241,59 @@ class ViewConfig{
   ViewConfig({required this.nameController,required this.formFieldType,required this.textFieldModel,this.obscureTextState = true,this.obscureTextStateCallBack});
 
   InputDecoration _getTextDecoration (){
-    Widget? suffixIcon;
-    if(textFieldModel.elementConfig!=null){
-      if(textFieldModel.elementConfig!.resetIcon!){
-        suffixIcon = const SuffixCloseIcon();
-      }
-    }
+
     return InputDecoration(
         border: configurationSetting._textFieldConfiguration.border,
         enabledBorder: configurationSetting._textFieldConfiguration.border,
         hintText: textFieldModel.elementConfig!.placeholder??"",hintStyle: configurationSetting._textFieldConfiguration.hintStyle,
-        label: textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: configurationSetting._textFieldConfiguration.textStyle,):null,suffixIcon: suffixIcon,counterText: ""
+        label: textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: configurationSetting._textFieldConfiguration.textStyle,):null,suffixIcon: null,counterText: ""
     );
 
   }
 
   getInputDecoration(){
     InputDecoration inputDecoration = _getTextDecoration();
+    Widget? suffixIcon;
+    if(textFieldModel.elementConfig!=null){
+      if(textFieldModel.elementConfig!.resetIcon!){
+        suffixIcon = SuffixCloseIcon(textController: nameController,iconClicked: (){
+          nameController.text = "";
+        },);
+      }
+    }
+    inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
 
     switch(formFieldType){
       case 'text':
-      //Add Click event on suffixIcon if suffixIcon added
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: inputDecoration.suffixIcon??SuffixCloseIcon(textController: nameController,iconClicked: (){
-          nameController.text = "";
-        },));
-        break ;
+        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
+      break ;
       case 'password':{
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: inputDecoration.suffixIcon??SuffixVisibilityIcon(initialValue: obscureTextState,iconClicked: (bool visibleStatus){
+        inputDecoration =  inputDecoration.copyWith(suffixIcon: textFieldModel.elementConfig!.resetIcon!?SuffixVisibilityIcon(initialValue: obscureTextState,iconClicked: (bool visibleStatus){
           try {
             obscureTextStateCallBack?.call(visibleStatus);
           } catch (e) {
             print(e);
           }
-        },));
+        },):null);
       }
         break ;
       case 'name':
-      //Add Click event on suffixIcon if suffixIcon added
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: inputDecoration.suffixIcon??SuffixCloseIcon(textController: nameController,iconClicked: (){
-          nameController.text = "";
-        },));
+        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
         break ;
       case 'email':
-      //Add Click event on suffixIcon if suffixIcon added
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: inputDecoration.suffixIcon??SuffixCloseIcon(textController: nameController,iconClicked: (){
-          nameController.text = "";
-        },));
+        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
         break ;
       case 'tel':
-      //Add Click event on suffixIcon if suffixIcon added
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: inputDecoration.suffixIcon??SuffixCloseIcon(textController: nameController,iconClicked: (){
-          nameController.text = "";
-        },));
+        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
         break ;
       case 'url':
-      //Add Click event on suffixIcon if suffixIcon added
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: inputDecoration.suffixIcon??SuffixCloseIcon(textController: nameController,iconClicked: (){
-          nameController.text = "";
-        },));
+        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
         break ;
       case 'number':
-      //Add Click event on suffixIcon if suffixIcon added
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: inputDecoration.suffixIcon??SuffixCloseIcon(textController: nameController,iconClicked: (){
-          nameController.text = "";
-        },));
+        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
         break ;
       case 'text_multiline':
+        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
         break ;
     }
 
