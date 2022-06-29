@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 void main() async {
   // if you are using await in main function then add this line
   WidgetsFlutterBinding.ensureInitialized();
-  ConfigurationSetting.instance.textField();
+  ConfigurationSetting.instance.textField(border: OutlineInputBorder());
   ConfigurationSetting.instance.setLoadFromApi = true;
 
-  String? jsonString = await ConfigurationSetting.instance.getFormDataLocal();
-  if(jsonString!.isEmpty) {
+  String? jsonString = "";//await ConfigurationSetting.instance.getFormDataLocal();
+  /*if(jsonString!.isEmpty) {
     String jsonStringResponse = await httpService.getPosts();
     jsonString = await ConfigurationSetting.instance.storeFormDataLocal(jsonStringResponse);
-  }
+  }*/
 
   runApp(MyApp(jsonString));
 }
@@ -91,9 +91,8 @@ class _MyFormState extends State<MyForm> {
                   });
                     String? jsonString = await ConfigurationSetting.instance.getFormDataLocal();
                     if(jsonString!.isEmpty) {
-                      //String jsonStringResponse = await httpService.getPosts();
-
-                      String jsonStringResponse = await localJsonRw.localRead();
+                      String jsonStringResponse = await httpService.getPosts();
+                      //String jsonStringResponse = await localJsonRw.localRead();
                       jsonString = await ConfigurationSetting.instance.storeFormDataLocal(jsonStringResponse);
                     }
                   setState(() {

@@ -10,7 +10,6 @@ class HttpService {
       try {
        // var body = jsonDecode(res.body);
         String body = res.body;
-
         /*List<User> posts = body
                   .map(
                     (dynamic item) => User.fromJson(item),

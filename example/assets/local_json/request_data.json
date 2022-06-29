@@ -133,6 +133,33 @@
       },
       "valid":true,
       "onchange":true
+    },
+    {
+      "elementType":"select",
+      "elementConfig":{
+        "name":"occupation",
+        "label":"Occupation",
+        "placeholder":"Occupation",
+        "class":"form-control",
+        "options":[
+          {
+            "value":"Salaried",
+            "displayValue":"Salaried"
+          },
+          {
+            "value":"selfEmployed",
+            "displayValue":"Self Employed"
+          }
+        ],
+        "isMulitpleSelect":false
+      },
+      "value":"",
+      "validation":{
+        "required":true,
+        "isReadOnly":false,
+        "isDisabled":false
+      },
+      "valid":false
     }
   ]
 }

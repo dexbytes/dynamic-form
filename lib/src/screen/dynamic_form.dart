@@ -33,6 +33,11 @@ class _DynamicFormState extends State<DynamicForm> {
          return TextFieldView(jsonData: data,onChangeValue: (String fieldKey, String value){
            formSubmitData[fieldKey] = value;
          });
+        /* case "select":
+         return DropDown(jsonData: data,onChangeValue: (String fieldKey, String value){
+           formSubmitData[fieldKey] = value;
+         },
+           itemList: ['Item 1','Item 2'],);*/
 
       }
     }
@@ -75,6 +80,7 @@ class _DynamicFormState extends State<DynamicForm> {
                     ],
                   );
                 }).toList()),
+
                 FlatButton(
                   onPressed: () async {
                     if(_formKey.currentState!.validate()){

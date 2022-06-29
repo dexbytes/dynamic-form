@@ -22,11 +22,14 @@ class _TextFieldsState extends State<TextFieldView> {
   ViewConfig? viewConfig;
   Function (String fieldKey,String fieldValue) onChangeValue ;
   final StreamController<bool> _fieldStreamControl = StreamController<bool>();
-  Stream get onVariableChanged => _fieldStreamControl.stream;
 
+  OverlayEntry? overlayEntry;
+  Stream get onVariableChanged => _fieldStreamControl.stream;
+  late FocusNode myFocusNode;
   bool checkValidOnChange = false;
   bool checkValid = true;
   bool checkValidOnSubmit = false;
+  bool isDoneOver = false;
 
   _TextFieldsState({required this.jsonData,required this.onChangeValue}){
 
@@ -50,6 +53,16 @@ class _TextFieldsState extends State<TextFieldView> {
   @override
   void initState() {
     super.initState();
+    myFocusNode = FocusNode();
+    myFocusNode.addListener(() {
+      if (isDoneOver && (Platform.isIOS)) {
+        bool hasFocus = myFocusNode.hasFocus;
+        if (hasFocus)
+          showOverlay(context);
+        else
+          removeOverlay();
+      }
+    });
    // _nameController = TextEditingController();
   }
 
@@ -68,8 +81,7 @@ class _TextFieldsState extends State<TextFieldView> {
         break ;
         case 'password':
         keyBoardType = TextInputType.text;
-
-          obscureText = true;
+        obscureText = true;
         break ;
         case 'name':
         keyBoardType = TextInputType.name;
@@ -78,15 +90,19 @@ class _TextFieldsState extends State<TextFieldView> {
         keyBoardType = TextInputType.emailAddress;
         break ;
         case 'tel':
+        isDoneOver = true;
         keyBoardType = TextInputType.phone;
+
         break ;
         case 'url':
         keyBoardType = TextInputType.url;
         break ;
         case 'number':
+        isDoneOver = true;
         keyBoardType = TextInputType.number;
         break ;
         case 'text_multiline':
+        isDoneOver = true;
         keyBoardType = TextInputType.multiline;
         break ;
     }
@@ -147,6 +163,34 @@ class _TextFieldsState extends State<TextFieldView> {
     return VerticalDirection.down;
   }
 
+  //for ios done button callback
+  onPressCallback() {
+    removeOverlay();
+    FocusScope.of(context).requestFocus(new FocusNode());
+  }
+  //for keyboard done button
+  showOverlay(BuildContext context) {
+    if (overlayEntry != null) return;
+    OverlayState overlayState = Overlay.of(context)!;
+    overlayEntry = OverlayEntry(builder: (context) {
+      return Positioned(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          right: 0.0,
+          left: 0.0,
+          child: InputDoneView(
+            onPressCallback: onPressCallback,
+            buttonName: "Done",
+          ));
+    });
+
+    overlayState.insert(overlayEntry!);
+  }
+  removeOverlay() {
+    if (overlayEntry != null) {
+      overlayEntry!.remove();
+      overlayEntry = null;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -171,7 +215,7 @@ class _TextFieldsState extends State<TextFieldView> {
           obscureText = snapshot.data;
         }
         return TextFormField(
-        key: _formFieldKey,
+        key: _formFieldKey,focusNode: myFocusNode,
         readOnly: textFieldModel!.validation!.isReadOnly!,
         enabled: !textFieldModel!.validation!.isDisabled!,
         controller: _nameController,

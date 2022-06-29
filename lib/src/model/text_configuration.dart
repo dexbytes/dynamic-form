@@ -41,7 +41,7 @@ class TextFieldConfiguration {
   ///    bottom of the input decorator's container.
   ///  * [OutlineInputBorder], an [InputDecorator] border which draws a
   ///    rounded rectangle around the input decorator's container.
-  InputBorder? border = const UnderlineInputBorder();
+  InputBorder? border = const OutlineInputBorder();
   TextStyle? textStyle = const TextStyle();
   TextStyle? hintStyle = const TextStyle();
   StrutStyle? strutStyle = const StrutStyle();

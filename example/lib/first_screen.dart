@@ -23,7 +23,7 @@ class _FirstScreenState extends State<FirstScreen> {
       backgroundColor: Colors.grey[200],
       appBar: AppBar(centerTitle: true,title: Text('First Screen'),),
       body:
-      Container(margin: EdgeInsets.symmetric(horizontal: 5,vertical: 20),
+      Container(margin: const EdgeInsets.symmetric(horizontal: 5,vertical: 20),
         child: ListView(
           children: [
             Column(
