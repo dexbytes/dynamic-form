@@ -33,11 +33,10 @@ class _DynamicFormState extends State<DynamicForm> {
          return TextFieldView(jsonData: data,onChangeValue: (String fieldKey, String value){
            formSubmitData[fieldKey] = value;
          });
-        /* case "select":
-         return DropDown(jsonData: data,onChangeValue: (String fieldKey, String value){
+         case "select":
+         return DropDown(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
            formSubmitData[fieldKey] = value;
-         },
-           itemList: ['Item 1','Item 2'],);*/
+         });
 
       }
     }

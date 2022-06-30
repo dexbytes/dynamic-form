@@ -9,10 +9,14 @@ class ConfigurationSetting extends TextFieldConfiguration{
   final List<String> singleLineInputFields = ['password','email','tel'];
 
   TextFieldConfiguration _textFieldConfiguration = TextFieldConfiguration();
+
   /*Set Text field ui presentation*/
-  textField({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border}){
-    _textFieldConfiguration = setConfiguration(textStyle:textStyle,hintStyle:hintStyle,border:border);
+  set setTextFieldViewConfig (TextFieldConfiguration textFieldConfig){
+    _textFieldConfiguration = textFieldConfig;
   }
+/*  textField({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border}){
+    _textFieldConfiguration = setConfiguration(textStyle:textStyle,hintStyle:hintStyle,border:border);
+  }*/
 
   /*Get stored local form from device */
   Future<String?> getFormDataLocal() async {

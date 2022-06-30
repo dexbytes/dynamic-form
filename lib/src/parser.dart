@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'package:dynamic_json_form/dynamic_json_form.dart';
 import 'package:dynamic_json_form/src/common_style.dart';
 import 'package:dynamic_json_form/src/common_validation.dart';
+import 'package:dynamic_json_form/src/model/drop_down_field_model.dart';
 import 'package:dynamic_json_form/src/model/text_field_model.dart';
 export 'model/text_field_model.dart';
 
@@ -46,6 +48,19 @@ class ResponseParser{
 
           }
       return textFieldModel;
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
+
+  DropDownModel? dropDownFormFiledParsing({required Map<String,dynamic> jsonData,bool updateCommon = false}){
+    try {
+      DropDownModel dropDownModel = DropDownModel.fromJson(jsonData);
+      if(updateCommon){
+
+          }
+      return dropDownModel;
     } catch (e) {
       print(e);
     }

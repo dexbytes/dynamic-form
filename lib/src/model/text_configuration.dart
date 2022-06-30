@@ -1,6 +1,5 @@
 // import 'package:flutter/material.dart';
-export 'package:flutter/material.dart';
-import '../../dynamic_json_form.dart';
+part of dynamic_json_form;
 
 class TextFieldConfiguration {
   /// The shape of the border to draw around the decoration's container.
@@ -41,22 +40,40 @@ class TextFieldConfiguration {
   ///    bottom of the input decorator's container.
   ///  * [OutlineInputBorder], an [InputDecorator] border which draws a
   ///    rounded rectangle around the input decorator's container.
-  InputBorder? border = const OutlineInputBorder();
-  TextStyle? textStyle = const TextStyle();
-  TextStyle? hintStyle = const TextStyle();
-  StrutStyle? strutStyle = const StrutStyle();
-  TextDirection? textDirection;
-  TextAlign textAlign = TextAlign.start;
-  TextAlignVertical? textAlignVertical;
-  TextFieldConfiguration({this.textStyle,this.hintStyle,this.border});
+  late InputBorder? _border =  const OutlineInputBorder();
+  late InputBorder? _errorBorder =  const OutlineInputBorder();
+  late TextStyle? _textStyle =  const TextStyle();
+  late TextStyle? _hintStyle =  const TextStyle();
+  late StrutStyle? _strutStyle =  const StrutStyle();
+  late TextDirection? _textDirection = TextDirection.ltr;
+  late TextAlign? _textAlign = TextAlign.start;
+  late TextAlignVertical? _textAlignVertical = TextAlignVertical.center;
+
+  TextFieldConfiguration({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border});
 
   TextFieldConfiguration setConfiguration({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border}) {
     return TextFieldConfiguration(
-        textStyle : textStyle ?? this.textStyle,
-        hintStyle : hintStyle ?? this.hintStyle,
-        border : border ?? this.border,
+        textStyle : textStyle ?? _textStyle,
+        hintStyle : hintStyle ?? _hintStyle,
+        border : border ?? _border,
     );
 }
+  set setBorder (value){
+    _border = value;
+  }
+
+  set setTextStyle (value){
+    _textStyle = value;
+  }
+  set setHintStyle (value){
+    _hintStyle = value;
+  }
+  set setStrutStyle (value){
+    _strutStyle = value;
+  }
+  set setTextDirection (value){
+    _textDirection = value;
+  }
 }
 TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration();
 

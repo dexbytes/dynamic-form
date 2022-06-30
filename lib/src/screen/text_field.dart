@@ -4,10 +4,11 @@ part of dynamic_json_form;
 
 class TextFieldView extends StatefulWidget {
   final Map<String,dynamic> jsonData;
+  final TextFieldConfiguration? viewConfiguration;
   final Function (String fieldKey,String fieldValue) onChangeValue ;
-   const TextFieldView({Key? key, required this.jsonData,required this.onChangeValue}) : super(key: key);
+   const TextFieldView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration}) : super(key: key);
   @override
-  _TextFieldsState createState() => _TextFieldsState(jsonData: jsonData,onChangeValue: onChangeValue);
+  _TextFieldsState createState() => _TextFieldsState(jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration: viewConfiguration);
 }
 
 class _TextFieldsState extends State<TextFieldView> {
@@ -19,6 +20,7 @@ class _TextFieldsState extends State<TextFieldView> {
   final TextEditingController? _nameController =  TextEditingController();
   TextFieldModel? textFieldModel;
   ConfigurationSetting configurationSetting = ConfigurationSetting.instance;
+  TextFieldConfiguration? viewConfiguration;
   ViewConfig? viewConfig;
   Function (String fieldKey,String fieldValue) onChangeValue ;
   final StreamController<bool> _fieldStreamControl = StreamController<bool>();
@@ -31,8 +33,7 @@ class _TextFieldsState extends State<TextFieldView> {
   bool checkValidOnSubmit = false;
   bool isDoneOver = false;
 
-  _TextFieldsState({required this.jsonData,required this.onChangeValue}){
-
+  _TextFieldsState({required this.jsonData,required this.onChangeValue,this.viewConfiguration}){
     textFieldModel ??= responseParser.textFormFiledParsing(jsonData: jsonData,updateCommon: true);
 
     if(textFieldModel!=null && textFieldModel!.elementConfig!=null){
@@ -43,7 +44,7 @@ class _TextFieldsState extends State<TextFieldView> {
       checkValidOnChange = textFieldModel!.onchange??false;
       checkValid = textFieldModel!.valid??false;
 
-      viewConfig = ViewConfig(nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
+      viewConfig = ViewConfig(viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
           obscureText = value;
           _fieldStreamControl.sink.add(obscureText);
       });
@@ -215,7 +216,7 @@ class _TextFieldsState extends State<TextFieldView> {
           obscureText = snapshot.data;
         }
         return TextFormField(
-        key: _formFieldKey,focusNode: myFocusNode,
+        key: _formFieldKey,focusNode: myFocusNode,strutStyle:StrutStyle(),
         readOnly: textFieldModel!.validation!.isReadOnly!,
         enabled: !textFieldModel!.validation!.isDisabled!,
         controller: _nameController,
@@ -276,21 +277,24 @@ class _TextFieldsState extends State<TextFieldView> {
 }
 
 class ViewConfig{
-  ConfigurationSetting configurationSetting = ConfigurationSetting.instance;
+  TextFieldConfiguration? viewConfiguration;
   String formFieldType;
   TextFieldModel textFieldModel;
   TextEditingController nameController;
   bool? obscureTextState;
   Function(bool)? obscureTextStateCallBack;
-  ViewConfig({required this.nameController,required this.formFieldType,required this.textFieldModel,this.obscureTextState = true,this.obscureTextStateCallBack});
+  ViewConfig({required this.nameController,required this.formFieldType,required this.textFieldModel,this.obscureTextState = true,this.obscureTextStateCallBack,this.viewConfiguration}) {
+  viewConfiguration  = viewConfiguration ?? ConfigurationSetting.instance._textFieldConfiguration;
+  }
 
   InputDecoration _getTextDecoration (){
-
-    return InputDecoration(
-        border: configurationSetting._textFieldConfiguration.border,
-        enabledBorder: configurationSetting._textFieldConfiguration.border,
-        hintText: textFieldModel.elementConfig!.placeholder??"",hintStyle: configurationSetting._textFieldConfiguration.hintStyle,
-        label: textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: configurationSetting._textFieldConfiguration.textStyle,):null,suffixIcon: null,counterText: ""
+ return InputDecoration(
+        border: viewConfiguration!._border,
+     /*   errorBorder: viewConfiguration!._errorBorder,
+        focusedErrorBorder: viewConfiguration!._errorBorder,*/
+        enabledBorder: viewConfiguration!._border,
+        hintText: textFieldModel.elementConfig!.placeholder??"",hintStyle: viewConfiguration!._hintStyle,
+        label: textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: viewConfiguration!._textStyle,):null,suffixIcon: null,counterText: ""
     );
 
   }
