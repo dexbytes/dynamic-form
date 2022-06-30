@@ -100,7 +100,7 @@ class _DropDownState extends State<DropDown> {
     return DropdownMenuItem(
         value: value,
         enabled: false,
-        child: Column(
+        child: Column(mainAxisSize: MainAxisSize.min,
           children: [
             DropdownRowItem(isMultipleSelect: isMultipleSelect,option: option, onClicked: (bool isChecked) {
               if(!isChecked){
@@ -293,7 +293,8 @@ class _DropdownRowItemState extends State<DropdownRowItem> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(onTap: (){
+    return Align(alignment: Alignment.center,
+        child:InkWell(onTap: (){
       setState(() {
         isChecked = !isChecked;
       });
@@ -302,9 +303,11 @@ class _DropdownRowItemState extends State<DropdownRowItem> {
       child: Row(crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.start,mainAxisSize: MainAxisSize.max,
         children: [
           Expanded(
-            child: Text(
-              item,
-              //style: appStyles.hintTextStyle()
+            child: Align(alignment: Alignment.centerLeft,
+              child: Text(
+                item,
+                //style: appStyles.hintTextStyle()
+              ),
             ),
           ),
           !widget.isMultipleSelect?Container():Checkbox(value: isChecked, onChanged: (value){
@@ -315,6 +318,6 @@ class _DropdownRowItemState extends State<DropdownRowItem> {
           })
         ],
       ),
-    );
+    ));
   }
 }
