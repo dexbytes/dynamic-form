@@ -62,9 +62,7 @@ class _DropDownState extends State<DropDown> {
             icon: const Icon(Icons.keyboard_arrow_down),
             iconSize: 28,
             elevation: 0,
-            isExpanded: true,buildMenuItem:(){
-
-            },
+            isExpanded: true,
             underline: Container(
               height: 0.0,
               decoration: const BoxDecoration(
@@ -164,7 +162,7 @@ class _DropDownState extends State<DropDown> {
         label = dropDownModel.elementConfig!.label!;
         placeholder = dropDownModel.elementConfig!.placeholder!;
 
-        isMultipleSelect = true;//dropDownModel.elementConfig!.isMultipleSelect??false;
+        isMultipleSelect = dropDownModel.elementConfig!.isMultipleSelect??false;
         isInline = dropDownModel.elementConfig!.isInline??false;
         value = const [];
         if (dropDownModel.elementConfig!.options!.isNotEmpty) {
