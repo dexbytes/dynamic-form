@@ -74,7 +74,7 @@
       "elementType":"input",
       "elementConfig":{
         "type":"tel",
-        "name":"tel",
+        "name":"office",
         "label":"Phone",
         "placeholder":"Phone",
         "class":"form-control",
@@ -96,7 +96,7 @@
           "required":"Please enter phone number",
           "minLength":"Please enter minimum 8 digit number",
           "maxLength":"Max 12 chat allow",
-          "rejex": "r'(^[a-zA-Z ]*)'"
+          "rejex": "Please enter 10 digit mobile number"
         }
       },
       "valid":true,
@@ -164,9 +164,9 @@
     {
       "elementType":"select",
       "elementConfig":{
-        "name":"occupation",
-        "label":"Occupation",
-        "placeholder":"Occupation",
+        "name":"College",
+        "label":"College",
+        "placeholder":"College",
         "class":"form-control",
         "options":[
           {
@@ -187,6 +187,36 @@
         "isDisabled":false
       },
       "valid":false
+    },
+    {
+      "elementType":"input",
+      "elementConfig":{
+        "type":"tel",
+        "name":"tel",
+        "label":"Phone",
+        "placeholder":"Phone",
+        "class":"form-control",
+        "resetIcon":true,
+        "isCountryCode":true,
+        "enabledCountries" : ["Sa","In"]
+      },
+      "value":"",
+      "validation": {
+        "required":true,
+        "minLength":2,
+        "maxLength":10,
+        "rejex":"(^(?:[+0]9)?[0-9]{10,12}$)",
+        "isReadOnly":false,
+        "isDisabled":false,
+        "errorMessage": {
+          "required":"Please enter phone number",
+          "minLength":"Please enter minimum 8 digit number",
+          "maxLength":"Max 12 chat allow",
+          "rejex": "Please enter 10 digit mobile number"
+        }
+      },
+      "valid":true,
+      "onchange":true
     }
   ]
 }

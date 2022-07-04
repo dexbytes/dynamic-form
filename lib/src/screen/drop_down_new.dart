@@ -415,7 +415,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
           enableFeedback: widget.enableFeedback,
           borderRadius: widget.borderRadius ?? BorderRadius.zero,
         ),
-      _DropdownMenuItemBottomButton<T>(
+      /*_DropdownMenuItemBottomButton<T>(
           route: widget.route,
           padding: widget.padding,
           buttonRect: widget.buttonRect,
@@ -423,7 +423,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
           itemIndex: 0,
           enableFeedback: widget.enableFeedback,
           borderRadius:BorderRadius.zero,
-        ),Text("OkB"),
+        ),Text("OkB"),*/
     ];
 
     return FadeTransition(

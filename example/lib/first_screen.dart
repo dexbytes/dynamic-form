@@ -15,6 +15,8 @@ class FirstScreen extends StatefulWidget {
 
 class _FirstScreenState extends State<FirstScreen> {
   final String jsonString;
+  final _formKeyNew = GlobalKey<DynamicFormState>();
+
   _FirstScreenState(this.jsonString) {}
 
   @override
@@ -29,12 +31,31 @@ class _FirstScreenState extends State<FirstScreen> {
             Column(
               children: [
                 Text(widget.apiCallingTime),
-                DynamicForm(jsonString, finalSubmitCallBack: (Map<String, dynamic> data) async {
+                DynamicForm(jsonString,dynamicFormKey: _formKeyNew, finalSubmitCallBack: (Map<String, dynamic> data) async {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => SecondScreen(data: data)),
                   );
                 },),
+                Align(alignment: Alignment.center,
+                  child: ElevatedButton(clipBehavior: Clip.hardEdge,
+                    onPressed: () async {
+                      if(_formKeyNew.currentState!.validateFields()){
+                     var data =  _formKeyNew.currentState!.getFormData();
+                     if(data!.isNotEmpty){
+                       Navigator.push(
+                         context,
+                         MaterialPageRoute(builder: (context) => SecondScreen(data: data)),
+                       );
+                     }
+                        /*_formKey.currentState!.save();
+                        widget.finalSubmitCallBack?.call(formSubmitData);*/
+                      }
+                    },
+                    child: const Text('Submit Form'),
+                    //color: Colors.green,
+                  ),
+                )
               ],
             ),
           ],

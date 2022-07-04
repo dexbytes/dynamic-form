@@ -14,6 +14,13 @@ class ConfigurationSetting extends TextFieldConfiguration{
   set setTextFieldViewConfig (TextFieldConfiguration textFieldConfig){
     _textFieldConfiguration = textFieldConfig;
   }
+
+  TelTextFieldConfiguration _telTextFieldConfiguration = TelTextFieldConfiguration();
+
+  /*Set Text field ui presentation*/
+  set setTelTextFieldViewConfig (TelTextFieldConfiguration textFieldConfig){
+    _telTextFieldConfiguration = textFieldConfig;
+  }
 /*  textField({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border}){
     _textFieldConfiguration = setConfiguration(textStyle:textStyle,hintStyle:hintStyle,border:border);
   }*/

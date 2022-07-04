@@ -9,9 +9,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration();
   textFieldConfiguration.setBorder = const UnderlineInputBorder();
+
+  TelTextFieldConfiguration telTextFieldConfiguration = TelTextFieldConfiguration();
+  telTextFieldConfiguration.setBorder = const UnderlineInputBorder();
   // textFieldConfiguration.setErrorBorder = const OutlineInputBorder();
 
   ConfigurationSetting.instance.setTextFieldViewConfig = textFieldConfiguration;
+  ConfigurationSetting.instance.setTelTextFieldViewConfig = telTextFieldConfiguration;
 
   ConfigurationSetting.instance.setLoadFromApi = true;
 
@@ -96,7 +100,7 @@ class _MyFormState extends State<MyForm> {
                   });
                     String? jsonString = await ConfigurationSetting.instance.getFormDataLocal();
                     if(jsonString!.isEmpty) {
-                      //String jsonStringResponse = await httpService.getPosts();
+                      // String jsonStringResponse = await httpService.getPosts();
                       String jsonStringResponse = await localJsonRw.localRead();
                       jsonString = await ConfigurationSetting.instance.storeFormDataLocal(jsonStringResponse);
                     }

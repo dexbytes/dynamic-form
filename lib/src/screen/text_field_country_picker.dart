@@ -2,8 +2,8 @@ part of dynamic_json_form;
 // enum formFieldType {text,name,email,tel,url,number,textMultiline}
 class TextFieldCountryPickerView extends StatefulWidget {
   final Map<String,dynamic> jsonData;
-  final TextFieldConfiguration? viewConfiguration;
-  final Function (String fieldKey,String fieldValue) onChangeValue ;
+  final TelTextFieldConfiguration? viewConfiguration;
+  final Function (String fieldKey,Map<String,String> fieldValue) onChangeValue ;
    const TextFieldCountryPickerView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration}) : super(key: key);
   @override
   _TextFieldCountryPickerState createState() => _TextFieldCountryPickerState(jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration: viewConfiguration);
@@ -17,9 +17,9 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   final TextEditingController? _nameController =  TextEditingController();
   TextFieldModel? textFieldModel;
   ConfigurationSetting configurationSetting = ConfigurationSetting.instance;
-  TextFieldConfiguration? viewConfiguration;
+  TelTextFieldConfiguration? viewConfiguration;
   CountryPickerViewConfig? viewConfig;
-  Function (String fieldKey,String fieldValue) onChangeValue ;
+  Function (String fieldKey,Map<String,String> fieldValue) onChangeValue ;
   final StreamController<bool> _fieldStreamControl = StreamController<bool>();
 
   OverlayEntry? overlayEntry;
@@ -29,6 +29,11 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   bool checkValid = true;
   bool checkValidOnSubmit = false;
   bool isDoneOver = false;
+  late MediaQueryData queryData;
+  bool isCountryCode = false;
+  List enabledCountries =  ["Sa","In"];
+  String selectedCountryCode = '';
+  String enteredNumber = '';
 
   _TextFieldCountryPickerState({required this.jsonData,required this.onChangeValue,this.viewConfiguration}){
     textFieldModel ??= responseParser.textFormFiledParsing(jsonData: jsonData,updateCommon: true);
@@ -37,13 +42,28 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
       formFieldType = textFieldModel!.elementConfig!.type??"text";
       formFieldType  = formFieldType.toLowerCase();
       fieldKey = textFieldModel!.elementConfig!.name!;
-      onChangeValue.call(fieldKey,"");
+
       checkValidOnChange = textFieldModel!.onchange??false;
       checkValid = textFieldModel!.valid??false;
 
-      viewConfig = CountryPickerViewConfig(viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
+      //Country code required condition
+      if(jsonData['elementConfig'].containsKey('isCountryCode') && jsonData['elementConfig']['isCountryCode']){
+        isCountryCode = jsonData['elementConfig']['isCountryCode'];
+
+        if(jsonData['elementConfig'].containsKey('enabledCountries')) {
+          enabledCountries = jsonData['elementConfig']['enabledCountries'];
+          selectedCountryCode = enabledCountries.isNotEmpty?enabledCountries[0]:"";
+        }
+      }
+
+      onChangeValue.call(fieldKey,getData(enteredNumber.trim(),selectedCountryCode));
+
+      viewConfig = CountryPickerViewConfig(isCountryCode: isCountryCode,enabledCountries: enabledCountries,viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
           obscureText = value;
           _fieldStreamControl.sink.add(obscureText);
+      },countryCodeCallBack: (value){
+        selectedCountryCode = value;
+        onChangeValue.call(fieldKey,getData(enteredNumber.trim(),selectedCountryCode));
       });
     }
   }
@@ -192,6 +212,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
 
   @override
   Widget build(BuildContext context) {
+    queryData = MediaQuery.of(context);
 
     //Check if data not pars properly
     if(fieldKey.isEmpty){
@@ -244,7 +265,8 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
         }
       ,onChanged: (value){
             if(mounted){
-              onChangeValue.call(fieldKey,value);
+              enteredNumber = value;
+              onChangeValue.call(fieldKey,getData(enteredNumber.trim(),selectedCountryCode));
             }
         },
           onSaved: (value){
@@ -271,16 +293,25 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
       ],
     );
   }
+
+  Map<String, String> getData(String tel, String selectedCountryCode) {
+
+    return {fieldKey:tel,"code":selectedCountryCode};
+  }
 }
 class CountryPickerViewConfig{
-  TextFieldConfiguration? viewConfiguration;
+  TelTextFieldConfiguration? viewConfiguration;
   String formFieldType;
   TextFieldModel textFieldModel;
   TextEditingController nameController;
   bool? obscureTextState;
   Function(bool)? obscureTextStateCallBack;
-  CountryPickerViewConfig({required this.nameController,required this.formFieldType,required this.textFieldModel,this.obscureTextState = true,this.obscureTextStateCallBack,this.viewConfiguration}) {
-  viewConfiguration  = viewConfiguration ?? ConfigurationSetting.instance._textFieldConfiguration;
+  Function(String)? countryCodeCallBack;
+  bool isCountryCode;
+  List enabledCountries;
+  CountryPickerViewConfig({this.isCountryCode = false,this.enabledCountries = const [],required this.nameController,required this.formFieldType,required this.textFieldModel,this.obscureTextState = true,this.obscureTextStateCallBack,this.viewConfiguration,required this.countryCodeCallBack}) {
+  viewConfiguration  = viewConfiguration ?? ConfigurationSetting.instance._telTextFieldConfiguration;
+
   }
 
   InputDecoration _getTextDecoration (){
@@ -290,7 +321,15 @@ class CountryPickerViewConfig{
         focusedErrorBorder: viewConfiguration!._errorBorder,*/
         enabledBorder: viewConfiguration!._border,
         hintText: textFieldModel.elementConfig!.placeholder??"",hintStyle: viewConfiguration!._hintStyle,
-        label: textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: viewConfiguration!._textStyle,):null,suffixIcon: null,counterText: ""
+        label: !viewConfiguration!._enableLabel?null:
+                textFieldModel.elementConfig!.label != null &&
+                        textFieldModel.elementConfig!.label!.isNotEmpty
+                    ? Text(
+                        textFieldModel.elementConfig!.label!,
+                        style: viewConfiguration!._textStyle,
+                      )
+                    : null
+              ,suffixIcon: null,counterText: ""
     );
 
   }
@@ -298,19 +337,42 @@ class CountryPickerViewConfig{
   getInputDecoration(){
     InputDecoration inputDecoration = _getTextDecoration();
     Widget? suffixIcon;
+    Widget? prefixCountryView;
     if(textFieldModel.elementConfig!=null){
       if(textFieldModel.elementConfig!.resetIcon!){
         suffixIcon = SuffixCloseIcon(textController: nameController,iconClicked: (){
           nameController.text = "";
         },);
       }
+
+      if(isCountryCode && enabledCountries.isNotEmpty){
+        prefixCountryView =
+            CountryPicker(
+              margin: const EdgeInsets.only(left: 0,right: 0,bottom: 0),
+              padding: const EdgeInsets.only(
+                  left: 0,
+                  top: 0,
+                  bottom: 5,
+                  right: 0
+              ),
+              initialSelection: enabledCountries[0].toString(),
+              onChanged: (value){
+              countryCodeCallBack!.call(value.code.toString());
+                print("$value");
+                //countryCode = value.dialCode!;
+              },
+              onInit: (value){
+                print("$value");
+              countryCodeCallBack!.call(value!.code.toString());
+                //countryCode = value!.dialCode!;
+              },
+            );
+      }
     }
     inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
+    inputDecoration =  inputDecoration.copyWith(prefixIcon: prefixCountryView);
 
     switch(formFieldType){
-      case 'text':
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
-      break ;
       case 'password':{
         inputDecoration =  inputDecoration.copyWith(suffixIcon: textFieldModel.elementConfig!.resetIcon!?SuffixVisibilityIcon(initialValue: obscureTextState,iconClicked: (bool visibleStatus){
           try {
@@ -320,28 +382,107 @@ class CountryPickerViewConfig{
           }
         },):null);
       }
-        break ;
-      case 'name':
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
-        break ;
-      case 'email':
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
-        break ;
+      break ;
       case 'tel':
         inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
         break ;
-      case 'url':
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
-        break ;
-      case 'number':
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
-        break ;
-      case 'text_multiline':
-        inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
-        break ;
-    }
+      }
 
     return inputDecoration;
+  }
+}
+class CountryPicker extends StatelessWidget {
+  final String? text;
+  final String? initialSelection;
+  final TextStyle? textStyle;
+  final EdgeInsetsGeometry margin;
+  final EdgeInsetsGeometry padding;
+  final EdgeInsetsGeometry dividerPadding;
+  final void Function(CountryCode)?  onChanged;
+  final void Function(CountryCode?)?  onInit;
+  final List<String> countryFilter;
+
+  const CountryPicker(
+      {Key? key,
+        this.text,
+        this.textStyle,
+        this.margin = EdgeInsets.zero,
+        this.padding = EdgeInsets.zero,
+        this.dividerPadding = const EdgeInsets.symmetric(horizontal: 21),
+        this.initialSelection,
+        this.onChanged,
+        this.onInit,
+        this.countryFilter =  const ['Sa','In'],
+      })
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
+
+    return
+
+      Container(
+        margin: margin,
+        child: Stack(
+          children: [
+            Padding(
+              padding: dividerPadding,
+              child: VerticalDivider(
+                width: 10,
+                thickness: 1,
+                endIndent: 0,
+                indent: 0,
+                color: Colors.grey.withOpacity(0.5),
+              ),
+            ),
+            CountryCodePicker(
+                searchDecoration: InputDecoration(
+                    contentPadding:  const EdgeInsets.all(10),
+                    prefixIcon: const Icon(Icons.search,color: Colors.grey,),
+                    hintText: "Search country code",
+                    hintStyle: const TextStyle(
+                      fontSize: 15.5,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.grey,//Color(0xff828588),
+                    ),
+                    fillColor:Colors.grey.withOpacity(0.1),
+                    filled: true,
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: const  BorderSide(width: 0.1,color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12)),
+                    enabledBorder:OutlineInputBorder(
+                        borderSide: const BorderSide(width: 0.1,color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12)),
+                    border: OutlineInputBorder(
+                        borderSide: const BorderSide(width: 0.1,color: Colors.grey),
+                        borderRadius: BorderRadius.circular(12))
+                ),
+                dialogSize: Size(queryData.size.width/1.15,queryData.size.height/3.8),
+                padding: padding,
+                backgroundColor: Colors.transparent,
+                countryFilter: countryFilter,
+                initialSelection: initialSelection,
+                showCountryOnly: false,
+                showFlag: true,
+                flagWidth: 20,
+                showFlagDialog: false,
+                showOnlyCountryWhenClosed: false,
+                dialogBackgroundColor:Colors.white,
+                dialogTextStyle: const TextStyle(
+                    fontSize: 16,
+                    color:Colors.black),
+                closeIcon: const Icon(Icons.clear,size: 26,color:Colors.black),
+                hideSearch: true,
+                hideMainText: false,
+                textStyle: const TextStyle(fontSize: 14,color:Colors.black),
+                onChanged: onChanged,
+                onInit:onInit
+              // flagWidth: ,
+            ),
+          ],
+        ),
+      );
   }
 }
 /*class ActionConfig{

@@ -4,20 +4,20 @@ part of dynamic_json_form;
 class DynamicForm extends StatefulWidget {
 final String jsonEncoded;
 final Function(Map<String,dynamic> data)? finalSubmitCallBack;
-
-const DynamicForm(this.jsonEncoded,{Key? key,required this.finalSubmitCallBack}) : super(key: key);
+final GlobalKey<DynamicFormState>? dynamicFormKey ;
+const DynamicForm(this.jsonEncoded,{this.dynamicFormKey,required this.finalSubmitCallBack}) : super(key: dynamicFormKey);
 
   @override
-  _DynamicFormState createState() => _DynamicFormState(jsonEncoded: jsonEncoded);
+  DynamicFormState createState() => DynamicFormState(jsonEncoded: jsonEncoded);
 }
 
-class _DynamicFormState extends State<DynamicForm> {
+class DynamicFormState extends State<DynamicForm> {
   String jsonEncoded;
   Stream get onVariableChanged => DataRefreshStream.instance.getFormFieldsStream.stream;
-  List<dynamic> formFieldList = [];
+  List<dynamic> _formFieldList = [];
   final _formKey = GlobalKey<FormState>();
 
-  _DynamicFormState({required this.jsonEncoded}){
+  DynamicFormState({required this.jsonEncoded}){
     responseParser.setFormData = jsonEncoded;
   }
 
@@ -30,21 +30,42 @@ class _DynamicFormState extends State<DynamicForm> {
     {
       switch(data["elementType"]){
         case "input":
+          //Open mobile field
+          if(data.containsKey("elementConfig") && data["elementConfig"].containsKey("type") && data["elementConfig"]["type"].toString().toLowerCase() == "tel"){
+            return TextFieldCountryPickerView(jsonData: data,onChangeValue: (String fieldKey, Map<String,String> value){
+              formSubmitData[fieldKey] = value;
+            });
+          }
          return TextFieldView(jsonData: data,onChangeValue: (String fieldKey, String value){
-           formSubmitData[fieldKey] = value;
+        formSubmitData[fieldKey] = value;
          });
+
          case "select":
          return DropDown(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
            formSubmitData[fieldKey] = value;
          });
-         case "country":
-         return TextFieldCountryPickerView(jsonData: data,onChangeValue: (String fieldKey, String value){
-           formSubmitData[fieldKey] = value;
-         });
-
       }
     }
     return Container();
+  }
+
+
+  //Check Form field value
+  bool validateFields(){
+    if(_formKey.currentState!.validate()){
+      _formKey.currentState!.save();
+      //widget.finalSubmitCallBack?.call(formSubmitData);
+      return true;
+    }
+    return false;
+  }
+
+  //Get form value
+  Map<String,dynamic>?  getFormData(){
+    if(_formKey.currentState!.validate()){
+      return formSubmitData;
+    }
+    return null;
   }
 
   @override
@@ -65,16 +86,16 @@ class _DynamicFormState extends State<DynamicForm> {
         /*if(snapshot.hasData){
           formFieldList = snapshot.data;
         }*/
-        formFieldList = responseParser.getFormData[responseParser.getCurrentFormNumber];
+        _formFieldList = responseParser.getFormData[responseParser.getCurrentFormNumber];
         return SizedBox(child:
-        formFieldList.isEmpty?Container():Form(
+        _formFieldList.isEmpty?Container():Form(
           key: _formKey,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(children: formFieldList.map((element) {
+                Column(children: _formFieldList.map((element) {
                   Map<String,dynamic> data = element;
                   return Column(mainAxisSize: MainAxisSize.min,
                     children: [
@@ -83,17 +104,19 @@ class _DynamicFormState extends State<DynamicForm> {
                     ],
                   );
                 }).toList()),
-
-                TextButton(
-                  onPressed: () async {
-                    if(_formKey.currentState!.validate()){
-                      _formKey.currentState!.save();
-                      widget.finalSubmitCallBack?.call(formSubmitData);
-                    }
-                  },
-                  child: Text('Submit'),
-                  //color: Colors.green,
-                ),
+/*
+                Align(alignment: Alignment.center,
+                  child: ElevatedButton(clipBehavior: Clip.hardEdge,
+                    onPressed: () async {
+                      if(_formKey.currentState!.validate()){
+                        _formKey.currentState!.save();
+                        widget.finalSubmitCallBack?.call(formSubmitData);
+                      }
+                    },
+                    child: Text('Submit'),
+                    //color: Colors.green,
+                  ),
+                ),*/
               ],
             ),
           ),

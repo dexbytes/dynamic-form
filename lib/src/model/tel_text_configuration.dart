@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 part of dynamic_json_form;
 
-class TextFieldConfiguration {
+class TelTextFieldConfiguration {
   /// The shape of the border to draw around the decoration's container.
   ///
   /// If [border] is a [MaterialStateUnderlineInputBorder]
@@ -48,12 +48,12 @@ class TextFieldConfiguration {
   late TextDirection? _textDirection = TextDirection.ltr;
   late TextAlign? _textAlign = TextAlign.start;
   late TextAlignVertical? _textAlignVertical = TextAlignVertical.center;
-  late bool _enableLabel = true;
+  late bool _enableLabel = false;
 
-  TextFieldConfiguration({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border,bool? enableLabel});
+  TelTextFieldConfiguration({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border,bool? enableLabel});
 
-  TextFieldConfiguration setConfiguration({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border,bool? enableLabel}) {
-    return TextFieldConfiguration(
+  TelTextFieldConfiguration setConfiguration({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border,bool? enableLabel}) {
+    return TelTextFieldConfiguration(
         textStyle : textStyle ?? _textStyle,
         hintStyle : hintStyle ?? _hintStyle,
         border : border ?? _border,
@@ -80,5 +80,5 @@ class TextFieldConfiguration {
     _enableLabel = value;
   }
 }
-TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration();
+TelTextFieldConfiguration telTextFieldConfiguration = TelTextFieldConfiguration();
 

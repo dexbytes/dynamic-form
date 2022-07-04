@@ -3,6 +3,7 @@ library dynamic_json_form;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dynamic_json_form/dynamic_json_form.dart';
 import 'package:dynamic_json_form/src/common_validation.dart';
 import 'package:dynamic_json_form/src/model/drop_down_field_model.dart';
@@ -22,8 +23,7 @@ import 'src/screen/suffix_visibility_icon.dart';
 export 'package:flutter/material.dart';
 
 part 'src/model/text_configuration.dart';
-
-
+part 'src/model/tel_text_configuration.dart';
 part 'src/screen/dynamic_form.dart';
 part 'src/screen/text_field.dart';
 part 'src/screen/text_field_country_picker.dart';
