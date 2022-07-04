@@ -38,67 +38,144 @@ class _DropDownState extends State<DropDown> {
         jsonData: jsonData, updateCommon: true);
     setValues(dropDownModel);
   }
-
+/*
+  final List<String> items = [
+    'Item1',
+    'Item2',
+    'Item3',
+    'Item4',
+    'Item5',
+    'Item6',
+    'Item7',
+    'Item8',
+  ];*/
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      padding: const EdgeInsets.only(right: 6),
-      margin: const EdgeInsets.only(
-          left: 0, right: 0,
-          top: 0,
-          bottom: 0
-      ),
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        child: DropdownButton<String>(key: _dropDownKey,
-            alignment: AlignmentDirectional.centerStart,
-            iconEnabledColor: Colors.grey,
-            icon: const Icon(Icons.keyboard_arrow_down),
-            iconSize: 28,
-            elevation: 0,
-            isExpanded: true,
-            underline: Container(
-              height: 0.0,
-              decoration: const BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: Color(0xFFBDBDBD),
-                    width: 0.01,
+    return Padding(
+      padding: const EdgeInsets.only(left: 0, right: 0),
+      child:
+      /*DropdownButtonHideUnderline(key: _dropDownKey,
+        child: DropdownButton2(
+          isExpanded: true,
+          hint: Row(
+            children: const [
+              Icon(
+                Icons.list,
+                size: 16,
+                color: Colors.yellow,
+              ),
+              SizedBox(
+                width: 4,
+              ),
+              Expanded(
+                child: Text(
+                  'Select Item',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.yellow,
                   ),
+                  overflow: TextOverflow.ellipsis,
                 ),
               ),
+            ],
+          ),dropdownOverButton:true,
+          items: optionList!.map((option) => buildMenuItem(option)).toList()*//*items
+              .map((item) => DropdownMenuItem<String>(
+            value: item,
+            child: Text(
+              item,
+              style: const TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
-            dropdownColor: Colors.grey,
-            // dropdownColor: !isDarkMode? Colors.grey.shade300 : Color(0xff212327),
-            // alignment: Alignment.bottomCenter,
-            borderRadius: BorderRadius.circular(8),
-            hint: Text(widget.hint ??
-                "" /*appString.trans(context, appString.restaurantType),style: appStyles.hintTextStyle()*/),
-            isDense: false,
-            value: valueChoose,
-            items: optionList!.map((option) => buildMenuItem(option)).toList(),
-            onChanged: (value) =>
-                setState(() {
-                  valueChoose = value;
-                })
+          ))
+              .toList()*//*,
+          value: valueChoose,
+          onChanged: (value) {
+            setState(() {
+              valueChoose = value as String;
+            });
+          },
+          icon: const Icon(
+            Icons.arrow_forward_ios_outlined,
+          ),
+          iconSize: 14,
+          iconEnabledColor: Colors.yellow,
+          iconDisabledColor: Colors.grey,
+          buttonHeight: 50,
+         // buttonWidth: 160,
+          buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+          buttonDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(
+              color: Colors.black26,
+            ),
+            color: Colors.redAccent,
+          ),
+          buttonElevation: 2,
+          itemHeight: 40,
+          itemPadding: const EdgeInsets.only(left: 14, right: 14),
+          dropdownMaxHeight: 200,
+          dropdownWidth: 200,
+          dropdownPadding: null,
+          dropdownDecoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            color: Colors.redAccent,
+          ),
+          dropdownElevation: 8,
+          scrollbarRadius: const Radius.circular(40),
+          scrollbarThickness: 6,
+          scrollbarAlwaysShow: true,
+          offset: const Offset(-20, 0),
         ),
+      )*/
+      DropdownButtonNew<String>(key: _dropDownKey,
+        dropdownOverButton:true,
+          alignment: AlignmentDirectional.centerStart,
+          iconEnabledColor: Colors.grey,
+          icon: const Icon(Icons.keyboard_arrow_down),
+          iconSize: 28,
+          elevation: 0,
+          isExpanded: true,dropdownDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          color: Colors.grey.withOpacity(0.8),
+        ),
+          underline: Container(
+            height: 1,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+              color: Colors.redAccent,
+            ),
+          ),
+          dropdownColor: Colors.red,
+          // dropdownColor: !isDarkMode? Colors.grey.shade300 : Color(0xff212327),
+          // alignment: Alignment.bottomCenter,
+          borderRadius: BorderRadius.circular(8),
+          hint: Text(widget.hint ??
+              "" /*appString.trans(context, appString.restaurantType),style: appStyles.hintTextStyle()*/),
+          isDense: false,
+        focusColor: Colors.red,
+          value: valueChoose,
+          items: optionList!.map((option) => buildMenuItem(option)).toList(),
+          onChanged: (value) =>
+              setState(() {
+               //// valueChoose = value;
+              }),
       ),
     );
   }
 
-  DropdownMenuItem<String> buildMenuItem(Options option) {
+  DropdownMenuItemNew<String> buildMenuItem(Options option) {
     String value = option.value!;/*
     String item = option.displayValue!;
     bool isChecked = selectedOption!.contains(value)?true:option.checked!;*/
 
-    return DropdownMenuItem(
-        value: value,
+    return DropdownMenuItemNew(value: value,
         enabled: false,
         child: Column(mainAxisSize: MainAxisSize.min,
           children: [
@@ -295,9 +372,11 @@ class _DropdownRowItemState extends State<DropdownRowItem> {
   Widget build(BuildContext context) {
     return Align(alignment: Alignment.center,
         child:InkWell(onTap: (){
-      setState(() {
-        isChecked = !isChecked;
-      });
+      if(mounted){
+        setState(() {
+          isChecked = !isChecked;
+        });
+      }
       onClicked?.call(!isChecked);
     },
       child: Row(crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.start,mainAxisSize: MainAxisSize.max,

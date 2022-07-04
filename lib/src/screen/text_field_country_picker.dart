@@ -1,14 +1,14 @@
 part of dynamic_json_form;
 // enum formFieldType {text,name,email,tel,url,number,textMultiline}
-class TextFieldView extends StatefulWidget {
+class TextFieldCountryPickerView extends StatefulWidget {
   final Map<String,dynamic> jsonData;
   final TextFieldConfiguration? viewConfiguration;
   final Function (String fieldKey,String fieldValue) onChangeValue ;
-   const TextFieldView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration}) : super(key: key);
+   const TextFieldCountryPickerView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration}) : super(key: key);
   @override
-  _TextFieldsState createState() => _TextFieldsState(jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration: viewConfiguration);
+  _TextFieldCountryPickerState createState() => _TextFieldCountryPickerState(jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration: viewConfiguration);
 }
-class _TextFieldsState extends State<TextFieldView> {
+class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   String fieldKey = "";
   bool obscureText = false;
   String formFieldType = "text";
@@ -18,7 +18,7 @@ class _TextFieldsState extends State<TextFieldView> {
   TextFieldModel? textFieldModel;
   ConfigurationSetting configurationSetting = ConfigurationSetting.instance;
   TextFieldConfiguration? viewConfiguration;
-  ViewConfig? viewConfig;
+  CountryPickerViewConfig? viewConfig;
   Function (String fieldKey,String fieldValue) onChangeValue ;
   final StreamController<bool> _fieldStreamControl = StreamController<bool>();
 
@@ -30,7 +30,7 @@ class _TextFieldsState extends State<TextFieldView> {
   bool checkValidOnSubmit = false;
   bool isDoneOver = false;
 
-  _TextFieldsState({required this.jsonData,required this.onChangeValue,this.viewConfiguration}){
+  _TextFieldCountryPickerState({required this.jsonData,required this.onChangeValue,this.viewConfiguration}){
     textFieldModel ??= responseParser.textFormFiledParsing(jsonData: jsonData,updateCommon: true);
 
     if(textFieldModel!=null && textFieldModel!.elementConfig!=null){
@@ -41,7 +41,7 @@ class _TextFieldsState extends State<TextFieldView> {
       checkValidOnChange = textFieldModel!.onchange??false;
       checkValid = textFieldModel!.valid??false;
 
-      viewConfig = ViewConfig(viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
+      viewConfig = CountryPickerViewConfig(viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
           obscureText = value;
           _fieldStreamControl.sink.add(obscureText);
       });
@@ -272,14 +272,14 @@ class _TextFieldsState extends State<TextFieldView> {
     );
   }
 }
-class ViewConfig{
+class CountryPickerViewConfig{
   TextFieldConfiguration? viewConfiguration;
   String formFieldType;
   TextFieldModel textFieldModel;
   TextEditingController nameController;
   bool? obscureTextState;
   Function(bool)? obscureTextStateCallBack;
-  ViewConfig({required this.nameController,required this.formFieldType,required this.textFieldModel,this.obscureTextState = true,this.obscureTextStateCallBack,this.viewConfiguration}) {
+  CountryPickerViewConfig({required this.nameController,required this.formFieldType,required this.textFieldModel,this.obscureTextState = true,this.obscureTextStateCallBack,this.viewConfiguration}) {
   viewConfiguration  = viewConfiguration ?? ConfigurationSetting.instance._textFieldConfiguration;
   }
 
@@ -344,7 +344,7 @@ class ViewConfig{
     return inputDecoration;
   }
 }
-class ActionConfig{
+/*class ActionConfig{
 
-}
+}*/
 

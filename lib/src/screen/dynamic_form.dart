@@ -37,6 +37,10 @@ class _DynamicFormState extends State<DynamicForm> {
          return DropDown(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
            formSubmitData[fieldKey] = value;
          });
+         case "country":
+         return TextFieldCountryPickerView(jsonData: data,onChangeValue: (String fieldKey, String value){
+           formSubmitData[fieldKey] = value;
+         });
 
       }
     }
@@ -80,7 +84,7 @@ class _DynamicFormState extends State<DynamicForm> {
                   );
                 }).toList()),
 
-                FlatButton(
+                TextButton(
                   onPressed: () async {
                     if(_formKey.currentState!.validate()){
                       _formKey.currentState!.save();
@@ -88,7 +92,7 @@ class _DynamicFormState extends State<DynamicForm> {
                     }
                   },
                   child: Text('Submit'),
-                  color: Colors.green,
+                  //color: Colors.green,
                 ),
               ],
             ),
