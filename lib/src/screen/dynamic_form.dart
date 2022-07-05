@@ -16,9 +16,11 @@ class DynamicFormState extends State<DynamicForm> {
   Stream get onVariableChanged => DataRefreshStream.instance.getFormFieldsStream.stream;
   List<dynamic> _formFieldList = [];
   final _formKey = GlobalKey<FormState>();
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
   DynamicFormState({required this.jsonEncoded}){
     responseParser.setFormData = jsonEncoded;
+    autovalidateMode = _autoValidate();
   }
 
   //We will include the entered values in the map from field on submit click
@@ -52,9 +54,13 @@ class DynamicFormState extends State<DynamicForm> {
 
   //Check Form field value
   bool validateFields(){
+    setState(() {
+      autovalidateMode = _autoValidate(checkValidOnSubmit :true);
+    });
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
       //widget.finalSubmitCallBack?.call(formSubmitData);
+
       return true;
     }
     return false;
@@ -62,10 +68,25 @@ class DynamicFormState extends State<DynamicForm> {
 
   //Get form value
   Map<String,dynamic>?  getFormData(){
+    setState(() {
+      autovalidateMode = _autoValidate(checkValidOnSubmit :true);
+    });
     if(_formKey.currentState!.validate()){
       return formSubmitData;
     }
     return null;
+  }
+
+  _autoValidate({bool checkValidOnSubmit = false}){
+     /*if(checkValidOnChange){
+      return AutovalidateMode.onUserInteraction;
+    }
+    else */
+    if(checkValidOnSubmit) {
+      return AutovalidateMode.onUserInteraction;
+    }
+    return AutovalidateMode.disabled;
+
   }
 
   @override
@@ -89,7 +110,7 @@ class DynamicFormState extends State<DynamicForm> {
         _formFieldList = responseParser.getFormData[responseParser.getCurrentFormNumber];
         return SizedBox(child:
         _formFieldList.isEmpty?Container():Form(
-          key: _formKey,
+          key: _formKey,autovalidateMode: autovalidateMode,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -104,7 +125,6 @@ class DynamicFormState extends State<DynamicForm> {
                     ],
                   );
                 }).toList()),
-/*
                 Align(alignment: Alignment.center,
                   child: ElevatedButton(clipBehavior: Clip.hardEdge,
                     onPressed: () async {
@@ -116,7 +136,7 @@ class DynamicFormState extends State<DynamicForm> {
                     child: Text('Submit'),
                     //color: Colors.green,
                   ),
-                ),*/
+                ),
               ],
             ),
           ),

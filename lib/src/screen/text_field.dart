@@ -29,23 +29,29 @@ class _TextFieldsState extends State<TextFieldView> {
   bool checkValid = true;
   bool checkValidOnSubmit = false;
   bool isDoneOver = false;
-
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   _TextFieldsState({required this.jsonData,required this.onChangeValue,this.viewConfiguration}){
     textFieldModel ??= responseParser.textFormFiledParsing(jsonData: jsonData,updateCommon: true);
 
-    if(textFieldModel!=null && textFieldModel!.elementConfig!=null){
-      formFieldType = textFieldModel!.elementConfig!.type??"text";
-      formFieldType  = formFieldType.toLowerCase();
-      fieldKey = textFieldModel!.elementConfig!.name!;
-      onChangeValue.call(fieldKey,"");
-      checkValidOnChange = textFieldModel!.onchange??false;
-      checkValid = textFieldModel!.valid??false;
+    if(textFieldModel!=null){
+      _nameController!.text = textFieldModel!.value??"";
 
-      viewConfig = ViewConfig(viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
+   if(textFieldModel!.elementConfig!=null){
+        formFieldType = textFieldModel!.elementConfig!.type??"text";
+        formFieldType  = formFieldType.toLowerCase();
+        fieldKey = textFieldModel!.elementConfig!.name!;
+        onChangeValue.call(fieldKey,"");
+        checkValidOnChange = textFieldModel!.onchange??false;
+        checkValid = textFieldModel!.valid??false;
+        autovalidateMode = _autoValidate();
+
+        viewConfig = ViewConfig(viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
           obscureText = value;
           _fieldStreamControl.sink.add(obscureText);
-      });
+        });
+      }
     }
+
   }
 
   @override
@@ -190,6 +196,17 @@ class _TextFieldsState extends State<TextFieldView> {
     }
   }
 
+  _autoValidate({bool checkValidOnSubmit = false}){
+    if(checkValidOnChange){
+      return AutovalidateMode.onUserInteraction;
+    }
+    else if(checkValid ) {
+      return AutovalidateMode.disabled;
+    }
+    return AutovalidateMode.disabled;
+
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -198,9 +215,9 @@ class _TextFieldsState extends State<TextFieldView> {
       return const SizedBox(height: 0,width: 0,);
     }
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+  /*  WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       _nameController!.text = textFieldModel!.value??"";
-    });
+    });*/
 
 
     return Column(
@@ -225,22 +242,29 @@ class _TextFieldsState extends State<TextFieldView> {
         keyboardType: keyBoardType(formFieldType: formFieldType),
         inputFormatters: inputFormatter(),
         validator: (value){
-          //Check all validation on change
+    if(value!.isEmpty && !checkValid){
+      return null;
+    }
+    else if(value.isNotEmpty && !checkValid && !checkValidOnChange){
+      return null;
+    }
+          return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
+          /*//Check all validation on change
           if(checkValid && checkValidOnChange){
             return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
           }
           //Check all validation on submit
-          else if(checkValidOnSubmit && checkValid && !checkValidOnChange){
+          else if(checkValidOnSubmit && !checkValidOnChange && checkValid){
             return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
           }
           //Check validation on submit and will not submit data on server
           else if(value!.isNotEmpty && checkValidOnSubmit && !checkValidOnChange && !checkValid){
             return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
           }
-        /*if(textFieldModel!.valid! && textFieldModel!.validation!.required!){
-        return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-        }*/
-        return null;
+          else if(value.isNotEmpty && checkValidOnSubmit){
+            return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
+          }
+        return null;*/
         }
       ,onChanged: (value){
             if(mounted){
@@ -249,21 +273,38 @@ class _TextFieldsState extends State<TextFieldView> {
         },
           onSaved: (value){
             //Check all validation on submit
-            if(!checkValidOnChange && checkValid){
+            /*if((!checkValidOnChange && checkValid)){
               setState(() {
                 checkValidOnSubmit = true;
               });
               _formFieldKey.currentState!.validate();
+            }*/
+            //Check validation on submit and will not submit data on server
+             if((value!.isNotEmpty && checkValid)){
+              /*setState(() {
+                checkValidOnSubmit = true;
+                autovalidateMode = _autoValidate(checkValidOnSubmit : true);
+              });*/
+             // _formFieldKey.currentState!.validate();
+            }
+             else if((checkValid)){
+              /*setState(() {
+                checkValidOnSubmit = true;
+                autovalidateMode = _autoValidate(checkValidOnSubmit : true);
+              });*/
+
+             // _formFieldKey.currentState!.validate();
             }
             //Check validation on submit and will not submit data on server
-            else if((value!.isNotEmpty && !checkValidOnChange && !checkValid)){
+            /*else if((value.isNotEmpty && !checkValidOnChange && !checkValid)){
               setState(() {
                 checkValidOnSubmit = true;
               });
               _formFieldKey.currentState!.validate();
-            }
+            }*/
+
           },
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autovalidateMode: autovalidateMode,
         );
   },),
         fieldHelpText(),

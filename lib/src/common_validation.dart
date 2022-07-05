@@ -26,7 +26,7 @@ class CommonValidation {
 
 
   String? checkValidation({required String enteredValue,required Map<String, dynamic> validationStr,required String formFieldType}){
-    String? errorMsg = "";
+    String? errorMsg;
     switch(formFieldType){
       case 'text':
        return errorMsg = isValidText(enteredValue,validationStr);
@@ -58,7 +58,7 @@ class CommonValidation {
   String? isValidText(String value,Map<String, dynamic> validationStr){
 
 
-    String? errorMsg = "";
+    String? errorMsg;
     try {
       Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
@@ -96,7 +96,7 @@ class CommonValidation {
   }
   String? isValidEmail(String value,Map<String, dynamic> validationStr){
 
-    String? errorMsg = "";
+    String? errorMsg ;
     try {
       Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
@@ -134,7 +134,7 @@ class CommonValidation {
     return errorMsg;
   }
   String? isValidPassword(String value,Map<String, dynamic> validationStr){
-    String? errorMsg = "";
+    String? errorMsg ;
     try {
       Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
@@ -172,7 +172,7 @@ class CommonValidation {
   }
   String? isValidName(String value,Map<String, dynamic> validationStr){
 
-    String? errorMsg = "";
+    String? errorMsg ;
     try {
       Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
@@ -210,7 +210,7 @@ class CommonValidation {
   }
   String? isValidTel(String value,Map<String, dynamic> validationStr){
 
-    String? errorMsg = "";
+    String? errorMsg ;
     try {
       Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
@@ -248,7 +248,7 @@ class CommonValidation {
   }
   String? isValidUrl(String value,Map<String, dynamic> validationStr){
 
-    String? errorMsg = "";
+    String? errorMsg;
     try {
       Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
@@ -286,7 +286,7 @@ class CommonValidation {
   }
   String? isValidNumber(String value,Map<String, dynamic> validationStr){
 
-    String? errorMsg = "";
+    String? errorMsg;
     try {
       Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};

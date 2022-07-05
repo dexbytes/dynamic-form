@@ -12,7 +12,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   String fieldKey = "";
   bool obscureText = false;
   String formFieldType = "text";
-  final _formFieldKey = GlobalKey<FormState>();
+  final _formTelFieldKey = GlobalKey<FormState>();
   Map<String,dynamic> jsonData;
   final TextEditingController? _nameController =  TextEditingController();
   TextFieldModel? textFieldModel;
@@ -34,38 +34,43 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   List enabledCountries =  ["Sa","In"];
   String selectedCountryCode = '';
   String enteredNumber = '';
-
+  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   _TextFieldCountryPickerState({required this.jsonData,required this.onChangeValue,this.viewConfiguration}){
     textFieldModel ??= responseParser.textFormFiledParsing(jsonData: jsonData,updateCommon: true);
 
-    if(textFieldModel!=null && textFieldModel!.elementConfig!=null){
-      formFieldType = textFieldModel!.elementConfig!.type??"text";
-      formFieldType  = formFieldType.toLowerCase();
-      fieldKey = textFieldModel!.elementConfig!.name!;
+    if(textFieldModel!=null){
+      _nameController!.text = textFieldModel!.value??"";
+      autovalidateMode = _autoValidate();
+      if(textFieldModel!.elementConfig!=null){
+        formFieldType = textFieldModel!.elementConfig!.type??"text";
+        formFieldType  = formFieldType.toLowerCase();
+        fieldKey = textFieldModel!.elementConfig!.name!;
 
-      checkValidOnChange = textFieldModel!.onchange??false;
-      checkValid = textFieldModel!.valid??false;
+        checkValidOnChange = textFieldModel!.onchange??false;
+        checkValid = textFieldModel!.valid??false;
 
-      //Country code required condition
-      if(jsonData['elementConfig'].containsKey('isCountryCode') && jsonData['elementConfig']['isCountryCode']){
-        isCountryCode = jsonData['elementConfig']['isCountryCode'];
+        //Country code required condition
+        if(jsonData['elementConfig'].containsKey('isCountryCode') && jsonData['elementConfig']['isCountryCode']){
+          isCountryCode = jsonData['elementConfig']['isCountryCode'];
 
-        if(jsonData['elementConfig'].containsKey('enabledCountries')) {
-          enabledCountries = jsonData['elementConfig']['enabledCountries'];
-          selectedCountryCode = enabledCountries.isNotEmpty?enabledCountries[0]:"";
+          if(jsonData['elementConfig'].containsKey('enabledCountries')) {
+            enabledCountries = jsonData['elementConfig']['enabledCountries'];
+            selectedCountryCode = enabledCountries.isNotEmpty?enabledCountries[0]:"";
+          }
         }
-      }
 
-      onChangeValue.call(fieldKey,getData(enteredNumber.trim(),selectedCountryCode));
+        onChangeValue.call(fieldKey,getData(enteredNumber.trim(),selectedCountryCode));
 
-      viewConfig = CountryPickerViewConfig(isCountryCode: isCountryCode,enabledCountries: enabledCountries,viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
+        viewConfig = CountryPickerViewConfig(isCountryCode: isCountryCode,enabledCountries: enabledCountries,viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
           obscureText = value;
           _fieldStreamControl.sink.add(obscureText);
-      },countryCodeCallBack: (value){
-        selectedCountryCode = value;
-        onChangeValue.call(fieldKey,getData(enteredNumber.trim(),selectedCountryCode));
-      });
+        },countryCodeCallBack: (value){
+          selectedCountryCode = value;
+          onChangeValue.call(fieldKey,getData(enteredNumber.trim(),selectedCountryCode));
+        });
+      }
     }
+
   }
 
   @override
@@ -210,6 +215,17 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
     }
   }
 
+  _autoValidate({bool checkValidOnSubmit = false}){
+    if(checkValidOnChange){
+      return AutovalidateMode.onUserInteraction;
+    }
+    else if(checkValid) {
+      return AutovalidateMode.disabled;
+    }
+    return AutovalidateMode.disabled;
+
+  }
+
   @override
   Widget build(BuildContext context) {
     queryData = MediaQuery.of(context);
@@ -219,9 +235,9 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
       return const SizedBox(height: 0,width: 0,);
     }
 
-    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+   /* WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       _nameController!.text = textFieldModel!.value??"";
-    });
+    });*/
 
 
     return Column(
@@ -234,7 +250,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
           obscureText = snapshot.data;
         }
         return TextFormField(
-        key: _formFieldKey,focusNode: myFocusNode,strutStyle:StrutStyle(),
+        key: _formTelFieldKey,focusNode: myFocusNode,strutStyle:StrutStyle(),
         readOnly: textFieldModel!.validation!.isReadOnly!,
         enabled: !textFieldModel!.validation!.isDisabled!,
         controller: _nameController,
@@ -246,22 +262,29 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
         keyboardType: keyBoardType(formFieldType: formFieldType),
         inputFormatters: inputFormatter(),
         validator: (value){
-          //Check all validation on change
+          if(value!.isEmpty && !checkValid){
+            return null;
+          }
+          else if(value.isNotEmpty && !checkValid && !checkValidOnChange){
+            return null;
+          }
+          return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
+          /*//Check all validation on change
           if(checkValid && checkValidOnChange){
             return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
           }
           //Check all validation on submit
-          else if(checkValidOnSubmit && checkValid && !checkValidOnChange){
+          else if(checkValidOnSubmit && !checkValidOnChange && checkValid){
             return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
           }
           //Check validation on submit and will not submit data on server
           else if(value!.isNotEmpty && checkValidOnSubmit && !checkValidOnChange && !checkValid){
             return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
           }
-        /*if(textFieldModel!.valid! && textFieldModel!.validation!.required!){
-        return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-        }*/
-        return null;
+          else if(value.isNotEmpty && checkValidOnSubmit){
+            return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
+          }
+        return null;*/
         }
       ,onChanged: (value){
             if(mounted){
@@ -270,22 +293,44 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
             }
         },
           onSaved: (value){
+
             //Check all validation on submit
-            if(!checkValidOnChange && checkValid){
+            /*if((!checkValidOnChange && checkValid)){
               setState(() {
                 checkValidOnSubmit = true;
               });
-              _formFieldKey.currentState!.validate();
+              _formTelFieldKey.currentState!.validate();
             }
             //Check validation on submit and will not submit data on server
-            else if((value!.isNotEmpty && !checkValidOnChange && !checkValid)){
+            else if((value!.isNotEmpty && !checkValidOnChange && checkValid)){
               setState(() {
                 checkValidOnSubmit = true;
               });
-              _formFieldKey.currentState!.validate();
+              _formTelFieldKey.currentState!.validate();
+            }*/
+            //Check validation on submit and will not submit data on server
+             if((value!.isNotEmpty && checkValid)){
+             /* setState(() {
+                checkValidOnSubmit = true;
+                autovalidateMode = _autoValidate(checkValidOnSubmit:true);
+              });*/
+             // _formTelFieldKey.currentState!.validate();
             }
+             else if((checkValid)){
+               /*setState(() {
+                 checkValidOnSubmit = true;
+                 autovalidateMode = _autoValidate(checkValidOnSubmit:true);
+               });*/
+               // _formFieldKey.currentState!.validate();
+             }
+            /*else if (checkValidOnSubmit){
+              setState(() {
+                checkValidOnSubmit = true;
+              });
+              _formTelFieldKey.currentState!.validate();
+            }*/
           },
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autovalidateMode: autovalidateMode,
         );
   },),
         fieldHelpText(),

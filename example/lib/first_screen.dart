@@ -48,9 +48,7 @@ class _FirstScreenState extends State<FirstScreen> {
                          MaterialPageRoute(builder: (context) => SecondScreen(data: data)),
                        );
                      }
-                        /*_formKey.currentState!.save();
-                        widget.finalSubmitCallBack?.call(formSubmitData);*/
-                      }
+                     }
                     },
                     child: const Text('Submit Form'),
                     //color: Colors.green,
