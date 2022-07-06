@@ -6,7 +6,6 @@ final String jsonEncoded;
 final Function(Map<String,dynamic> data)? finalSubmitCallBack;
 final GlobalKey<DynamicFormState>? dynamicFormKey ;
 const DynamicForm(this.jsonEncoded,{this.dynamicFormKey,required this.finalSubmitCallBack}) : super(key: dynamicFormKey);
-
   @override
   DynamicFormState createState() => DynamicFormState(jsonEncoded: jsonEncoded);
 }
@@ -125,7 +124,7 @@ class DynamicFormState extends State<DynamicForm> {
                     ],
                   );
                 }).toList()),
-                Align(alignment: Alignment.center,
+                /*Align(alignment: Alignment.center,
                   child: ElevatedButton(clipBehavior: Clip.hardEdge,
                     onPressed: () async {
                       if(_formKey.currentState!.validate()){
@@ -136,7 +135,7 @@ class DynamicFormState extends State<DynamicForm> {
                     child: Text('Submit'),
                     //color: Colors.green,
                   ),
-                ),
+                ),*/
               ],
             ),
           ),

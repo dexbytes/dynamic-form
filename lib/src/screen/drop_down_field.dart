@@ -38,103 +38,90 @@ class _DropDownState extends State<DropDown> {
         jsonData: jsonData, updateCommon: true);
     setValues(dropDownModel);
   }
-/*
-  final List<String> items = [
-    'Item1',
-    'Item2',
-    'Item3',
-    'Item4',
-    'Item5',
-    'Item6',
-    'Item7',
-    'Item8',
-  ];*/
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 0, right: 0),
-      child:
-      /*DropdownButtonHideUnderline(key: _dropDownKey,
-        child: DropdownButton2(
-          isExpanded: true,
-          hint: Row(
-            children: const [
-              Icon(
-                Icons.list,
-                size: 16,
-                color: Colors.yellow,
-              ),
-              SizedBox(
-                width: 4,
-              ),
-              Expanded(
-                child: Text(
-                  'Select Item',
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.yellow,
-                  ),
-                  overflow: TextOverflow.ellipsis,
+      child:DropdownButton2(
+        isExpanded: true,
+        dropdownFullScreen:false,
+        dropdownOverButton:false,
+        hint: Row(
+          children: const [
+            /*Icon(
+              Icons.list,
+              size: 16,
+              color: Colors.yellow,
+            ),
+            SizedBox(
+              width: 4,
+            ),*/
+            Expanded(
+              child: Text(
+                'Select Item',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
-            ],
-          ),dropdownOverButton:true,
-          items: optionList!.map((option) => buildMenuItem(option)).toList()*//*items
-              .map((item) => DropdownMenuItem<String>(
-            value: item,
-            child: Text(
-              item,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-              ),
-              overflow: TextOverflow.ellipsis,
             ),
-          ))
-              .toList()*//*,
-          value: valueChoose,
-          onChanged: (value) {
-            setState(() {
-              valueChoose = value as String;
-            });
-          },
-          icon: const Icon(
-            Icons.arrow_forward_ios_outlined,
-          ),
-          iconSize: 14,
-          iconEnabledColor: Colors.yellow,
-          iconDisabledColor: Colors.grey,
-          buttonHeight: 50,
-         // buttonWidth: 160,
-          buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-          buttonDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(
-              color: Colors.black26,
-            ),
-            color: Colors.redAccent,
-          ),
-          buttonElevation: 2,
-          itemHeight: 40,
-          itemPadding: const EdgeInsets.only(left: 14, right: 14),
-          dropdownMaxHeight: 200,
-          dropdownWidth: 200,
-          dropdownPadding: null,
-          dropdownDecoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(14),
-            color: Colors.redAccent,
-          ),
-          dropdownElevation: 8,
-          scrollbarRadius: const Radius.circular(40),
-          scrollbarThickness: 6,
-          scrollbarAlwaysShow: true,
-          offset: const Offset(-20, 0),
+          ],
         ),
-      )*/
-      DropdownButtonNew<String>(key: _dropDownKey,
+        items: optionList!
+            .map((item) =>
+            DropdownMenuItem<String>(
+              value: "${item.value}",
+              child: Text(
+                item.displayValue!,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ))
+            .toList(),
+        value: valueChoose,
+        onChanged: (value) {
+         onItemSelect(value);
+        },
+        icon: const Icon(
+          Icons.arrow_forward_ios_outlined,
+        ),
+        iconSize: 14,
+        iconEnabledColor: Colors.white,
+        iconDisabledColor: Colors.grey,
+        buttonHeight: 50,
+        // buttonWidth: 160,
+        buttonPadding: const EdgeInsets.only(left: 14, right: 14),
+        buttonDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: Colors.black26,
+          ),
+          color: Colors.redAccent,
+        ),
+        buttonElevation: 2,
+        itemHeight: 40,
+        itemPadding: const EdgeInsets.only(left: 14, right: 14),
+        dropdownMaxHeight: 200,
+        // dropdownWidth: 200,
+        dropdownPadding: null,
+        dropdownDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(14),
+          color: Colors.redAccent,
+        ),
+        dropdownElevation: 8,
+        scrollbarRadius: const Radius.circular(40),
+        scrollbarThickness: 6,
+        scrollbarAlwaysShow: true,
+        offset: const Offset(0, 0),
+      )
+     /* DropdownButtonNew<String>(key: _dropDownKey,
         dropdownOverButton:true,
           alignment: AlignmentDirectional.centerStart,
           iconEnabledColor: Colors.grey,
@@ -157,7 +144,7 @@ class _DropDownState extends State<DropDown> {
           // alignment: Alignment.bottomCenter,
           borderRadius: BorderRadius.circular(8),
           hint: Text(widget.hint ??
-              "" /*appString.trans(context, appString.restaurantType),style: appStyles.hintTextStyle()*/),
+              "" *//*appString.trans(context, appString.restaurantType),style: appStyles.hintTextStyle()*//*),
           isDense: false,
         focusColor: Colors.red,
           value: valueChoose,
@@ -166,9 +153,12 @@ class _DropDownState extends State<DropDown> {
               setState(() {
                //// valueChoose = value;
               }),
-      ),
+      ),*/
     );
   }
+
+
+
 
   DropdownMenuItemNew<String> buildMenuItem(Options option) {
     String value = option.value!;/*
@@ -252,17 +242,19 @@ class _DropDownState extends State<DropDown> {
 
   /*Call action when click on any item*/
   void _onSelect({String? value = "", String? displayValue = ""}){
-    if(value!.trim().isNotEmpty){
+    if(value!.trim().isNotEmpty && !selectedOption!.contains(value.trim())){
       selectedOption!.add(value.trim());
       setState(() {});
     }
-    else if(displayValue!.trim().isNotEmpty){
+    else if(displayValue!.trim().isNotEmpty ){
       int idTemp = optionList!.indexWhere((element) => element.displayValue==displayValue);
       if(idTemp!=-1){
         value = optionList![idTemp].value;
       }
-      selectedOption!.add(value!.trim());
-      setState(() {});
+      if(!selectedOption!.contains(value!.trim())){
+        selectedOption!.add(value.trim());
+        setState(() {});
+      }
     }
     else{
       debugPrint("Please attlist one value");
@@ -270,7 +262,7 @@ class _DropDownState extends State<DropDown> {
   }
   /*Call action when click on any item*/
   void _onUnSelect({String? value = "", String? displayValue = ""}){
-    if(value!.trim().isNotEmpty){
+    if(value!.trim().isNotEmpty && selectedOption!.contains(value.trim())){
       selectedOption!.remove(value.trim());
       setState(() {});
     }
@@ -279,8 +271,10 @@ class _DropDownState extends State<DropDown> {
       if(idTemp!=-1){
         value = optionList![idTemp].value;
       }
-      selectedOption!.remove(value!.trim());
-      setState(() {});
+      if(selectedOption!.contains(value!.trim())) {
+        selectedOption!.remove(value.trim());
+        setState(() {});
+      }
     }
     else{
       debugPrint("Please attlist one value");
@@ -288,10 +282,28 @@ class _DropDownState extends State<DropDown> {
   }
 
   void _returnValue(){
-    if(!isMultipleSelect){
+    /*if(!isMultipleSelect){
       Navigator.pop(_dropDownKey.currentContext!);
-      }
+      }*/
     onChangeValue.call(fieldKey,selectedOption!);
+  }
+
+  void onItemSelect(Object? value) {
+    int index =  optionList!.indexWhere((element) => value as String == element.value);
+    if(index!= -1){
+      setState(() {
+        Options indexData = optionList![index];
+        valueChoose = indexData.value!;
+      });
+      String valueTemp = value as String;
+      //if(!isChecked){
+        _onSelect(value: valueTemp);
+      /*}
+      else{
+        _onUnSelect(value: value as String);
+      }*/
+      _returnValue();
+    }
   }
 }
 
