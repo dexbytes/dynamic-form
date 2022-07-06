@@ -34,10 +34,9 @@ class DropdownConfiguration {
   /// The decoration of the dropdown menu
   late BoxDecoration? _dropdownDecoration = BoxDecoration(
     borderRadius: BorderRadius.circular(10),
-    color: Colors.blueAccent,
+    color: Colors.blueAccent.shade100,
   );
   /// The size to use for the drop-down button's icon.
-  ///
   /// Defaults to 24.0.
   late double _iconSize = 24;
   late double _itemHeight = 35 ;
