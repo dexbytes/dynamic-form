@@ -16,11 +16,18 @@ class ConfigurationSetting extends TextFieldConfiguration{
   }
 
   TelTextFieldConfiguration _telTextFieldConfiguration = TelTextFieldConfiguration();
-
-  /*Set Text field ui presentation*/
+  /*Set Tel Text field ui presentation*/
   set setTelTextFieldViewConfig (TelTextFieldConfiguration textFieldConfig){
     _telTextFieldConfiguration = textFieldConfig;
   }
+
+  DropdownConfiguration _dropdownConfiguration = DropdownConfiguration();
+
+  /*Set Dropdown field ui presentation*/
+  set setDropdownConfiguration (DropdownConfiguration dropdownConfiguration){
+    _dropdownConfiguration = dropdownConfiguration;
+  }
+
 /*  textField({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border}){
     _textFieldConfiguration = setConfiguration(textStyle:textStyle,hintStyle:hintStyle,border:border);
   }*/

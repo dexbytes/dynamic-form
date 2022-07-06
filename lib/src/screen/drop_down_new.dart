@@ -961,10 +961,10 @@ class DropdownMenuItemNew<T> extends _DropdownMenuItemContainer {
 /// This is used by [DataTable] to remove the underline from any
 /// [DropdownButtonNew] widgets placed within material data tables, as
 /// required by the material design specification.
-class DropdownButtonHideUnderline extends InheritedWidget {
-  /// Creates a [DropdownButtonHideUnderline]. A non-null [child] must
+class DropdownButtonHideUnderlineNew extends InheritedWidget {
+  /// Creates a [DropdownButtonHideUnderlineNew]. A non-null [child] must
   /// be given.
-  const DropdownButtonHideUnderline({
+  const DropdownButtonHideUnderlineNew({
     Key? key,
     required Widget child,
   }) : assert(child != null),
@@ -973,11 +973,11 @@ class DropdownButtonHideUnderline extends InheritedWidget {
   /// Returns whether the underline of [DropdownButtonNew] widgets should
   /// be hidden.
   static bool at(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<DropdownButtonHideUnderline>() != null;
+    return context.dependOnInheritedWidgetOfExactType<DropdownButtonHideUnderlineNew>() != null;
   }
 
   @override
-  bool updateShouldNotify(DropdownButtonHideUnderline oldWidget) => false;
+  bool updateShouldNotify(DropdownButtonHideUnderlineNew oldWidget) => false;
 }
 
 /// A material design button for selecting from a list of items.
@@ -1018,7 +1018,7 @@ class DropdownButtonHideUnderline extends InheritedWidget {
 ///
 ///  * [DropdownButtonFormField], which integrates with the [Form] widget.
 ///  * [DropdownMenuItemNew], the class used to represent the [items].
-///  * [DropdownButtonHideUnderline], which prevents its descendant dropdown buttons
+///  * [DropdownButtonHideUnderlineNew], which prevents its descendant dropdown buttons
 ///    from displaying their underlines.
 ///  * [ElevatedButton], [TextButton], ordinary buttons that trigger a single action.
 ///  * <https://material.io/design/components/menus.html#dropdown-menu>
@@ -1634,7 +1634,7 @@ class _DropdownButtonState<T> extends State<DropdownButtonNew<T>> with WidgetsBi
       ),
     );
 
-    if (!DropdownButtonHideUnderline.at(context)) {
+    if (!DropdownButtonHideUnderlineNew.at(context)) {
       final double bottom = (widget.isDense || widget.itemHeight == null) ? 0.0 : 8.0;
       result = Container( decoration: widget.dropdownDecoration??BoxDecoration(
         color: widget.focusColor ?? Theme.of(context).focusColor,
@@ -1801,7 +1801,7 @@ class DropdownButtonFormField<T> extends FormField<T> {
                 decoration: effectiveDecoration.copyWith(errorText: field.errorText),
                 isEmpty: isEmpty,
                 isFocused: Focus.of(context).hasFocus,
-                child: DropdownButtonHideUnderline(
+                child: DropdownButtonHideUnderlineNew(
                   child: DropdownButtonNew<T>(
                     items: items,
                     selectedItemBuilder: selectedItemBuilder,

@@ -158,7 +158,7 @@
         ],
         "isMulitpleSelect":false
       },
-      "value":"",
+      "value":"Salaried",
       "validation":{
         "required":true,
         "isReadOnly":false,

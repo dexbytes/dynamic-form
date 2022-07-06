@@ -5,160 +5,123 @@ class DropDown extends StatefulWidget {
   final List<Options>? optionList;
   final String? hint;
   final Map<String,dynamic> jsonData;
+  final DropdownConfiguration? viewConfiguration;
   final Function (String fieldKey,List<String> fieldValue) onChangeValue ;
 
   const DropDown({Key? key,required this.jsonData,required this.onChangeValue,
     this.optionList = const [],
-    this.hint,
+    this.hint,this.viewConfiguration
   }) : super(key: key);
 
   @override
-  _DropDownState createState() => _DropDownState(optionList: this.optionList,jsonData: jsonData,onChangeValue: onChangeValue);
+  _DropDownState createState() => _DropDownState(optionList: this.optionList,jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration:viewConfiguration);
 }
 
 class _DropDownState extends State<DropDown> {
   String? valueChoose;
+  String? buttonHead = "Select Item";
   List<Options>? optionList;
   DropDownModel? dropDownModel;
   Map<String, dynamic> jsonData;
-
+  DropdownConfiguration? viewConfiguration;
   bool isMultipleSelect = false;
   bool isInline = false;
-  final _dropDownKey = GlobalKey<FormState>();
   String fieldKey = "";
   String label = "";
+  bool enableLabel = true;
   String placeholder = "";
-  List<String> value = const [];
+  String value = "";
   List<String>? selectedOption = [];
 
   Function (String fieldKey,List<String> fieldValue) onChangeValue ;
   _DropDownState(
-      {required this.jsonData,this.optionList,required this.onChangeValue}) {
+      {required this.jsonData,this.optionList,required this.onChangeValue,this.viewConfiguration}) {
     dropDownModel ??= responseParser.dropDownFormFiledParsing(
         jsonData: jsonData, updateCommon: true);
-    setValues(dropDownModel);
+
+
+    setValues(dropDownModel,jsonData);
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 0, right: 0),
-      child:DropdownButton2(
-        isExpanded: true,
-        dropdownFullScreen:false,
-        dropdownOverButton:false,
-        hint: Row(
-          children: const [
-            /*Icon(
-              Icons.list,
-              size: 16,
-              color: Colors.yellow,
-            ),
-            SizedBox(
-              width: 4,
-            ),*/
-            Expanded(
-              child: Text(
-                'Select Item',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                overflow: TextOverflow.ellipsis,
+      child:
+      Column(
+        children: [
+          !enableLabel?const SizedBox(height: 0,):Row(
+            children: [
+              Text(label,style: viewConfiguration!._labelTextStyle,),
+            ],
+          ),SizedBox(height: enableLabel?5:0,),
+          DropdownButtonHideUnderline(
+            child: DropdownButton2(
+              isExpanded: true,
+              dropdownFullScreen:false,
+              dropdownOverButton:false,
+              hint: Row(
+                children: [
+                  /*Icon(
+                    Icons.list,
+                    size: 16,
+                    color: Colors.yellow,
+                  ),
+                  SizedBox(
+                    width: 4,
+                  ),*/
+                  Expanded(
+                    child: Text(
+                      '$buttonHead',
+                      style: viewConfiguration!._selectedTextStyle,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                ],
               ),
+              items: optionList!
+                  .map((item) =>
+                  DropdownMenuItem<String>(
+                    value: "${item.value}",
+                    child: Text(
+                      item.displayValue!,
+                      style: viewConfiguration!._textStyle,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ))
+                  .toList(),
+              value: valueChoose,
+              onChanged: (value) {
+               onItemSelect(value);
+              },
+              icon: viewConfiguration!._rightArrow,
+              iconSize: viewConfiguration!._iconSize,
+              iconEnabledColor: viewConfiguration!._iconEnabledColor,
+              iconDisabledColor: viewConfiguration!._iconDisabledColor,
+              buttonHeight: viewConfiguration!._buttonHeight,
+              // buttonWidth: viewConfiguration!._buttonWidth,
+              buttonPadding: viewConfiguration!._buttonPadding,
+              buttonDecoration: viewConfiguration!._buttonDecoration,
+              buttonElevation: viewConfiguration!._buttonElevation!,
+              itemHeight: viewConfiguration!._itemHeight,
+              itemPadding: viewConfiguration!._itemPadding,
+              dropdownMaxHeight: viewConfiguration!._dropdownMaxHeight,
+              // dropdownWidth: viewConfiguration!._dropdownWidth,
+              dropdownPadding: null,
+              dropdownDecoration: viewConfiguration!._dropdownDecoration,
+              dropdownElevation: viewConfiguration!._dropdownElevation!,
+              scrollbarRadius: const Radius.circular(40),
+              scrollbarThickness: 1,
+              scrollbarAlwaysShow: true,
+              offset: const Offset(0, 0),
             ),
-          ],
-        ),
-        items: optionList!
-            .map((item) =>
-            DropdownMenuItem<String>(
-              value: "${item.value}",
-              child: Text(
-                item.displayValue!,
-                style: const TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ))
-            .toList(),
-        value: valueChoose,
-        onChanged: (value) {
-         onItemSelect(value);
-        },
-        icon: const Icon(
-          Icons.arrow_forward_ios_outlined,
-        ),
-        iconSize: 14,
-        iconEnabledColor: Colors.white,
-        iconDisabledColor: Colors.grey,
-        buttonHeight: 50,
-        // buttonWidth: 160,
-        buttonPadding: const EdgeInsets.only(left: 14, right: 14),
-        buttonDecoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: Colors.black26,
           ),
-          color: Colors.redAccent,
-        ),
-        buttonElevation: 2,
-        itemHeight: 40,
-        itemPadding: const EdgeInsets.only(left: 14, right: 14),
-        dropdownMaxHeight: 200,
-        // dropdownWidth: 200,
-        dropdownPadding: null,
-        dropdownDecoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: Colors.redAccent,
-        ),
-        dropdownElevation: 8,
-        scrollbarRadius: const Radius.circular(40),
-        scrollbarThickness: 6,
-        scrollbarAlwaysShow: true,
-        offset: const Offset(0, 0),
+        ],
       )
-     /* DropdownButtonNew<String>(key: _dropDownKey,
-        dropdownOverButton:true,
-          alignment: AlignmentDirectional.centerStart,
-          iconEnabledColor: Colors.grey,
-          icon: const Icon(Icons.keyboard_arrow_down),
-          iconSize: 28,
-          elevation: 0,
-          isExpanded: true,dropdownDecoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          color: Colors.grey.withOpacity(0.8),
-        ),
-          underline: Container(
-            height: 1,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              color: Colors.redAccent,
-            ),
-          ),
-          dropdownColor: Colors.red,
-          // dropdownColor: !isDarkMode? Colors.grey.shade300 : Color(0xff212327),
-          // alignment: Alignment.bottomCenter,
-          borderRadius: BorderRadius.circular(8),
-          hint: Text(widget.hint ??
-              "" *//*appString.trans(context, appString.restaurantType),style: appStyles.hintTextStyle()*//*),
-          isDense: false,
-        focusColor: Colors.red,
-          value: valueChoose,
-          items: optionList!.map((option) => buildMenuItem(option)).toList(),
-          onChanged: (value) =>
-              setState(() {
-               //// valueChoose = value;
-              }),
-      ),*/
+
     );
   }
-
-
-
 
   DropdownMenuItemNew<String> buildMenuItem(Options option) {
     String value = option.value!;/*
@@ -189,41 +152,20 @@ class _DropDownState extends State<DropDown> {
             )*/
           ],
         )
-        /*InkWell(onTap: (){
-          *//*setState(() {
-            isChecked = !isChecked;
-          });*//*
-          debugPrint("Item Click $isChecked");
-          if(!isChecked){
-          _onSelect(value: value);
-          }
-          else{
-            _onUnSelect(value: value);
-          }
-          isChecked = !isChecked;
-
-        },
-          child: Row(crossAxisAlignment: CrossAxisAlignment.center,mainAxisAlignment: MainAxisAlignment.start,mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: Text(
-                  item,
-                  //style: appStyles.hintTextStyle()
-                ),
-              ),
-              !isMultipleSelect?Container():CheckBoxCustom(checkStatus: isChecked,onClicked: (value){
-
-              },)
-            ],
-          ),
-        )*/
     );
   }
 
   //Initial value set
-  void setValues(DropDownModel? dropDownModel) {
-    if (dropDownModel != null) {
+  void setValues(DropDownModel? dropDownModel, Map<String, dynamic> jsonData) {
 
+   viewConfiguration  = viewConfiguration ?? ConfigurationSetting.instance._dropdownConfiguration;
+
+    if (dropDownModel != null) {
+        try {
+          enableLabel = jsonData['elementConfig']['enableLabel'];
+        } catch (e) {
+          print(e);
+        }
       if (dropDownModel.elementConfig != null) {
         fieldKey = dropDownModel.elementConfig!.name!;
         label = dropDownModel.elementConfig!.label!;
@@ -231,9 +173,13 @@ class _DropDownState extends State<DropDown> {
 
         isMultipleSelect = dropDownModel.elementConfig!.isMultipleSelect??false;
         isInline = dropDownModel.elementConfig!.isInline??false;
-        value = const [];
+        value = dropDownModel.value??"";
+
         if (dropDownModel.elementConfig!.options!.isNotEmpty) {
           optionList = dropDownModel.elementConfig!.options!.map((e) => Options(value: e.value,displayValue: e.displayValue,checked: e.checked)).toList();
+          if(value.isNotEmpty){
+            _onSelect(isInit: true,displayValue: value);
+          }
         }
         onChangeValue.call(fieldKey,selectedOption!);
       }
@@ -241,10 +187,17 @@ class _DropDownState extends State<DropDown> {
   }
 
   /*Call action when click on any item*/
-  void _onSelect({String? value = "", String? displayValue = ""}){
+  void _onSelect({bool isInit = false,String? value = "", String? displayValue = ""}){
     if(value!.trim().isNotEmpty && !selectedOption!.contains(value.trim())){
       selectedOption!.add(value.trim());
-      setState(() {});
+      if(isInit){
+        valueChoose = value;
+      }
+      else {
+        setState(() {
+          valueChoose = value;
+        });
+      }
     }
     else if(displayValue!.trim().isNotEmpty ){
       int idTemp = optionList!.indexWhere((element) => element.displayValue==displayValue);
@@ -253,7 +206,30 @@ class _DropDownState extends State<DropDown> {
       }
       if(!selectedOption!.contains(value!.trim())){
         selectedOption!.add(value.trim());
-        setState(() {});
+
+        if(isInit){
+          valueChoose = value;
+        }
+        else {
+          setState(() {
+            valueChoose = value;
+          });
+        }
+      }
+      else {
+        try {
+          if(isInit){
+              buttonHead = displayValue;
+          }
+          else{
+            setState(() {
+              buttonHead = displayValue;
+            });
+          }
+
+        } catch (e) {
+          print(e);
+        }
       }
     }
     else{
@@ -401,12 +377,12 @@ class _DropdownRowItemState extends State<DropdownRowItem> {
               ),
             ),
           ),
-          !widget.isMultipleSelect?Container():Checkbox(value: isChecked, onChanged: (value){
+          /*!widget.isMultipleSelect?Container():Checkbox(value: isChecked, onChanged: (value){
             setState(() {
               isChecked = !isChecked;
             });
             onClicked?.call(!isChecked);
-          })
+          })*/
         ],
       ),
     ));

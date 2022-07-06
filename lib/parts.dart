@@ -24,6 +24,7 @@ export 'package:flutter/material.dart';
 
 part 'src/model/text_configuration.dart';
 part 'src/model/tel_text_configuration.dart';
+part 'src/model/dropdown_configuration.dart';
 part 'src/screen/dynamic_form.dart';
 part 'src/screen/text_field.dart';
 part 'src/screen/text_field_country_picker.dart';
