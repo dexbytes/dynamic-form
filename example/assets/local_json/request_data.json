@@ -11,6 +11,7 @@
         "type": "text",
         "name" : "name",
         "label" : "Name",
+        "enableLabel":true,
         "placeholder": "Name",
         "class" : "form-control",
         "resetIcon": true,
@@ -37,7 +38,7 @@
         }
       },
       "valid": true,
-      "onchange":true
+      "onchange":false
     },
     {
       "elementType":"input",
@@ -45,6 +46,7 @@
         "type":"email",
         "name":"email",
         "label":"Email",
+        "enableLabel":true,
         "placeholder":"E-Mail",
         "class":"form-control",
         "resetIcon":true
@@ -76,6 +78,7 @@
         "type":"tel",
         "name":"office",
         "label":"Phone",
+        "enableLabel":true,
         "placeholder":"Phone",
         "class":"form-control",
         "resetIcon":true
@@ -89,13 +92,13 @@
         "required":true,
         "minLength":8,
         "maxLength":10,
-        "rejex":"(^(?:[+0]9)?[0-9]{8,10}$)",
+        "rejex":"[0-9]",
         "isReadOnly":false,
         "isDisabled":false,
          "errorMessage": {
           "required":"Please enter phone number",
           "minLength":"Please enter minimum 8 digit number",
-          "maxLength":"Max 12 chat allow",
+          "maxLength":"Max 10 chat allow",
           "rejex": "Please enter 10 digit mobile number"
         }
       },
@@ -108,6 +111,7 @@
         "type":"password",
         "name":"password",
         "label":"Password",
+        "enableLabel":true,
         "placeholder":"Password",
         "class":"form-control",
         "resetIcon":true
@@ -139,6 +143,7 @@
       "elementConfig":{
         "name":"occupation",
         "label":"Occupation",
+        "enableLabel":true,
         "placeholder":"Occupation",
         "class":"form-control",
         "options":[
@@ -166,6 +171,7 @@
       "elementConfig":{
         "name":"College",
         "label":"College",
+        "enableLabel":true,
         "placeholder":"College",
         "class":"form-control",
         "options":[
@@ -194,6 +200,7 @@
         "type":"tel",
         "name":"tel",
         "label":"Phone",
+        "enableLabel":false,
         "placeholder":"Phone",
         "class":"form-control",
         "resetIcon":true,
@@ -205,7 +212,7 @@
         "required":true,
         "minLength":8,
         "maxLength":10,
-        "rejex":"(^(?:[+0]9)?[0-9]{8,10}$)",
+        "rejex":"[0-9]",
         "isReadOnly":false,
         "isDisabled":false,
         "errorMessage": {
@@ -216,7 +223,7 @@
         }
       },
       "valid":true,
-      "onchange":false
+      "onchange":true
     }
   ]
 }

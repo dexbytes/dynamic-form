@@ -114,7 +114,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
         break ;
         case 'tel':
         isDoneOver = true;
-        keyBoardType = TextInputType.phone;
+        keyBoardType = TextInputType.number;
 
         break ;
         case 'url':
@@ -136,10 +136,13 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
 
   List<TextInputFormatter>? inputFormatter(){
     String keyText = textFieldModel!.validation!.rejex!;
+    // if(formFieldType.toLowerCase()=="tel"){
+    //  // keyText = r'[0-9]';
+    // }
     List<TextInputFormatter>? filter = [];
     if(keyText.isNotEmpty){
-      //filter = [];
-     // filter.add(FilteringTextInputFormatter.allow(RegExp(keyText)));
+      filter = [];
+      filter.add(FilteringTextInputFormatter.allow(RegExp(keyText)));
       return filter;
     }
     return filter;
@@ -360,13 +363,18 @@ class CountryPickerViewConfig{
   }
 
   InputDecoration _getTextDecoration (){
+    bool enableLabel = viewConfiguration!._enableLabel;
+    if(textFieldModel.elementConfig!.enableLabel != null){
+      enableLabel = textFieldModel.elementConfig!.enableLabel!;
+    }
+
  return InputDecoration(
         border: viewConfiguration!._border,
      /*   errorBorder: viewConfiguration!._errorBorder,
         focusedErrorBorder: viewConfiguration!._errorBorder,*/
         enabledBorder: viewConfiguration!._border,
         hintText: textFieldModel.elementConfig!.placeholder??"",hintStyle: viewConfiguration!._hintStyle,
-        label: !viewConfiguration!._enableLabel?null:
+        label: !enableLabel?null:
                 textFieldModel.elementConfig!.label != null &&
                         textFieldModel.elementConfig!.label!.isNotEmpty
                     ? Text(

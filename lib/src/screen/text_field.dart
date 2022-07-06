@@ -325,13 +325,19 @@ class ViewConfig{
   }
 
   InputDecoration _getTextDecoration (){
+
+    bool enableLabel = viewConfiguration!._enableLabel;
+    if(textFieldModel.elementConfig!.enableLabel != null){
+      enableLabel = textFieldModel.elementConfig!.enableLabel!;
+    }
+
  return InputDecoration(
         border: viewConfiguration!._border,
      /*   errorBorder: viewConfiguration!._errorBorder,
         focusedErrorBorder: viewConfiguration!._errorBorder,*/
         enabledBorder: viewConfiguration!._border,
         hintText: textFieldModel.elementConfig!.placeholder??"",hintStyle: viewConfiguration!._hintStyle,
-        label: textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: viewConfiguration!._textStyle,):null,suffixIcon: null,counterText: ""
+        label: !enableLabel?null:textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: viewConfiguration!._textStyle,):null,suffixIcon: null,counterText: ""
     );
 
   }

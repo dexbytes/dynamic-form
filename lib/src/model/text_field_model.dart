@@ -45,6 +45,7 @@ class ElementConfig {
   String? type;
   String? name;
   String? label;
+  bool? enableLabel;
   String? placeholder;
   String? classProperty;
   bool? resetIcon;
@@ -52,12 +53,15 @@ class ElementConfig {
   int? minLine;
   int? maxLine;
 
-  ElementConfig({this.type, this.name, this.label, this.placeholder, this.classProperty, this.resetIcon,this.nextName,this.minLine = 1,this.maxLine = 2});
+  ElementConfig({this.type, this.name, this.label,this.enableLabel, this.placeholder, this.classProperty, this.resetIcon,this.nextName,this.minLine = 1,this.maxLine = 2});
 
   ElementConfig.fromJson(Map<String, dynamic> json) {
   type = json['type'];
   name = json['name'];
   label = json['label'];
+  if(json.containsKey('enableLabel')){
+    enableLabel = json['enableLabel'];
+  }
   placeholder = json['placeholder'];
   classProperty = json['class'];
   resetIcon = json['resetIcon'];
@@ -71,6 +75,7 @@ class ElementConfig {
   data['type'] = this.type;
   data['name'] = this.name;
   data['label'] = this.label;
+  data['enableLabel'] = this.enableLabel;
   data['placeholder'] = this.placeholder;
   data['class'] = this.classProperty;
   data['resetIcon'] = this.resetIcon;
