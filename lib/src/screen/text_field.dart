@@ -10,7 +10,7 @@ class TextFieldView extends StatefulWidget {
 }
 class _TextFieldsState extends State<TextFieldView> {
   String fieldKey = "";
-  bool obscureText = false;
+  bool obscureText = true;
   String formFieldType = "text";
   String textCapitalizeStr = "none";
   final _formFieldKey = GlobalKey<FormState>();
@@ -46,6 +46,9 @@ class _TextFieldsState extends State<TextFieldView> {
         checkValidOnChange = textFieldModel!.onchange??false;
         checkValid = textFieldModel!.valid??false;
         autovalidateMode = _autoValidate();
+        if(formFieldType!="password"){
+          obscureText = false;
+        }
 
         viewConfig = ViewConfig(viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
           obscureText = value;

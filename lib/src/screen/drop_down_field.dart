@@ -189,6 +189,10 @@ class _DropDownState extends State<DropDown> {
   /*Call action when click on any item*/
   void _onSelect({bool isInit = false,String? value = "", String? displayValue = ""}){
     if(value!.trim().isNotEmpty && !selectedOption!.contains(value.trim())){
+      //Remove older selected value in case multi selection off
+      if(!isMultipleSelect){
+        selectedOption = [];
+      }
       selectedOption!.add(value.trim());
       if(isInit){
         valueChoose = value;
@@ -205,6 +209,10 @@ class _DropDownState extends State<DropDown> {
         value = optionList![idTemp].value;
       }
       if(!selectedOption!.contains(value!.trim())){
+        //Remove older selected value in case multi selection off
+        if(!isMultipleSelect){
+          selectedOption = [];
+        }
         selectedOption!.add(value.trim());
 
         if(isInit){

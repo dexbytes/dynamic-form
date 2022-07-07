@@ -40,6 +40,6 @@ _IconClearTextFormFiledState(bool initialValue) {
         _passwordVisible = !_passwordVisible;
         widget.iconClicked?.call(_passwordVisible);
       });
-    },child: Container(child: widget.iconWidget!=null? widget.iconWidget!:  Icon(_passwordVisible?Icons.visibility:Icons.visibility_off),));
+    },child: Container(child: widget.iconWidget!=null? widget.iconWidget!:  Icon(!_passwordVisible?Icons.visibility:Icons.visibility_off),));
   }
 }
