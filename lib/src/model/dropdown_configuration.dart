@@ -3,13 +3,13 @@ part of dynamic_json_form;
 
 class DropdownConfiguration {
 
-  late TextStyle? _textStyle =   TextStyle(
+  late TextStyle? _textStyle =  const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.bold,
     color: Colors.white,
   );
 
-  late TextStyle? _labelTextStyle =   TextStyle(
+  late TextStyle? _labelTextStyle =  const TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.normal,
     color: Colors.grey,
@@ -60,14 +60,81 @@ class DropdownConfiguration {
   /// The highlight color of the current selected item
   late Color? _selectedItemHighlightColor;
 
-  DropdownConfiguration({TextStyle? textStyle,Widget? rightArrow,InputBorder? border,bool? enableLabel});
+  DropdownConfiguration({TextStyle? textStyle,Widget? rightArrow,InputBorder? border,bool? enableLabel,TextStyle? labelTextStyle,TextStyle? selectedTextStyle,Color? iconEnabledColor,Color? iconDisabledColor,Color? selectedItemHighlightColor,BoxDecoration? buttonDecoration,BoxDecoration? dropdownDecoration,double? iconSize,double? itemHeight,double? buttonHeight,double? buttonWidth,EdgeInsetsGeometry? buttonPadding,EdgeInsetsGeometry? itemPadding,int? buttonElevation,int? dropdownElevation});
 
-  DropdownConfiguration setConfiguration({TextStyle? textStyle,Widget? rightArrow,InputBorder? border,bool? enableLabel}) {
+  DropdownConfiguration setConfiguration({TextStyle? textStyle,Widget? rightArrow,InputBorder? border,bool? enableLabel,TextStyle? labelTextStyle,TextStyle? selectedTextStyle,Color? iconEnabledColor,Color? iconDisabledColor,Color? selectedItemHighlightColor,BoxDecoration? buttonDecoration,BoxDecoration? dropdownDecoration,double? iconSize,double? itemHeight,double? buttonHeight,double? buttonWidth,EdgeInsetsGeometry? buttonPadding,EdgeInsetsGeometry? itemPadding,int? buttonElevation,int? dropdownElevation}) {
     return DropdownConfiguration(
         textStyle : textStyle ?? _textStyle,
-      rightArrow : rightArrow ?? _rightArrow
+        rightArrow : rightArrow ?? _rightArrow,
+        labelTextStyle : labelTextStyle ?? _labelTextStyle,
+      selectedTextStyle : selectedTextStyle ?? _selectedTextStyle,
+      iconEnabledColor : iconEnabledColor ?? _iconEnabledColor,
+      iconDisabledColor : iconDisabledColor ?? _iconDisabledColor,
+      buttonDecoration : buttonDecoration ?? _buttonDecoration,
+      dropdownDecoration : dropdownDecoration ?? _dropdownDecoration,
+      iconSize : iconSize ?? _iconSize,
+      itemHeight : itemHeight ?? _itemHeight,
+      buttonHeight : buttonHeight ?? _buttonHeight,
+      buttonWidth : buttonWidth ?? _buttonWidth,
+      buttonPadding : buttonPadding ?? _buttonPadding,
+      itemPadding : itemPadding ?? _itemPadding,
+      buttonElevation : buttonElevation ?? _buttonElevation,
+      dropdownElevation : dropdownElevation ?? _dropdownElevation,
+      selectedItemHighlightColor : selectedItemHighlightColor ?? _selectedItemHighlightColor,
     );
 }
+
+  set setTextStyle (TextStyle value){
+    _textStyle = value;
+  }
+  set setLabelTextStyle (TextStyle value){
+    _labelTextStyle = value;
+  }
+  set setSelectedTextStyle (TextStyle value){
+    _selectedTextStyle = value;
+  }
+  set setRightArrow (Widget value){
+    _rightArrow = value;
+  }
+  set setIconEnabledColor (Color value){
+    _iconEnabledColor = value;
+  }
+  set setIconDisabledColor (Color value){
+    _iconDisabledColor = value;
+  }
+  set setSelectedItemHighlightColor (Color value){
+    _selectedItemHighlightColor = value;
+  }
+  set setButtonDecoration (BoxDecoration value){
+    _buttonDecoration = value;
+  }
+  set setDropdownDecoration (BoxDecoration value){
+    _dropdownDecoration = value;
+  }
+  set setIconSize (double value){
+    _iconSize = value;
+  }
+  set setItemHeight (double value){
+    _itemHeight = value;
+  }
+  set setButtonHeight (double value){
+    _buttonHeight = value;
+  }
+  set setButtonWidth (double value){
+    _buttonWidth = value;
+  }
+  set setButtonPadding (EdgeInsetsGeometry value){
+    _buttonPadding = value;
+  }
+  set setItemPadding (EdgeInsetsGeometry value){
+    _itemPadding = value;
+  }
+  set setButtonElevation (int value){
+    _buttonElevation = value;
+  }
+  set setDropdownElevation (int value){
+    _dropdownElevation = value;
+  }
 
 }
 DropdownConfiguration dropdownConfiguration = DropdownConfiguration();
