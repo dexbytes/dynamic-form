@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:dynamic_json_form/dynamic_json_form.dart';
-import 'package:dynamic_json_form/src/common_style.dart';
 import 'package:dynamic_json_form/src/common_validation.dart';
 import 'package:dynamic_json_form/src/model/drop_down_field_model.dart';
 import 'package:dynamic_json_form/src/model/text_field_model.dart';
