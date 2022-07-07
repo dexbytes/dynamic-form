@@ -254,7 +254,6 @@ class _TextFieldsState extends State<TextFieldView> {
           obscureText = snapshot.data;
         }
         return TextFormField(
-        // key: _formFieldKey,
         focusNode: myFocusNode,strutStyle:StrutStyle(),
         readOnly: textFieldModel!.validation!.isReadOnly!,
         enabled: !textFieldModel!.validation!.isDisabled!,

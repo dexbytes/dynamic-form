@@ -300,6 +300,14 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
               _formTelFieldKey.currentState!.validate();
             }*/
           },
+          onFieldSubmitted:(value){
+            if((value.isNotEmpty && checkValid)){
+              setState(() {
+                checkValidOnChange = true;
+                autovalidateMode = _autoValidate();
+              });
+            }
+          },
           autovalidateMode: autovalidateMode,
         );
   },),
