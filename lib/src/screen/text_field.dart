@@ -137,16 +137,18 @@ class _TextFieldsState extends State<TextFieldView> {
     return textCapitalization;
 }
 
-  List<TextInputFormatter>? inputFormatter(){
+  List<TextInputFormatter>? inputFormatter({required String formFieldType}){
      String keyText = textFieldModel!.validation!.rejex!;
-    //String keyText = r'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{12,}$';
-    //String keyText = r'[a-zA-Z!@#$&*~]+';
     List<TextInputFormatter>? filter = [];
     if(keyText.isNotEmpty){
       filter = [];
-     // filter.add(FilteringTextInputFormatter.allow(RegExp(keyText)));
       filter.add(FilteringTextInputFormatter.allow(RegExp(keyText)));
-      return filter;
+      //return filter;
+    }
+     String formFieldTypeTemp = formFieldType.toLowerCase();
+    //Not apply regex in this case
+    if(formFieldTypeTemp=="email"/*||formFieldTypeTemp=="email"*/){
+      filter = [];
     }
     return filter;
 }
@@ -256,10 +258,11 @@ class _TextFieldsState extends State<TextFieldView> {
         textInputAction: TextInputAction.done,
         maxLength: textFieldModel!.validation!.maxLength,   //It is the length of char
         maxLines: maxLine(),
-        minLines: minLine(),textCapitalization:textCapitalize(textCapitalizeStr: textCapitalizeStr),
+        minLines: minLine(),
+          textCapitalization:textCapitalize(textCapitalizeStr: textCapitalizeStr),
         decoration: viewConfig!.getInputDecoration(),obscureText: obscureText,
         keyboardType: keyBoardType(formFieldType: formFieldType),
-        inputFormatters: inputFormatter(),
+        inputFormatters: inputFormatter(formFieldType: formFieldType),
         validator: (value){
     if(value!.isEmpty && !checkValid){
       return null;

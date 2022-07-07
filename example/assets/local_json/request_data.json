@@ -53,17 +53,14 @@
       "validation": {
         "required":true,
         "isEmail":true,
-        "minLength":1,
         "maxLength":50,
-        "rejex":"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$",
+        "rejex":"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*",
         "isReadOnly":false,
         "isDisabled":false,
         "isUnique":false,
         "errorMessage": {
-          "required":"Please enter name",
-          "minLength":"Please enter minimum 2 char",
-          "maxLength":"Max 50 chat allow",
-          "rejex": "Only alphabetic is allow "
+          "required":"Please enter email",
+          "rejex": "Please enter valid email"
         }
       },
       "valid":true,
