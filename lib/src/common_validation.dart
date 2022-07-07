@@ -99,13 +99,7 @@ class CommonValidation {
       Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
 
-      /*int minLine = 1;
-    int maxLine = 20;*/
-
-      bool required = validation.containsKey('required')?validation['required']: false;
       bool isEmail = validation.containsKey('isEmail')?validation['isEmail']: false;
-      int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
-      int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
       String rejex = validation.containsKey('rejex')?validation['rejex']:"";
 
       if(value.trim().isEmpty){
@@ -131,16 +125,13 @@ class CommonValidation {
     }
     return errorMsg;
   }
+
   String? isValidPassword(String value,Map<String, dynamic> validationStr){
     String? errorMsg ;
     try {
       Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
 
-    /*int minLine = 1;
-    int maxLine = 20;*/
-
-    bool required = validation.containsKey('required')?validation['required']: false;
     int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
     int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
     String rejex = validation.containsKey('rejex')?validation['rejex']:"";
@@ -206,6 +197,7 @@ class CommonValidation {
     }
     return errorMsg;
   }
+
   String? isValidTel(String value,Map<String, dynamic> validationStr){
 
     String? errorMsg ;
@@ -213,10 +205,6 @@ class CommonValidation {
       Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
 
-      /*int minLine = 1;
-    int maxLine = 20;*/
-
-      bool required = validation.containsKey('required')?validation['required']: false;
       int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
       int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
       String rejex = validation.containsKey('rejex')?validation['rejex']:"";
@@ -224,11 +212,11 @@ class CommonValidation {
       if(value.trim().isEmpty){
         errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
       }
-      else if(value.length > maxLength){
-        errorMsg = errorMessage.containsKey('maxLength')?errorMessage['maxLength']:"maxLength key missing";
-      }
       else if(value.length < minLength){
         errorMsg = errorMessage.containsKey('minLength')?errorMessage['minLength']:"minLength key missing";
+      }
+      else if(value.length > maxLength){
+        errorMsg = errorMessage.containsKey('maxLength')?errorMessage['maxLength']:"maxLength key missing";
       }
       else if(rejex.trim().isNotEmpty){
         RegExp regex = RegExp(rejex.trim());

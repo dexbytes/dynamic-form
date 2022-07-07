@@ -85,14 +85,14 @@
       "validation": {
         "required":true,
         "minLength":8,
-        "maxLength":10,
-        "rejex":"^[0-9]+",
+        "maxLength":13,
+        "rejex":"^[0-9+]+",
         "isReadOnly":false,
         "isDisabled":false,
         "errorMessage": {
           "required":"Please enter phone number",
-          "minLength":"Please enter minimum 8 digit number",
-          "maxLength":"Max 10 chat allow",
+          "minLength":"Minimum 8 digit mobile number required",
+          "maxLength":"Max 13 digit allow",
           "rejex": "Please enter 10 digit mobile number"
         }
       },
