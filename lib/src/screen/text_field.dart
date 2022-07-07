@@ -111,7 +111,6 @@ class _TextFieldsState extends State<TextFieldView> {
         break ;
     }
    // keyBoardType = TextInputType.text;
-
     return keyBoardType;
 }
 
@@ -214,12 +213,6 @@ class _TextFieldsState extends State<TextFieldView> {
     if(fieldKey.isEmpty){
       return const SizedBox(height: 0,width: 0,);
     }
-
-  /*  WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      _nameController!.text = textFieldModel!.value??"";
-    });*/
-
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       verticalDirection: fieldHelpPosition(),
@@ -249,22 +242,7 @@ class _TextFieldsState extends State<TextFieldView> {
       return null;
     }
           return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-          /*//Check all validation on change
-          if(checkValid && checkValidOnChange){
-            return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-          }
-          //Check all validation on submit
-          else if(checkValidOnSubmit && !checkValidOnChange && checkValid){
-            return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-          }
-          //Check validation on submit and will not submit data on server
-          else if(value!.isNotEmpty && checkValidOnSubmit && !checkValidOnChange && !checkValid){
-            return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-          }
-          else if(value.isNotEmpty && checkValidOnSubmit){
-            return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-          }
-        return null;*/
+
         }
       ,onChanged: (value){
             if(mounted){

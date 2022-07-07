@@ -124,18 +124,6 @@ class DynamicFormState extends State<DynamicForm> {
                     ],
                   );
                 }).toList()),
-                /*Align(alignment: Alignment.center,
-                  child: ElevatedButton(clipBehavior: Clip.hardEdge,
-                    onPressed: () async {
-                      if(_formKey.currentState!.validate()){
-                        _formKey.currentState!.save();
-                        widget.finalSubmitCallBack?.call(formSubmitData);
-                      }
-                    },
-                    child: Text('Submit'),
-                    //color: Colors.green,
-                  ),
-                ),*/
               ],
             ),
           ),

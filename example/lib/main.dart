@@ -7,24 +7,21 @@ import 'package:flutter/material.dart';
 void main() async {
   // if you are using await in main function then add this line
   WidgetsFlutterBinding.ensureInitialized();
+
+  //Custom local configuration for Input field setup
   TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration();
   textFieldConfiguration.setBorder = const UnderlineInputBorder();
-
-  TelTextFieldConfiguration telTextFieldConfiguration = TelTextFieldConfiguration();
-  telTextFieldConfiguration.setBorder = const UnderlineInputBorder();
-  // textFieldConfiguration.setErrorBorder = const OutlineInputBorder();
-
   ConfigurationSetting.instance.setTextFieldViewConfig = textFieldConfiguration;
+
+  //Custom local configuration for tel Input field setup
+  TelTextFieldConfiguration telTextFieldConfiguration =  TelTextFieldConfiguration();
+  telTextFieldConfiguration.setBorder = const UnderlineInputBorder();
   ConfigurationSetting.instance.setTelTextFieldViewConfig = telTextFieldConfiguration;
 
+  //Set load form from json
   ConfigurationSetting.instance.setLoadFromApi = true;
 
-  String? jsonString = "";//await ConfigurationSetting.instance.getFormDataLocal();
-  /*if(jsonString!.isEmpty) {
-    String jsonStringResponse = await httpService.getPosts();
-    jsonString = await ConfigurationSetting.instance.storeFormDataLocal(jsonStringResponse);
-  }*/
-
+  String? jsonString = "";
   runApp(MyApp(jsonString));
 }
 
@@ -71,8 +68,6 @@ class _MyFormState extends State<MyForm> {
     super.dispose();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -101,7 +96,7 @@ class _MyFormState extends State<MyForm> {
                     String? jsonString = await ConfigurationSetting.instance.getFormDataLocal();
                     if(jsonString!.isEmpty) {
                        String jsonStringResponse = await httpService.getPosts();
-                      // String jsonStringResponse = await localJsonRw.localRead();
+                      /*String jsonStringResponse = await localJsonRw.localRead();*/
                       jsonString = await ConfigurationSetting.instance.storeFormDataLocal(jsonStringResponse);
                     }
                   setState(() {
@@ -119,12 +114,6 @@ class _MyFormState extends State<MyForm> {
           ],
         ),
       )
-      /*DynamicForm(jsonString, finalSubmitCallBack: (Map<String, dynamic> data) async {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => FirstScreen(jsonString: jsonString)),
-        );
-      },)*/,
 
     );
   }

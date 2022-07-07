@@ -135,6 +135,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
 }
 
   List<TextInputFormatter>? inputFormatter(){
+    //String keyText = textFieldModel!.validation!.rejex!;
     String keyText = textFieldModel!.validation!.rejex!;
     // if(formFieldType.toLowerCase()=="tel"){
     //  // keyText = r'[0-9]';
@@ -142,6 +143,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
     List<TextInputFormatter>? filter = [];
     if(keyText.isNotEmpty){
       filter = [];
+      //filter.add(FilteringTextInputFormatter.digitsOnly);
       filter.add(FilteringTextInputFormatter.allow(RegExp(keyText)));
       return filter;
     }
@@ -238,11 +240,6 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
       return const SizedBox(height: 0,width: 0,);
     }
 
-   /* WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      _nameController!.text = textFieldModel!.value??"";
-    });*/
-
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       verticalDirection: fieldHelpPosition(),
@@ -272,22 +269,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
             return null;
           }
           return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-          /*//Check all validation on change
-          if(checkValid && checkValidOnChange){
-            return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-          }
-          //Check all validation on submit
-          else if(checkValidOnSubmit && !checkValidOnChange && checkValid){
-            return commonValidation.checkValidation(enteredValue:value!,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-          }
-          //Check validation on submit and will not submit data on server
-          else if(value!.isNotEmpty && checkValidOnSubmit && !checkValidOnChange && !checkValid){
-            return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-          }
-          else if(value.isNotEmpty && checkValidOnSubmit){
-            return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-          }
-        return null;*/
+
         }
       ,onChanged: (value){
             if(mounted){
@@ -296,21 +278,6 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
             }
         },
           onSaved: (value){
-
-            //Check all validation on submit
-            /*if((!checkValidOnChange && checkValid)){
-              setState(() {
-                checkValidOnSubmit = true;
-              });
-              _formTelFieldKey.currentState!.validate();
-            }
-            //Check validation on submit and will not submit data on server
-            else if((value!.isNotEmpty && !checkValidOnChange && checkValid)){
-              setState(() {
-                checkValidOnSubmit = true;
-              });
-              _formTelFieldKey.currentState!.validate();
-            }*/
             //Check validation on submit and will not submit data on server
              if((value!.isNotEmpty && checkValid)){
              /* setState(() {
@@ -370,8 +337,6 @@ class CountryPickerViewConfig{
 
  return InputDecoration(
         border: viewConfiguration!._border,
-     /*   errorBorder: viewConfiguration!._errorBorder,
-        focusedErrorBorder: viewConfiguration!._errorBorder,*/
         enabledBorder: viewConfiguration!._border,
         hintText: textFieldModel.elementConfig!.placeholder??"",hintStyle: viewConfiguration!._hintStyle,
         label: !enableLabel?null:

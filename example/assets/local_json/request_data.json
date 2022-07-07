@@ -92,7 +92,7 @@
         "required":true,
         "minLength":8,
         "maxLength":10,
-        "rejex":"[0-9]",
+        "rejex":"^[0-9]+",
         "isReadOnly":false,
         "isDisabled":false,
          "errorMessage": {
@@ -212,7 +212,7 @@
         "required":true,
         "minLength":8,
         "maxLength":10,
-        "rejex":"[0-9]",
+        "rejex":"^[0-9]+",
         "isReadOnly":false,
         "isDisabled":false,
         "errorMessage": {

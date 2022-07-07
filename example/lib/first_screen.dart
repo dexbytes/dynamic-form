@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:dynamic_json_form/parts.dart';
 import 'package:example/second_screen.dart';
 import 'package:flutter/material.dart';

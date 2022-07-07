@@ -3,7 +3,7 @@ import 'package:http/http.dart';
 
 class HttpService {
   // final String postsURL = "http://54.37.200.85/json/forms/inputForm.json";
-  final String postsURL = "http://54.37.200.85/json/forms/dynamicform.json";
+  final String postsURL = "http://json.dexbytes.in/dynamicform.json";
 
   Future<String> getPosts() async {
     Response res = await get(Uri.parse(postsURL));
@@ -26,7 +26,6 @@ class HttpService {
       //throw "Unable to retrieve posts.";
     }
   }
-
 
 }
 
