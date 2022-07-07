@@ -254,7 +254,8 @@ class _TextFieldsState extends State<TextFieldView> {
           obscureText = snapshot.data;
         }
         return TextFormField(
-        key: _formFieldKey,focusNode: myFocusNode,strutStyle:StrutStyle(),
+        // key: _formFieldKey,
+        focusNode: myFocusNode,strutStyle:StrutStyle(),
         readOnly: textFieldModel!.validation!.isReadOnly!,
         enabled: !textFieldModel!.validation!.isDisabled!,
         controller: _nameController,
@@ -314,6 +315,14 @@ class _TextFieldsState extends State<TextFieldView> {
             }*/
 
           },
+          onFieldSubmitted:(value){
+            if((value.isNotEmpty && checkValid)){
+              setState(() {
+                checkValidOnChange = true;
+                autovalidateMode = _autoValidate();
+              });
+            }
+        },
           autovalidateMode: autovalidateMode,
         );
   },),

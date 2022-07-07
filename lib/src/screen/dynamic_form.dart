@@ -50,7 +50,6 @@ class DynamicFormState extends State<DynamicForm> {
     return Container();
   }
 
-
   //Check Form field value
   bool validateFields(){
     setState(() {

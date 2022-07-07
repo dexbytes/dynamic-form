@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:dynamic_json_form/src/common_validation.dart';
 import 'package:dynamic_json_form/src/model/drop_down_field_model.dart';
 import 'package:dynamic_json_form/src/model/text_field_model.dart';
+import '../dynamic_json_form.dart';
 export 'model/text_field_model.dart';
 
 class ResponseParser{
@@ -11,6 +12,16 @@ class ResponseParser{
   set setCurrentFormNumber(value){
     _currentFormNumber = value;
   }
+
+  static late Map<String,FocusNode> _fieldSFocusNode = {};
+  get getFieldSFocusNode => _fieldSFocusNode;
+  set setFieldSFocusNode (String fieldName){
+    _fieldSFocusNode[fieldName] = FocusNode();
+  }
+  set clearFieldSFocusNode (String fieldName){
+    _fieldSFocusNode.clear();
+  }
+
   /*This is formData will contain data according to form index*/
   static final Map<int,List<dynamic>> _formData = {};
   get getFormData => _formData;
@@ -35,9 +46,6 @@ class ResponseParser{
   resetAll(){
     setCurrentFormNumber = -1;
   }
-
-
-
 
   TextFieldModel? textFormFiledParsing({required Map<String,dynamic> jsonData,bool updateCommon = false}){
     try {
