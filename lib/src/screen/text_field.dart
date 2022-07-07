@@ -147,7 +147,7 @@ class _TextFieldsState extends State<TextFieldView> {
     }
      String formFieldTypeTemp = formFieldType.toLowerCase();
     //Not apply regex in this case
-    if(formFieldTypeTemp=="email"/*||formFieldTypeTemp=="email"*/){
+    if(formFieldTypeTemp=="email"||formFieldTypeTemp=="password"){
       filter = [];
     }
     return filter;
@@ -344,7 +344,7 @@ class ViewConfig{
         focusedErrorBorder: viewConfiguration!._errorBorder,*/
         enabledBorder: viewConfiguration!._border,
         hintText: textFieldModel.elementConfig!.placeholder??"",hintStyle: viewConfiguration!._hintStyle,
-        label: !enableLabel?null:textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: viewConfiguration!._textStyle,):null,suffixIcon: null,counterText: ""
+        label: !enableLabel?null:textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: viewConfiguration!._textStyle,):null,suffixIcon: null,counterText: "",errorMaxLines: 3
     );
 
   }

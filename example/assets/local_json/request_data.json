@@ -29,7 +29,7 @@
         "isDisabled": false,
         "errorMessage":{
           "required":"Please enter name",
-          "minLength":"Minimum 2 characters required",
+          "minLength":"Minimum 2 characters require",
           "maxLength":"Max 30 characters allow",
           "rejex": "Please enter valid name"
         }
@@ -54,7 +54,7 @@
         "required":true,
         "isEmail":true,
         "maxLength":50,
-        "rejex":"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*",
+        "rejex":"^[a-z0-9.a-z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-z0-9.a-z0-9.!#$%&'*+-/=?^_`{|}~]+\\.[a-z]+",
         "isReadOnly":false,
         "isDisabled":false,
         "isUnique":false,
@@ -119,14 +119,14 @@
         "required":true,
         "minLength":4,
         "maxLength":12,
-        "rejex":"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{12,}$",
+        "rejex":"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~])",
         "isReadOnly":false,
         "isDisabled":false,
         "errorMessage": {
           "required":"Please enter password",
-          "minLength":"Please enter minimum 8 digit number",
-          "maxLength":"Max 12 chat allow",
-          "rejex": "Please enter password"
+          "minLength":"Minimum 4 characters require",
+          "maxLength":"Maximum 12 characters allow",
+          "rejex": "Please enter valid password"
         }
       },
       "valid":true,
@@ -194,7 +194,7 @@
         "type":"tel",
         "name":"tel",
         "label":"Phone",
-        "enableLabel":false,
+        "enableLabel":true,
         "placeholder":"Phone",
         "class":"form-control",
         "resetIcon":true,
@@ -211,8 +211,8 @@
         "isDisabled":false,
         "errorMessage": {
           "required":"Please enter phone number",
-          "minLength":"Please enter minimum 8 digit number",
-          "maxLength":"Max 10 chat allow",
+          "minLength":"Minimum 8 digit mobile number required",
+          "maxLength":"Max 10 digit allow",
           "rejex": "Please enter 10 digit mobile number"
         }
       },
