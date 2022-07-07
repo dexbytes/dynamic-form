@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/rendering.dart';
 
-import 'model/text_field_model.dart';
-
 class CommonValidation {
 
   //Check is entered json is not empty and correct format

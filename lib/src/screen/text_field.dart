@@ -12,6 +12,7 @@ class _TextFieldsState extends State<TextFieldView> {
   String fieldKey = "";
   bool obscureText = false;
   String formFieldType = "text";
+  String textCapitalizeStr = "none";
   final _formFieldKey = GlobalKey<FormState>();
   Map<String,dynamic> jsonData;
   final TextEditingController? _nameController =  TextEditingController();
@@ -37,6 +38,7 @@ class _TextFieldsState extends State<TextFieldView> {
       _nameController!.text = textFieldModel!.value??"";
 
    if(textFieldModel!.elementConfig!=null){
+        textCapitalizeStr = textFieldModel!.elementConfig!.textCapitalization??"none";
         formFieldType = textFieldModel!.elementConfig!.type??"text";
         formFieldType  = formFieldType.toLowerCase();
         fieldKey = textFieldModel!.elementConfig!.name!;
@@ -114,12 +116,36 @@ class _TextFieldsState extends State<TextFieldView> {
     return keyBoardType;
 }
 
+
+
+  //Get TextCapitalization
+  TextCapitalization textCapitalize({required String textCapitalizeStr}){
+    TextCapitalization textCapitalization = TextCapitalization.none;
+    switch(textCapitalizeStr.toLowerCase()){
+        case 'sentences':
+          textCapitalization = TextCapitalization.sentences;
+        obscureText = true;
+        break ;
+        case 'characters':
+          textCapitalization = TextCapitalization.characters;
+        break ;
+        case 'words':
+          textCapitalization = TextCapitalization.words;
+        break ;
+
+    }
+    return textCapitalization;
+}
+
   List<TextInputFormatter>? inputFormatter(){
-    String keyText = textFieldModel!.validation!.rejex!;
+     String keyText = textFieldModel!.validation!.rejex!;
+    //String keyText = r'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{12,}$';
+    //String keyText = r'[a-zA-Z!@#$&*~]+';
     List<TextInputFormatter>? filter = [];
     if(keyText.isNotEmpty){
-      //filter = [];
+      filter = [];
      // filter.add(FilteringTextInputFormatter.allow(RegExp(keyText)));
+      filter.add(FilteringTextInputFormatter.allow(RegExp(keyText)));
       return filter;
     }
     return filter;
@@ -230,7 +256,7 @@ class _TextFieldsState extends State<TextFieldView> {
         textInputAction: TextInputAction.done,
         maxLength: textFieldModel!.validation!.maxLength,   //It is the length of char
         maxLines: maxLine(),
-        minLines: minLine(),
+        minLines: minLine(),textCapitalization:textCapitalize(textCapitalizeStr: textCapitalizeStr),
         decoration: viewConfig!.getInputDecoration(),obscureText: obscureText,
         keyboardType: keyBoardType(formFieldType: formFieldType),
         inputFormatters: inputFormatter(),

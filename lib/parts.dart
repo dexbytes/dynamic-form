@@ -1,5 +1,4 @@
 library dynamic_json_form;
-
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
@@ -20,7 +19,6 @@ import 'src/screen/input_done_view.dart';
 import 'src/screen/suffix_visibility_icon.dart';
 
 export 'package:flutter/material.dart';
-
 part 'src/model/text_configuration.dart';
 part 'src/model/tel_text_configuration.dart';
 part 'src/model/dropdown_configuration.dart';

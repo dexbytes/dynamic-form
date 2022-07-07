@@ -16,25 +16,22 @@
         "class" : "form-control",
         "resetIcon": true,
         "minLine":1,
-        "maxLine": 2
-      },
-      "help" : {
-        "text" : "",
-        "placement": "below"
+        "maxLine": 2,
+        "textCapitalization": "words"
       },
       "value": "",
       "validation": {
         "required": true,
         "minLength": 2,
         "maxLength": 30,
-        "rejex": "(^[a-zA-Z ]*$)",
+        "rejex": "^[a-zA-Z!@#$&*~]+",
         "isReadOnly": false,
         "isDisabled": false,
         "errorMessage":{
           "required":"Please enter name",
-          "minLength":"Please enter minimum 2 char",
-          "maxLength":"Max 2 chat allow",
-          "rejex": "Only alphabetic is allow "
+          "minLength":"Minimum 2 characters required",
+          "maxLength":"Max 30 characters allow",
+          "rejex": "Please enter valid name"
         }
       },
       "valid": true,
@@ -51,7 +48,7 @@
         "class":"form-control",
         "resetIcon":true
       },
-      
+
       "value":"",
       "validation": {
         "required":true,
@@ -95,7 +92,7 @@
         "rejex":"^[0-9]+",
         "isReadOnly":false,
         "isDisabled":false,
-         "errorMessage": {
+        "errorMessage": {
           "required":"Please enter phone number",
           "minLength":"Please enter minimum 8 digit number",
           "maxLength":"Max 10 chat allow",
@@ -128,7 +125,7 @@
         "rejex":"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$&*~]).{12,}$",
         "isReadOnly":false,
         "isDisabled":false,
-         "errorMessage": {
+        "errorMessage": {
           "required":"Please enter password",
           "minLength":"Please enter minimum 8 digit number",
           "maxLength":"Max 12 chat allow",
@@ -225,5 +222,6 @@
       "valid":true,
       "onchange":true
     }
+
   ]
 }

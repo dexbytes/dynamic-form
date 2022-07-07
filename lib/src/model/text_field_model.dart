@@ -43,6 +43,7 @@ class TextFieldModel {
 
 class ElementConfig {
   String? type;
+  String? textCapitalization;
   String? name;
   String? label;
   bool? enableLabel;
@@ -53,10 +54,12 @@ class ElementConfig {
   int? minLine;
   int? maxLine;
 
-  ElementConfig({this.type, this.name, this.label,this.enableLabel, this.placeholder, this.classProperty, this.resetIcon,this.nextName,this.minLine = 1,this.maxLine = 2});
+  ElementConfig({this.type,this.textCapitalization, this.name, this.label,this.enableLabel, this.placeholder, this.classProperty, this.resetIcon,this.nextName,this.minLine = 1,this.maxLine = 2});
 
   ElementConfig.fromJson(Map<String, dynamic> json) {
   type = json['type'];
+
+  textCapitalization = json.containsKey('textCapitalization')?json['textCapitalization']:"none";
   name = json['name'];
   label = json['label'];
   if(json.containsKey('enableLabel')){
@@ -72,6 +75,7 @@ class ElementConfig {
 
   Map<String, dynamic> toJson() {
   final Map<String, dynamic> data = new Map<String, dynamic>();
+  data['textCapitalization'] = this.textCapitalization;
   data['type'] = this.type;
   data['name'] = this.name;
   data['label'] = this.label;
