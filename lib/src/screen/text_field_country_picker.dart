@@ -114,7 +114,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
         break ;
         case 'tel':
         isDoneOver = true;
-        keyBoardType = TextInputType.number;
+        keyBoardType = TextInputType.phone;
 
         break ;
         case 'url':

@@ -14,7 +14,7 @@
         "enableLabel":true,
         "placeholder": "First name",
         "class" : "form-control",
-        "keyboardRejex": "^[a-zA-Z-`]+",
+        "keyboardRejex": "^[a-zA-Z-]+",
         "resetIcon": true,
         "minLine":1,
         "maxLine": 2,
@@ -25,7 +25,7 @@
         "required": true,
         "minLength": 3,
         "maxLength": 50,
-        "rejex": "^[a-zA-Z'-]+",
+        "rejex": "^[a-zA-Z-]+",
         "isReadOnly": false,
         "isDisabled": false,
         "errorMessage":{
@@ -46,7 +46,7 @@
         "enableLabel":true,
         "placeholder": "Full name",
         "class" : "form-control",
-        "keyboardRejex": "^[a-zA-Z -`]+",
+        "keyboardRejex": "^[a-zA-Z\\s-]+",
         "resetIcon": true,
         "minLine":1,
         "maxLine": 1,
@@ -105,7 +105,7 @@
         "name":"office",
         "label":"Phone",
         "enableLabel":true,
-        "keyboardRejex": "^[0-9'+-]+",
+        "keyboardRejex": "^[0-9+]+",
         "placeholder":"Phone",
         "class":"form-control",
         "resetIcon":true
@@ -118,8 +118,8 @@
       "validation": {
         "required":true,
         "minLength":8,
-        "maxLength":16,
-        "rejex":"^[0-9+-]+",
+        "maxLength":13,
+        "rejex":"^[0-9+]+",
         "isReadOnly":false,
         "isDisabled":false,
         "errorMessage": {
@@ -226,15 +226,15 @@
         "class":"form-control",
         "resetIcon":true,
         "isCountryCode":true,
-        "keyboardRejex": "^[0-9-]+",
+        "keyboardRejex": "^[0-9]+",
         "enabledCountries" : ["Sa","In"]
       },
       "value":"",
       "validation": {
         "required":true,
         "minLength":8,
-        "maxLength":15,
-        "rejex":"^[0-9-]+",
+        "maxLength":10,
+        "rejex":"^[0-9]+",
         "isReadOnly":false,
         "isDisabled":false,
         "errorMessage": {
