@@ -26,25 +26,50 @@ class DynamicFormState extends State<DynamicForm> {
   Map<String,dynamic> formSubmitData = <String,dynamic>{};
 
   //Filter form field according type from json and return view
-  Widget _getFormField({required Map<String,dynamic> data}){
+  Widget _getFormField({required Map<String,dynamic> data, Map<String,dynamic>? nextData}){
+
+    String nextElementKey = "";
+    String currentElementKey = "";
+    String currentElementType = "";
+
     if(data.containsKey("elementType") && data["elementType"].isNotEmpty)
     {
-      switch(data["elementType"]){
+      currentElementType = data["elementType"].toString().toLowerCase();
+      currentElementKey = data["elementConfig"]['name'];
+    }
+
+    if(nextData!=null && nextData.isNotEmpty && nextData.containsKey("elementType") && nextData["elementType"].isNotEmpty){
+      String nextElementType = "";
+      nextElementType = nextData["elementType"].toString().toLowerCase();
+      if(nextElementType!=currentElementType){
+        nextElementType = "";
+      }
+      else{
+        nextElementKey = nextData["elementConfig"]['name'];
+      }
+    }
+
+    if(currentElementType.isNotEmpty){
+      switch(currentElementType){
         case "input":
+          responseParser.setFieldFocusNode = currentElementKey;
+          if(nextElementKey.isNotEmpty){
+            responseParser.setFieldFocusNode = nextElementKey;
+          }
           //Open mobile field
           if(data.containsKey("elementConfig") && data["elementConfig"].containsKey("type") && data["elementConfig"]["type"].toString().toLowerCase() == "tel"){
             return TextFieldCountryPickerView(jsonData: data,onChangeValue: (String fieldKey, Map<String,String> value){
               formSubmitData[fieldKey] = value;
-            });
+            },nextElementKey: nextElementKey);
           }
-         return TextFieldView(jsonData: data,onChangeValue: (String fieldKey, String value){
-        formSubmitData[fieldKey] = value;
-         });
+          return TextFieldView(jsonData: data,onChangeValue: (String fieldKey, String value){
+            formSubmitData[fieldKey] = value;
+          },nextElementKey: nextElementKey);
 
-         case "select":
-         return DropDown(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
-           formSubmitData[fieldKey] = value;
-         });
+        case "select":
+          return DropDown(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
+            formSubmitData[fieldKey] = value;
+          });
       }
     }
     return Container();
@@ -87,6 +112,26 @@ class DynamicFormState extends State<DynamicForm> {
 
   }
 
+  Widget formFieldList({required List<dynamic> formFieldList}){
+    int nextItemIndex = 1;
+    responseParser.clearFieldFocusNode();
+    return Column(children: formFieldList.map((element) {
+      Map<String,dynamic> data = element;
+      Map<String,dynamic> nextData = {};
+
+      if(nextItemIndex<=formFieldList.length){
+        nextData = formFieldList[nextItemIndex];
+        nextItemIndex = nextItemIndex+1;
+      }
+      return Column(mainAxisSize: MainAxisSize.min,
+        children: [
+          _getFormField(data: data,nextData:nextData),
+          const SizedBox(height: 20,width: 10)
+        ],
+      );
+    }).toList());
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -114,15 +159,7 @@ class DynamicFormState extends State<DynamicForm> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Column(children: _formFieldList.map((element) {
-                  Map<String,dynamic> data = element;
-                  return Column(mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _getFormField(data: data),
-                      const SizedBox(height: 20,width: 10)
-                    ],
-                  );
-                }).toList()),
+                formFieldList(formFieldList:_formFieldList),
               ],
             ),
           ),

@@ -13,13 +13,13 @@ class ResponseParser{
     _currentFormNumber = value;
   }
 
-  static late Map<String,FocusNode> _fieldSFocusNode = {};
-  get getFieldSFocusNode => _fieldSFocusNode;
-  set setFieldSFocusNode (String fieldName){
-    _fieldSFocusNode[fieldName] = FocusNode();
+  static late Map<String,FocusNode> _fieldFocusNode = {};
+  get getFieldFocusNode => _fieldFocusNode;
+  set setFieldFocusNode (String fieldName){
+    _fieldFocusNode[fieldName] = FocusNode();
   }
-  set clearFieldSFocusNode (String fieldName){
-    _fieldSFocusNode.clear();
+  void clearFieldFocusNode (){
+    _fieldFocusNode.clear();
   }
 
   /*This is formData will contain data according to form index*/
@@ -45,6 +45,7 @@ class ResponseParser{
   }
   resetAll(){
     setCurrentFormNumber = -1;
+    clearFieldFocusNode();
   }
 
   TextFieldModel? textFormFiledParsing({required Map<String,dynamic> jsonData,bool updateCommon = false}){

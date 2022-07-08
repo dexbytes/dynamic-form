@@ -2,9 +2,10 @@ part of dynamic_json_form;
 // enum formFieldType {text,name,email,tel,url,number,textMultiline}
 class TextFieldCountryPickerView extends StatefulWidget {
   final Map<String,dynamic> jsonData;
+  final String? nextElementKey;
   final TelTextFieldConfiguration? viewConfiguration;
   final Function (String fieldKey,Map<String,String> fieldValue) onChangeValue ;
-   const TextFieldCountryPickerView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration}) : super(key: key);
+   const TextFieldCountryPickerView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration,this.nextElementKey = ""}) : super(key: key);
   @override
   _TextFieldCountryPickerState createState() => _TextFieldCountryPickerState(jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration: viewConfiguration);
 }

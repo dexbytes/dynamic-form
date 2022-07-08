@@ -2,9 +2,10 @@ part of dynamic_json_form;
 // enum formFieldType {text,name,email,tel,url,number,textMultiline}
 class TextFieldView extends StatefulWidget {
   final Map<String,dynamic> jsonData;
+  final String? nextElementKey;
   final TextFieldConfiguration? viewConfiguration;
   final Function (String fieldKey,String fieldValue) onChangeValue ;
-   const TextFieldView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration}) : super(key: key);
+   const TextFieldView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration,this.nextElementKey = ""}) : super(key: key);
   @override
   _TextFieldsState createState() => _TextFieldsState(jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration: viewConfiguration);
 }
