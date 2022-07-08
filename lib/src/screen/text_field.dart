@@ -141,18 +141,19 @@ class _TextFieldsState extends State<TextFieldView> {
 }
 
   List<TextInputFormatter>? inputFormatter({required String formFieldType}){
-     String keyText = textFieldModel!.validation!.rejex!;
+     String keyText = textFieldModel!.elementConfig!.keyboardRejex!;
+    // String keyText = "^[a-zA-Z '-]+";
     List<TextInputFormatter>? filter = [];
     if(keyText.isNotEmpty){
       filter = [];
       filter.add(FilteringTextInputFormatter.allow(RegExp(keyText)));
       //return filter;
     }
-     String formFieldTypeTemp = formFieldType.toLowerCase();
-    //Not apply regex in this case
-    if(formFieldTypeTemp=="email"||formFieldTypeTemp=="password"){
-      filter = [];
-    }
+      String formFieldTypeTemp = formFieldType.toLowerCase();
+      //Not apply regex in this case
+      if(formFieldTypeTemp=="email"||formFieldTypeTemp=="password"){
+        filter = [];
+      }
     return filter;
 }
 
@@ -201,6 +202,12 @@ class _TextFieldsState extends State<TextFieldView> {
   onPressCallback() {
     removeOverlay();
     FocusScope.of(context).requestFocus(new FocusNode());
+    if(mounted && _nameController!=null && _nameController!.text.isNotEmpty && checkValid){
+      setState(() {
+        checkValidOnChange = true;
+        autovalidateMode = _autoValidate();
+      });
+    }
   }
   //for keyboard done button
   showOverlay(BuildContext context) {

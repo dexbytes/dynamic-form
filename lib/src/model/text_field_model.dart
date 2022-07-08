@@ -49,12 +49,13 @@ class ElementConfig {
   bool? enableLabel;
   String? placeholder;
   String? classProperty;
+  String? keyboardRejex;
   bool? resetIcon;
   String? nextName;
   int? minLine;
   int? maxLine;
 
-  ElementConfig({this.type,this.textCapitalization, this.name, this.label,this.enableLabel, this.placeholder, this.classProperty, this.resetIcon,this.nextName,this.minLine = 1,this.maxLine = 2});
+  ElementConfig({this.type,this.textCapitalization, this.name,this.keyboardRejex = "", this.label,this.enableLabel, this.placeholder, this.classProperty, this.resetIcon,this.nextName,this.minLine = 1,this.maxLine = 2});
 
   ElementConfig.fromJson(Map<String, dynamic> json) {
   type = json['type'];
@@ -65,6 +66,8 @@ class ElementConfig {
   if(json.containsKey('enableLabel')){
     enableLabel = json['enableLabel'];
   }
+    keyboardRejex = json.containsKey('keyboardRejex')?json['keyboardRejex']:"";
+
   placeholder = json['placeholder'];
   classProperty = json['class'];
   resetIcon = json['resetIcon'];
@@ -78,6 +81,7 @@ class ElementConfig {
   data['textCapitalization'] = this.textCapitalization;
   data['type'] = this.type;
   data['name'] = this.name;
+  data['keyboardRejex'] = this.keyboardRejex;
   data['label'] = this.label;
   data['enableLabel'] = this.enableLabel;
   data['placeholder'] = this.placeholder;

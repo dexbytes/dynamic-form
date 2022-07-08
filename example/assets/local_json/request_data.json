@@ -9,11 +9,12 @@
       "elementType": "input",
       "elementConfig": {
         "type": "text",
-        "name" : "name",
-        "label" : "Name",
+        "name" : "first_name",
+        "label" : "First name",
         "enableLabel":true,
-        "placeholder": "Name",
+        "placeholder": "First name",
         "class" : "form-control",
+        "keyboardRejex": "^[a-zA-Z-`]+",
         "resetIcon": true,
         "minLine":1,
         "maxLine": 2,
@@ -28,9 +29,41 @@
         "isReadOnly": false,
         "isDisabled": false,
         "errorMessage":{
-          "required":"Please enter name",
+          "required":"Please enter first name",
           "minLength":"Minimum 3 characters require",
-          "rejex": "Please enter valid name"
+          "rejex": "Please enter valid first name"
+        }
+      },
+      "valid": true,
+      "onchange":false
+    },
+    {
+      "elementType": "input",
+      "elementConfig": {
+        "type": "text",
+        "name" : "full_name",
+        "label" : "Full name",
+        "enableLabel":true,
+        "placeholder": "Full name",
+        "class" : "form-control",
+        "keyboardRejex": "^[a-zA-Z -`]+",
+        "resetIcon": true,
+        "minLine":1,
+        "maxLine": 1,
+        "textCapitalization": "words"
+      },
+      "value": "",
+      "validation": {
+        "required": true,
+        "minLength": 5,
+        "maxLength": 50,
+        "rejex": "^[a-zA-Z.a-zA-Z-`]+ [a-zA-Z.a-zA-Z-`]+",
+        "isReadOnly": false,
+        "isDisabled": false,
+        "errorMessage":{
+          "required":"Please enter full name",
+          "minLength":"Minimum 5 characters require",
+          "rejex": "Please enter valid full name"
         }
       },
       "valid": true,
@@ -72,6 +105,7 @@
         "name":"office",
         "label":"Phone",
         "enableLabel":true,
+        "keyboardRejex": "^[0-9'+-]+",
         "placeholder":"Phone",
         "class":"form-control",
         "resetIcon":true
@@ -192,6 +226,7 @@
         "class":"form-control",
         "resetIcon":true,
         "isCountryCode":true,
+        "keyboardRejex": "^[0-9-]+",
         "enabledCountries" : ["Sa","In"]
       },
       "value":"",

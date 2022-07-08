@@ -136,7 +136,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
 
   List<TextInputFormatter>? inputFormatter(){
     //String keyText = textFieldModel!.validation!.rejex!;
-    String keyText = textFieldModel!.validation!.rejex!;
+    String keyText = textFieldModel!.elementConfig!.keyboardRejex!;
     // if(formFieldType.toLowerCase()=="tel"){
     //  // keyText = r'[0-9]';
     // }
@@ -195,6 +195,12 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   onPressCallback() {
     removeOverlay();
     FocusScope.of(context).requestFocus(new FocusNode());
+    if(mounted && _nameController!=null && _nameController!.text.isNotEmpty && checkValid){
+      setState(() {
+        checkValidOnChange = true;
+        autovalidateMode = _autoValidate();
+      });
+    }
   }
   //for keyboard done button
   showOverlay(BuildContext context) {
