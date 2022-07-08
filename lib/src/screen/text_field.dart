@@ -2,15 +2,16 @@ part of dynamic_json_form;
 // enum formFieldType {text,name,email,tel,url,number,textMultiline}
 class TextFieldView extends StatefulWidget {
   final Map<String,dynamic> jsonData;
-  final String? nextElementKey;
+  final String? nextFieldKey;
   final TextFieldConfiguration? viewConfiguration;
   final Function (String fieldKey,String fieldValue) onChangeValue ;
-   const TextFieldView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration,this.nextElementKey = ""}) : super(key: key);
+   const TextFieldView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration,this.nextFieldKey = ""}) : super(key: key);
   @override
-  _TextFieldsState createState() => _TextFieldsState(jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration: viewConfiguration);
+  _TextFieldsState createState() => _TextFieldsState(jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration: viewConfiguration,nextFieldKey: nextFieldKey);
 }
 class _TextFieldsState extends State<TextFieldView> {
   String fieldKey = "";
+  String? nextFieldKey = "";
   bool obscureText = true;
   String formFieldType = "text";
   String textCapitalizeStr = "none";
@@ -26,15 +27,15 @@ class _TextFieldsState extends State<TextFieldView> {
 
   OverlayEntry? overlayEntry;
   Stream get onVariableChanged => _fieldStreamControl.stream;
-  late FocusNode myFocusNode;
+  late FocusNode currentFocusNode;
+  late FocusNode nextFocusNode;
   bool checkValidOnChange = false;
   bool checkValid = true;
   bool checkValidOnSubmit = false;
   bool isDoneOver = false;
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
-  _TextFieldsState({required this.jsonData,required this.onChangeValue,this.viewConfiguration}){
+  _TextFieldsState({required this.jsonData,required this.onChangeValue,this.viewConfiguration,this.nextFieldKey=""}){
     textFieldModel ??= responseParser.textFormFiledParsing(jsonData: jsonData,updateCommon: true);
-
     if(textFieldModel!=null){
       _nameController!.text = textFieldModel!.value??"";
 
@@ -51,6 +52,8 @@ class _TextFieldsState extends State<TextFieldView> {
           obscureText = false;
         }
 
+        currentFocusNode = (responseParser.getFieldFocusNode.containsKey(fieldKey)? responseParser.getFieldFocusNode[fieldKey]:FocusNode())!;nextFocusNode = (responseParser.getFieldFocusNode.containsKey(nextFieldKey)? responseParser.getFieldFocusNode[nextFieldKey]:FocusNode())!;
+
         viewConfig = ViewConfig(viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
           obscureText = value;
           _fieldStreamControl.sink.add(obscureText);
@@ -63,10 +66,9 @@ class _TextFieldsState extends State<TextFieldView> {
   @override
   void initState() {
     super.initState();
-    myFocusNode = FocusNode();
-    myFocusNode.addListener(() {
+    currentFocusNode.addListener(() {
       if (isDoneOver && (Platform.isIOS)) {
-        bool hasFocus = myFocusNode.hasFocus;
+        bool hasFocus = currentFocusNode.hasFocus;
         if (hasFocus)
           showOverlay(context);
         else
@@ -208,6 +210,8 @@ class _TextFieldsState extends State<TextFieldView> {
         checkValidOnChange = true;
         autovalidateMode = _autoValidate();
       });
+
+      moveToNextField(_nameController!.text.toString());
     }
   }
   //for keyboard done button
@@ -262,7 +266,7 @@ class _TextFieldsState extends State<TextFieldView> {
           obscureText = snapshot.data;
         }
         return TextFormField(
-        focusNode: myFocusNode,strutStyle:StrutStyle(),
+        focusNode: currentFocusNode,strutStyle:StrutStyle(),
         readOnly: textFieldModel!.validation!.isReadOnly!,
         enabled: !textFieldModel!.validation!.isDisabled!,
         controller: _nameController,
@@ -328,6 +332,8 @@ class _TextFieldsState extends State<TextFieldView> {
                 checkValidOnChange = true;
                 autovalidateMode = _autoValidate();
               });
+
+              moveToNextField(value);
             }
         },
           autovalidateMode: autovalidateMode,
@@ -337,6 +343,12 @@ class _TextFieldsState extends State<TextFieldView> {
 
       ],
     );
+  }
+
+  void moveToNextField(String value) {
+    if(nextFocusNode!=null && commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType) == null){
+      nextFocusNode.requestFocus();
+    }
   }
 }
 class ViewConfig{

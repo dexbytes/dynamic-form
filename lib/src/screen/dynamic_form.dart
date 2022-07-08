@@ -28,7 +28,7 @@ class DynamicFormState extends State<DynamicForm> {
   //Filter form field according type from json and return view
   Widget _getFormField({required Map<String,dynamic> data, Map<String,dynamic>? nextData}){
 
-    String nextElementKey = "";
+    String nextFieldKey = "";
     String currentElementKey = "";
     String currentElementType = "";
 
@@ -45,7 +45,7 @@ class DynamicFormState extends State<DynamicForm> {
         nextElementType = "";
       }
       else{
-        nextElementKey = nextData["elementConfig"]['name'];
+        nextFieldKey = nextData["elementConfig"]['name'];
       }
     }
 
@@ -53,18 +53,18 @@ class DynamicFormState extends State<DynamicForm> {
       switch(currentElementType){
         case "input":
           responseParser.setFieldFocusNode = currentElementKey;
-          if(nextElementKey.isNotEmpty){
-            responseParser.setFieldFocusNode = nextElementKey;
+          if(nextFieldKey.isNotEmpty){
+            responseParser.setFieldFocusNode = nextFieldKey;
           }
           //Open mobile field
           if(data.containsKey("elementConfig") && data["elementConfig"].containsKey("type") && data["elementConfig"]["type"].toString().toLowerCase() == "tel"){
             return TextFieldCountryPickerView(jsonData: data,onChangeValue: (String fieldKey, Map<String,String> value){
               formSubmitData[fieldKey] = value;
-            },nextElementKey: nextElementKey);
+            },nextFieldKey: nextFieldKey);
           }
           return TextFieldView(jsonData: data,onChangeValue: (String fieldKey, String value){
             formSubmitData[fieldKey] = value;
-          },nextElementKey: nextElementKey);
+          },nextFieldKey: nextFieldKey);
 
         case "select":
           return DropDown(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
@@ -119,7 +119,7 @@ class DynamicFormState extends State<DynamicForm> {
       Map<String,dynamic> data = element;
       Map<String,dynamic> nextData = {};
 
-      if(nextItemIndex<=formFieldList.length){
+      if(nextItemIndex<formFieldList.length){
         nextData = formFieldList[nextItemIndex];
         nextItemIndex = nextItemIndex+1;
       }

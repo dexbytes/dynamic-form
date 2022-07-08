@@ -2,15 +2,16 @@ part of dynamic_json_form;
 // enum formFieldType {text,name,email,tel,url,number,textMultiline}
 class TextFieldCountryPickerView extends StatefulWidget {
   final Map<String,dynamic> jsonData;
-  final String? nextElementKey;
+  final String? nextFieldKey;
   final TelTextFieldConfiguration? viewConfiguration;
   final Function (String fieldKey,Map<String,String> fieldValue) onChangeValue ;
-   const TextFieldCountryPickerView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration,this.nextElementKey = ""}) : super(key: key);
+   const TextFieldCountryPickerView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration,this.nextFieldKey = ""}) : super(key: key);
   @override
-  _TextFieldCountryPickerState createState() => _TextFieldCountryPickerState(jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration: viewConfiguration);
+  _TextFieldCountryPickerState createState() => _TextFieldCountryPickerState(jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration: viewConfiguration,nextFieldKey:nextFieldKey!);
 }
 class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   String fieldKey = "";
+  String nextFieldKey = "";
   bool obscureText = false;
   String formFieldType = "text";
   final _formTelFieldKey = GlobalKey<FormState>();
@@ -25,7 +26,8 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
 
   OverlayEntry? overlayEntry;
   Stream get onVariableChanged => _fieldStreamControl.stream;
-  late FocusNode myFocusNode;
+  late FocusNode currentFocusNode;
+  late FocusNode nextFocusNode;
   bool checkValidOnChange = false;
   bool checkValid = true;
   bool checkValidOnSubmit = false;
@@ -36,7 +38,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   String selectedCountryCode = '';
   String enteredNumber = '';
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
-  _TextFieldCountryPickerState({required this.jsonData,required this.onChangeValue,this.viewConfiguration}){
+  _TextFieldCountryPickerState({required this.jsonData,required this.onChangeValue,this.viewConfiguration,this.nextFieldKey = ""}){
     textFieldModel ??= responseParser.textFormFiledParsing(jsonData: jsonData,updateCommon: true);
 
     if(textFieldModel!=null){
@@ -62,6 +64,8 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
 
         onChangeValue.call(fieldKey,getData(enteredNumber.trim(),selectedCountryCode));
 
+        currentFocusNode = (responseParser.getFieldFocusNode.containsKey(fieldKey)? responseParser.getFieldFocusNode[fieldKey]:FocusNode())!;nextFocusNode = (responseParser.getFieldFocusNode.containsKey(nextFieldKey)? responseParser.getFieldFocusNode[nextFieldKey]:FocusNode())!;
+
         viewConfig = CountryPickerViewConfig(isCountryCode: isCountryCode,enabledCountries: enabledCountries,viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
           obscureText = value;
           _fieldStreamControl.sink.add(obscureText);
@@ -77,10 +81,9 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   @override
   void initState() {
     super.initState();
-    myFocusNode = FocusNode();
-    myFocusNode.addListener(() {
+    currentFocusNode.addListener(() {
       if (isDoneOver && (Platform.isIOS)) {
-        bool hasFocus = myFocusNode.hasFocus;
+        bool hasFocus = currentFocusNode.hasFocus;
         if (hasFocus)
           showOverlay(context);
         else
@@ -201,6 +204,9 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
         checkValidOnChange = true;
         autovalidateMode = _autoValidate();
       });
+
+      moveToNextField(_nameController!.text.toString());
+
     }
   }
   //for keyboard done button
@@ -257,7 +263,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
           obscureText = snapshot.data;
         }
         return TextFormField(
-        key: _formTelFieldKey,focusNode: myFocusNode,strutStyle:StrutStyle(),
+        key: _formTelFieldKey,focusNode: currentFocusNode,strutStyle:StrutStyle(),
         readOnly: textFieldModel!.validation!.isReadOnly!,
         enabled: !textFieldModel!.validation!.isDisabled!,
         controller: _nameController,
@@ -314,6 +320,8 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
                 autovalidateMode = _autoValidate();
               });
             }
+
+            moveToNextField(value);
           },
           autovalidateMode: autovalidateMode,
         );
@@ -327,6 +335,12 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   Map<String, String> getData(String tel, String selectedCountryCode) {
 
     return {fieldKey:tel,"code":selectedCountryCode};
+  }
+
+  void moveToNextField(String value) {
+    if(nextFocusNode!=null && commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType) == null){
+      nextFocusNode.requestFocus();
+    }
   }
 }
 class CountryPickerViewConfig{
