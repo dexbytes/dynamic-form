@@ -57,6 +57,9 @@ class _TextFieldsState extends State<TextFieldView> {
         viewConfig = ViewConfig(viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
           obscureText = value;
           _fieldStreamControl.sink.add(obscureText);
+        },
+            textFieldCallBack: (){
+              pickDate(context);
         });
       }
     }
@@ -110,6 +113,10 @@ class _TextFieldsState extends State<TextFieldView> {
         keyBoardType = TextInputType.url;
         break ;
         case 'number':
+        isDoneOver = true;
+        keyBoardType = TextInputType.number;
+        break ;
+        case 'date':
         isDoneOver = true;
         keyBoardType = TextInputType.number;
         break ;
@@ -210,7 +217,6 @@ class _TextFieldsState extends State<TextFieldView> {
         checkValidOnChange = true;
         autovalidateMode = _autoValidate();
       });
-
       moveToNextField(_nameController!.text.toString());
     }
   }
@@ -350,6 +356,47 @@ class _TextFieldsState extends State<TextFieldView> {
       nextFocusNode.requestFocus();
     }
   }
+
+
+  //Date of birth
+  void pickDate(BuildContext context) async {
+    final newDate = await showDatePicker(
+        context: context,
+        fieldLabelText: "DOB",
+        initialDate: DateTime(DateTime.now().year - 10),
+        initialEntryMode: DatePickerEntryMode.calendarOnly,
+        initialDatePickerMode: DatePickerMode.day,
+        firstDate: DateTime(DateTime.now().year - 100),
+        lastDate: DateTime(DateTime.now().year),
+        confirmText: "Ok",
+        builder: (context ,child ) {
+          return Theme(
+              child: child!,
+              data: ThemeData().copyWith(
+                // brightness:!isDarkMode? Brightness.light:Brightness.dark,
+                  colorScheme: const ColorScheme.dark(
+                    /*primary: appColors.buttonColor2,
+                      onSurface: appColors.calendarSurfacebgColorBlack,
+                      onPrimary: appColors.calendarColorWhite,
+                      surface:appColors.buttonColor2,*/
+                      brightness: Brightness.light
+                  ),
+                  dialogBackgroundColor: Colors.white
+              )
+          );
+        }
+    );
+
+    if (newDate == null) return;
+    _nameController!.text = packageUtil.getText("dd MMMM, yyyy",newDate).toString();
+    /*setState(() {
+      date = newDate;
+      nameController?.text = getText().toString();
+      widget.selectedValue?.call(date);
+    });*/
+    // setState(() => date = newDate
+    // );
+  }
 }
 class ViewConfig{
   TextFieldConfiguration? viewConfiguration;
@@ -358,7 +405,8 @@ class ViewConfig{
   TextEditingController nameController;
   bool? obscureTextState;
   Function(bool)? obscureTextStateCallBack;
-  ViewConfig({required this.nameController,required this.formFieldType,required this.textFieldModel,this.obscureTextState = true,this.obscureTextStateCallBack,this.viewConfiguration}) {
+  Function()? textFieldCallBack;
+  ViewConfig({required this.nameController,required this.formFieldType,required this.textFieldModel,this.obscureTextState = true,this.obscureTextStateCallBack,this.textFieldCallBack,this.viewConfiguration}) {
   viewConfiguration  = viewConfiguration ?? ConfigurationSetting.instance._textFieldConfiguration;
   }
 
@@ -415,6 +463,15 @@ class ViewConfig{
       case 'tel':
         inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
         break ;
+      case 'date':
+        inputDecoration =  inputDecoration.copyWith(suffixIcon: textFieldModel.elementConfig!.resetIcon!?SuffixCalendarIcon(iconClicked: (bool visibleStatus){
+          try {
+            textFieldCallBack?.call();
+          } catch (e) {
+            print(e);
+          }
+        },):null);
+        break ;
       case 'url':
         inputDecoration =  inputDecoration.copyWith(suffixIcon: suffixIcon);
         break ;
@@ -428,6 +485,11 @@ class ViewConfig{
 
     return inputDecoration;
   }
+
+
+
+
+
 }
 class ActionConfig{
 

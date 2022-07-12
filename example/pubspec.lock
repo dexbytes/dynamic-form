@@ -90,6 +90,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_cart:
+    dependency: transitive
+    description:
+      name: flutter_cart
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.7"
   flutter_lints:
     dependency: "direct dev"
     description:
@@ -121,6 +128,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
+  intl:
+    dependency: transitive
+    description:
+      name: intl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.17.0"
   js:
     dependency: transitive
     description:
@@ -352,4 +366,4 @@ packages:
     version: "0.2.0+1"
 sdks:
   dart: ">=2.16.2 <3.0.0"
-  flutter: ">=2.8.0"
+  flutter: ">=2.8.1"

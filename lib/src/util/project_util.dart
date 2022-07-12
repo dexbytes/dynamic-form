@@ -1,4 +1,5 @@
 import 'package:dynamic_json_form/parts.dart';
+import 'package:intl/intl.dart';
 
 class PackageUtil {
 
@@ -30,6 +31,24 @@ class PackageUtil {
     // keyBoardType = TextInputType.emailAddress;
 
     return keyBoardType;
+  }
+
+  String getText(String dateFormat,DateTime dateTime) {
+
+    try {
+      if (dateTime == null) {
+            return 'Select Date';
+          }
+          else {
+            if(dateFormat.isNotEmpty){
+              return DateFormat(dateFormat).format(dateTime).toString();
+            }
+            return DateFormat('dd MMMM, yyyy').format(dateTime);
+          }
+    } catch (e) {
+      print(e);
+      return 'Select Date';
+    }
   }
 }
 
