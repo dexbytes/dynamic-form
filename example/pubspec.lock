@@ -60,9 +60,11 @@ packages:
   dynamic_json_form:
     dependency: "direct main"
     description:
-      path: ".."
-      relative: true
-    source: path
+      path: "."
+      ref: HEAD
+      resolved-ref: ed4c0ba12c496386ee653a6e9b806e3a6322ad24
+      url: "https://github.com/dexbytes/standard-form.git"
+    source: git
     version: "0.0.1"
   fake_async:
     dependency: transitive
