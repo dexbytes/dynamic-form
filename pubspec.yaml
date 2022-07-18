@@ -5,7 +5,7 @@ homepage: https://github.com/dexbytes
 repository: https://github.com/dexbytes/standard-form.git
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
+  sdk: ">=2.15.0 <3.0.0"
   flutter: ">=1.17.0"
 
 dependencies:
