@@ -49,11 +49,30 @@ class TelTextFieldConfiguration {
   late TextAlign? _textAlign = TextAlign.start;
   late TextAlignVertical? _textAlignVertical = TextAlignVertical.center;
   late bool _enableLabel = false;
+  late bool _filled = true;
+  late Color _fillColor = Colors.transparent;
 
-  TelTextFieldConfiguration({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border,bool? enableLabel});
+  TelTextFieldConfiguration({TextStyle? textStyle,
+    TextStyle? hintStyle,
+    InputBorder? border,
+    bool? enableLabel,
+    bool? filled,
+    Color? fillColor,
 
-  TelTextFieldConfiguration setConfiguration({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border,bool? enableLabel}) {
+  }) {
+    _fillColor = fillColor ?? _fillColor;
+    _filled = filled ?? _filled;
+    _enableLabel = enableLabel ?? _enableLabel;
+    _hintStyle = hintStyle ?? _hintStyle;
+    _textStyle = textStyle ?? _textStyle;
+    _border = border ?? _border;
+  }
+
+  TelTextFieldConfiguration setConfiguration({TextStyle? textStyle,TextStyle? hintStyle,  bool? filled,
+    Color? fillColor,InputBorder? border,bool? enableLabel}) {
     return TelTextFieldConfiguration(
+      fillColor : fillColor ?? _fillColor,
+      filled : filled ?? _filled,
         textStyle : textStyle ?? _textStyle,
         hintStyle : hintStyle ?? _hintStyle,
         border : border ?? _border,

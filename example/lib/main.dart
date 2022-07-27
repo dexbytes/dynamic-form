@@ -9,13 +9,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //Custom local configuration for Input field setup
-  TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration();
-  textFieldConfiguration.setBorder = const UnderlineInputBorder();
+  TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration(fillColor: Colors.purple,
+  filled: true, border: const UnderlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20)))
+  );
+  //textFieldConfiguration.setBorder = const UnderlineInputBorder();
   ConfigurationSetting.instance.setTextFieldViewConfig = textFieldConfiguration;
 
   //Custom local configuration for tel Input field setup
-  TelTextFieldConfiguration telTextFieldConfiguration =  TelTextFieldConfiguration();
-  telTextFieldConfiguration.setBorder = const UnderlineInputBorder();
+  TelTextFieldConfiguration telTextFieldConfiguration =  TelTextFieldConfiguration(fillColor: Colors.purple,
+      filled: true, border: const UnderlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20)))
+  );
+  //telTextFieldConfiguration.setBorder = const UnderlineInputBorder();
   ConfigurationSetting.instance.setTelTextFieldViewConfig = telTextFieldConfiguration;
 
   //Set load form from json

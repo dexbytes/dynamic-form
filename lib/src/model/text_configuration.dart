@@ -49,17 +49,42 @@ class TextFieldConfiguration {
   late TextAlign? _textAlign = TextAlign.start;
   late TextAlignVertical? _textAlignVertical = TextAlignVertical.center;
   late bool _enableLabel = true;
+  late bool _filled = true;
+  late Color _fillColor = Colors.transparent;
 
-  TextFieldConfiguration({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border,bool? enableLabel});
+  TextFieldConfiguration({TextStyle? textStyle,
+    TextStyle? hintStyle,
+    InputBorder? border,
+    bool? enableLabel,
+    bool? filled,
+    Color? fillColor,
 
-  TextFieldConfiguration setConfiguration({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border,bool? enableLabel}) {
+  }) {
+  _fillColor = fillColor ?? _fillColor;
+  _filled = filled ?? _filled;
+  _enableLabel = enableLabel ?? _enableLabel;
+  _hintStyle = hintStyle ?? _hintStyle;
+  _textStyle = textStyle ?? _textStyle;
+  _border = border ?? _border;
+  }
+
+  TextFieldConfiguration setConfiguration({TextStyle? textStyle,
+    TextStyle? hintStyle,
+    InputBorder? border,
+    bool? enableLabel,
+    bool? filled,
+    Color? fillColor,
+  }) {
     return TextFieldConfiguration(
         textStyle : textStyle ?? _textStyle,
         hintStyle : hintStyle ?? _hintStyle,
         border : border ?? _border,
+      fillColor : fillColor ?? _fillColor,
+      filled: filled??_filled,
       enableLabel : enableLabel ?? _enableLabel,
     );
 }
+
   set setBorder (value){
     _border = value;
   }

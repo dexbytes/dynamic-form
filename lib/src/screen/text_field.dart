@@ -419,6 +419,8 @@ class ViewConfig{
 
  return InputDecoration(
         border: viewConfiguration!._border,
+     filled: viewConfiguration!._filled,
+     fillColor: viewConfiguration!._fillColor,
      /*   errorBorder: viewConfiguration!._errorBorder,
         focusedErrorBorder: viewConfiguration!._errorBorder,*/
         enabledBorder: viewConfiguration!._border,
