@@ -53,6 +53,7 @@ class _TextFieldsState extends State<TextFieldView> {
           obscureText = false;
         }
 
+
         currentFocusNode = (responseParser.getFieldFocusNode.containsKey(fieldKey)? responseParser.getFieldFocusNode[fieldKey]:FocusNode())!;nextFocusNode = (responseParser.getFieldFocusNode.containsKey(nextFieldKey)? responseParser.getFieldFocusNode[nextFieldKey]:FocusNode())!;
 
         viewConfig = ViewConfig(viewConfiguration: viewConfiguration,nameController: _nameController!,textFieldModel: textFieldModel!, formFieldType: formFieldType,obscureTextState: obscureText,obscureTextStateCallBack: (value){
@@ -272,13 +273,14 @@ class _TextFieldsState extends State<TextFieldView> {
         if(snapshot.hasData){
           obscureText = snapshot.data;
         }
-        return Container(
+        return SizedBox(
           height:textFieldHeight,
           child: TextFormField(
           focusNode: currentFocusNode,strutStyle:StrutStyle(),
           readOnly: textFieldModel!.validation!.isReadOnly!,
           enabled: !textFieldModel!.validation!.isDisabled!,
           controller: _nameController,
+          cursorColor: viewConfig!.viewConfiguration?._cursorColor??Colors.blue,
           textInputAction: TextInputAction.done,
           maxLength: textFieldModel!.validation!.maxLength,   //It is the length of char
           maxLines: maxLine(),
@@ -421,24 +423,35 @@ class ViewConfig{
   viewConfiguration  = viewConfiguration ?? ConfigurationSetting.instance._textFieldConfiguration;
   }
 
+  //Color cursorColor = cursorColor ??Colors.red;
   InputDecoration _getTextDecoration (){
-
     bool enableLabel = viewConfiguration!._enableLabel;
     if(textFieldModel.elementConfig!.enableLabel != null){
       enableLabel = textFieldModel.elementConfig!.enableLabel!;
     }
 
  return InputDecoration(
-   contentPadding: const EdgeInsets.all(16),
-        border: viewConfiguration!._border,
-    /* focusedErrorBorder: const OutlineInputBorder(
-         borderRadius: BorderRadius.all(Radius.circular(10.0)),
-         borderSide: BorderSide(color: Colors.blue)),*/
+   contentPadding: viewConfiguration!._contentPadding,
+     border: viewConfiguration!._border,
      floatingLabelBehavior: FloatingLabelBehavior.never,
      isDense:true,
+     labelStyle: viewConfiguration!._labelStyle,
+     errorStyle:  viewConfiguration!._errorStyle,
+     counterStyle: viewConfiguration!._counterStyle,
+     suffixStyle: viewConfiguration!._suffixStyle,
+     prefixStyle: viewConfiguration!._prefixStyle,
+     focusedBorder: viewConfiguration!._focusedBorder,
+     // suffixText: ,
+     // prefixText: ,
+     // prefixIcon: ,
+     // suffix: ,
+     // suffixIconColor: ,
+     // counter: ,
+     // prefix: ,
      alignLabelWithHint: true,
      filled: viewConfiguration!._filled,
      fillColor: viewConfiguration!._fillColor,
+
      /*   errorBorder: viewConfiguration!._errorBorder,
         focusedErrorBorder: viewConfiguration!._errorBorder,*/
         enabledBorder: viewConfiguration!._border,
@@ -453,7 +466,7 @@ class ViewConfig{
     Widget? suffixIcon;
     if(textFieldModel.elementConfig!=null){
       if(textFieldModel.elementConfig!.resetIcon!){
-        suffixIcon = SuffixCloseIcon(textController: nameController,iconClicked: (){
+        suffixIcon = SuffixCloseIcon(iconColor:viewConfiguration?._suffixIconColor,textController: nameController,iconClicked: (){
           nameController.text = "";
         },);
       }

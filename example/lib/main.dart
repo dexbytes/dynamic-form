@@ -9,15 +9,22 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //Custom local configuration for Input field setup
-  TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration(fillColor: Colors.purple,
-  filled: true, border: const UnderlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20)))
+  TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration(
+      cursorColor: Colors.yellow,
+      suffixIconColor: Colors.pink,
+      fillColor: Colors.grey.shade200,
+  filled: true,border: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
+          borderSide: BorderSide(color: Colors.transparent,)//BorderSide
+      ), focusedBorder: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
+          borderSide: BorderSide(color: Colors.grey,)//BorderSide
+      )
   );
   //textFieldConfiguration.setBorder = const UnderlineInputBorder();
   ConfigurationSetting.instance.setTextFieldViewConfig = textFieldConfiguration;
 
   //Custom local configuration for tel Input field setup
   TelTextFieldConfiguration telTextFieldConfiguration =  TelTextFieldConfiguration(fillColor: Colors.purple,
-      filled: true, border: const UnderlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(20)))
+      filled: true, border: const UnderlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(12)))
   );
   //telTextFieldConfiguration.setBorder = const UnderlineInputBorder();
   ConfigurationSetting.instance.setTelTextFieldViewConfig = telTextFieldConfiguration;
