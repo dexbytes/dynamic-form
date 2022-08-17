@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
 class CommonValidation {
@@ -22,7 +23,7 @@ class CommonValidation {
     return isValidate;
   }
 
-
+  //Check all field validation
   String? checkValidation({required String enteredValue,required Map<String, dynamic> validationStr,required String formFieldType}){
     String? errorMsg;
     switch(formFieldType){
@@ -53,6 +54,7 @@ class CommonValidation {
     }
   }
 
+  //Text validation
   String? isValidText(String value,Map<String, dynamic> validationStr){
 
 
@@ -88,10 +90,14 @@ class CommonValidation {
       }
     }
     catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     return errorMsg;
   }
+
+  //Email validation
   String? isValidEmail(String value,Map<String, dynamic> validationStr){
 
     String? errorMsg ;
@@ -121,11 +127,14 @@ class CommonValidation {
       }
     }
     catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     return errorMsg;
   }
 
+  //Password validation
   String? isValidPassword(String value,Map<String, dynamic> validationStr){
     String? errorMsg ;
     try {
@@ -155,10 +164,14 @@ class CommonValidation {
       }
     }
     catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     return errorMsg;
   }
+
+  //name validation
   String? isValidName(String value,Map<String, dynamic> validationStr){
 
     String? errorMsg ;
@@ -193,11 +206,14 @@ class CommonValidation {
       }
     }
     catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     return errorMsg;
   }
 
+  //telephone validation
   String? isValidTel(String value,Map<String, dynamic> validationStr){
 
     String? errorMsg ;
@@ -228,10 +244,14 @@ class CommonValidation {
       }
     }
     catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     return errorMsg;
   }
+
+  //Url validation
   String? isValidUrl(String value,Map<String, dynamic> validationStr){
 
     String? errorMsg;
@@ -266,10 +286,14 @@ class CommonValidation {
       }
     }
     catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     return errorMsg;
   }
+
+  //Number validation
   String? isValidNumber(String value,Map<String, dynamic> validationStr){
 
     String? errorMsg;
@@ -304,7 +328,9 @@ class CommonValidation {
       }
     }
     catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     return errorMsg;
   }

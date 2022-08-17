@@ -15,7 +15,7 @@ class TextFieldModel {
     elementConfig = json['elementConfig'] != null ?  ElementConfig.fromJson(json['elementConfig']) : null;
     help = !json.containsKey('help')?null:json['help'] != null ?  Help.fromJson(json['help']) : null;
     value = json['value'];
-    validation = json['validation'] != null ? new Validation.fromJson(json['validation']) : null;
+    validation = json['validation'] != null ?  Validation.fromJson(json['validation']) : null;
     validationStr = json['validation'] != null ? json['validation'] : null;
     valid = json['valid'];
     onchange = json['onchange'];
@@ -165,7 +165,7 @@ class ErrorMessage {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data =  Map<String, dynamic>();
     data['required'] = this.required;
     data['minLength'] = this.minLength;
     data['maxLength'] = this.maxLength;

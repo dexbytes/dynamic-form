@@ -15,7 +15,7 @@ class _TextFieldsState extends State<TextFieldView> {
   bool obscureText = true;
   String formFieldType = "text";
   String textCapitalizeStr = "none";
-  final _formFieldKey = GlobalKey<FormState>();
+
   Map<String,dynamic> jsonData;
   final TextEditingController? _nameController =  TextEditingController();
   TextFieldModel? textFieldModel;
@@ -33,6 +33,7 @@ class _TextFieldsState extends State<TextFieldView> {
   bool checkValid = true;
   bool checkValidOnSubmit = false;
   bool isDoneOver = false;
+  double textFieldHeight = 50;
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
   _TextFieldsState({required this.jsonData,required this.onChangeValue,this.viewConfiguration,this.nextFieldKey=""}){
     textFieldModel ??= responseParser.textFormFiledParsing(jsonData: jsonData,updateCommon: true);
@@ -51,6 +52,7 @@ class _TextFieldsState extends State<TextFieldView> {
         if(formFieldType!="password"){
           obscureText = false;
         }
+
 
         currentFocusNode = (responseParser.getFieldFocusNode.containsKey(fieldKey)? responseParser.getFieldFocusNode[fieldKey]:FocusNode())!;nextFocusNode = (responseParser.getFieldFocusNode.containsKey(nextFieldKey)? responseParser.getFieldFocusNode[nextFieldKey]:FocusNode())!;
 
@@ -72,10 +74,11 @@ class _TextFieldsState extends State<TextFieldView> {
     currentFocusNode.addListener(() {
       if (isDoneOver && (Platform.isIOS)) {
         bool hasFocus = currentFocusNode.hasFocus;
-        if (hasFocus)
+        if (hasFocus) {
           showOverlay(context);
-        else
+        } else {
           removeOverlay();
+        }
       }
     });
    // _nameController = TextEditingController();
@@ -211,7 +214,7 @@ class _TextFieldsState extends State<TextFieldView> {
   //for ios done button callback
   onPressCallback() {
     removeOverlay();
-    FocusScope.of(context).requestFocus(new FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode());
     if(mounted && _nameController!=null && _nameController!.text.isNotEmpty && checkValid){
       setState(() {
         checkValidOnChange = true;
@@ -271,78 +274,89 @@ class _TextFieldsState extends State<TextFieldView> {
         if(snapshot.hasData){
           obscureText = snapshot.data;
         }
-        return TextFormField(
-        focusNode: currentFocusNode,strutStyle:StrutStyle(),
-        readOnly: textFieldModel!.validation!.isReadOnly!,
-        enabled: !textFieldModel!.validation!.isDisabled!,
-        controller: _nameController,
-        textInputAction: TextInputAction.done,
-        maxLength: textFieldModel!.validation!.maxLength,   //It is the length of char
-        maxLines: maxLine(),
-        minLines: minLine(),
-          textCapitalization:textCapitalize(textCapitalizeStr: textCapitalizeStr),
-        decoration: viewConfig!.getInputDecoration(),obscureText: obscureText,
-        keyboardType: keyBoardType(formFieldType: formFieldType),
-        inputFormatters: inputFormatter(formFieldType: formFieldType),
-        validator: (value){
+        return SizedBox(
+         // height:textFieldHeight,
+          child: TextFormField(
+          focusNode: currentFocusNode,strutStyle:StrutStyle(),
+          readOnly: textFieldModel!.validation!.isReadOnly!,
+          enabled: !textFieldModel!.validation!.isDisabled!,
+          controller: _nameController,
+          cursorColor: viewConfig!.viewConfiguration?._cursorColor??Colors.blue,
+          textInputAction: TextInputAction.done,
+          maxLength: textFieldModel!.validation!.maxLength,   //It is the length of char
+          maxLines: maxLine(),
+          minLines: minLine(),
+            textCapitalization:textCapitalize(textCapitalizeStr: textCapitalizeStr),
+          decoration: viewConfig!.getInputDecoration(),obscureText: obscureText,
+          keyboardType: keyBoardType(formFieldType: formFieldType),
+          inputFormatters: inputFormatter(formFieldType: formFieldType),
+          validator: (value){
     if(value!.isEmpty && !checkValid){
       return null;
     }
     else if(value.isNotEmpty && !checkValid && !checkValidOnChange){
       return null;
     }
-          return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
+            return commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
 
-        }
+          }
       ,onChanged: (value){
-            if(mounted){
-              onChangeValue.call(fieldKey,value);
-            }
-        },
-          onSaved: (value){
-            //Check all validation on submit
-            /*if((!checkValidOnChange && checkValid)){
-              setState(() {
-                checkValidOnSubmit = true;
-              });
-              _formFieldKey.currentState!.validate();
-            }*/
-            //Check validation on submit and will not submit data on server
-             if((value!.isNotEmpty && checkValid)){
-              /*setState(() {
-                checkValidOnSubmit = true;
-                autovalidateMode = _autoValidate(checkValidOnSubmit : true);
-              });*/
-             // _formFieldKey.currentState!.validate();
-            }
-             else if((checkValid)){
-              /*setState(() {
-                checkValidOnSubmit = true;
-                autovalidateMode = _autoValidate(checkValidOnSubmit : true);
-              });*/
+              if(mounted){
+                onChangeValue.call(fieldKey,value);
+                String? validate = commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
 
-             // _formFieldKey.currentState!.validate();
-            }
-            //Check validation on submit and will not submit data on server
-            /*else if((value.isNotEmpty && !checkValidOnChange && !checkValid)){
-              setState(() {
-                checkValidOnSubmit = true;
-              });
-              _formFieldKey.currentState!.validate();
-            }*/
-
+                // if(validate !=null ){
+                //   textFieldHeight = 80;
+                // }else{
+                //   textFieldHeight = 50;
+                // }
+              }
           },
-          onFieldSubmitted:(value){
-            if((value.isNotEmpty && checkValid)){
-              setState(() {
-                checkValidOnChange = true;
-                autovalidateMode = _autoValidate();
-              });
+            onSaved: (value){
+              //Check all validation on submit
+              /*if((!checkValidOnChange && checkValid)){
+                setState(() {
+                  checkValidOnSubmit = true;
+                });
+                _formFieldKey.currentState!.validate();
+              }*/
+              //Check validation on submit and will not submit data on server
+               if((value!.isNotEmpty && checkValid)){
+                /*setState(() {
+                  checkValidOnSubmit = true;
+                  autovalidateMode = _autoValidate(checkValidOnSubmit : true);
+                });*/
+               // _formFieldKey.currentState!.validate();
+              }
+               else if((checkValid)){
+                /*setState(() {
+                  checkValidOnSubmit = true;
+                  autovalidateMode = _autoValidate(checkValidOnSubmit : true);
+                });*/
 
-              moveToNextField(value);
-            }
-        },
-          autovalidateMode: autovalidateMode,
+               // _formFieldKey.currentState!.validate();
+              }
+              //Check validation on submit and will not submit data on server
+              /*else if((value.isNotEmpty && !checkValidOnChange && !checkValid)){
+                setState(() {
+                  checkValidOnSubmit = true;
+                });
+                _formFieldKey.currentState!.validate();
+              }*/
+
+            },
+            onFieldSubmitted:(value){
+              if((value.isNotEmpty && checkValid)){
+                setState(() {
+                  checkValidOnChange = true;
+                  autovalidateMode = _autoValidate();
+                });
+
+                moveToNextField(value);
+              }
+          },
+            autovalidateMode: autovalidateMode,
+          ),
         );
   },),
         fieldHelpText(),
@@ -410,15 +424,35 @@ class ViewConfig{
   viewConfiguration  = viewConfiguration ?? ConfigurationSetting.instance._textFieldConfiguration;
   }
 
+  //Color cursorColor = cursorColor ??Colors.red;
   InputDecoration _getTextDecoration (){
-
     bool enableLabel = viewConfiguration!._enableLabel;
     if(textFieldModel.elementConfig!.enableLabel != null){
       enableLabel = textFieldModel.elementConfig!.enableLabel!;
     }
 
  return InputDecoration(
-        border: viewConfiguration!._border,
+   contentPadding: viewConfiguration!._contentPadding,
+     border: viewConfiguration!._border,
+     floatingLabelBehavior: FloatingLabelBehavior.never,
+     //isDense:true,
+     labelStyle: viewConfiguration!._labelStyle,
+     errorStyle:  viewConfiguration!._errorStyle,
+     counterStyle: viewConfiguration!._counterStyle,
+     suffixStyle: viewConfiguration!._suffixStyle,
+     prefixStyle: viewConfiguration!._prefixStyle,
+     focusedBorder: viewConfiguration!._focusedBorder,
+     //suffixText: viewConfiguration!._suffixText,
+     //prefixText: viewConfiguration!._prefixText,
+     // prefixIcon: ,
+     // suffix: ,
+     // suffixIconColor: ,
+     // counter: ,
+     prefix: viewConfiguration!._prefix,
+     alignLabelWithHint: true,
+     filled: viewConfiguration!._filled,
+     fillColor: viewConfiguration!._fillColor,
+
      /*   errorBorder: viewConfiguration!._errorBorder,
         focusedErrorBorder: viewConfiguration!._errorBorder,*/
         enabledBorder: viewConfiguration!._border,
@@ -433,7 +467,7 @@ class ViewConfig{
     Widget? suffixIcon;
     if(textFieldModel.elementConfig!=null){
       if(textFieldModel.elementConfig!.resetIcon!){
-        suffixIcon = SuffixCloseIcon(textController: nameController,iconClicked: (){
+        suffixIcon = SuffixCloseIcon(iconColor:viewConfiguration?._suffixIconColor,textController: nameController,iconClicked: (){
           nameController.text = "";
         },);
       }
@@ -449,7 +483,9 @@ class ViewConfig{
           try {
             obscureTextStateCallBack?.call(visibleStatus);
           } catch (e) {
-            print(e);
+            if (kDebugMode) {
+              print(e);
+            }
           }
         },):null);
       }
@@ -468,7 +504,9 @@ class ViewConfig{
           try {
             textFieldCallBack?.call();
           } catch (e) {
-            print(e);
+            if (kDebugMode) {
+              print(e);
+            }
           }
         },):null);
         break ;

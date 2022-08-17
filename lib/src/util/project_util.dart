@@ -1,4 +1,5 @@
 import 'package:dynamic_json_form/parts.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 
 class PackageUtil {
@@ -46,7 +47,9 @@ class PackageUtil {
             return DateFormat('dd MMMM, yyyy').format(dateTime);
           }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return 'Select Date';
     }
   }

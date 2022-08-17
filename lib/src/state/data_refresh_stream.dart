@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
+
 class DataRefreshStream {
   DataRefreshStream._internal();
   static final DataRefreshStream instance = DataRefreshStream._internal();
@@ -14,7 +16,9 @@ class DataRefreshStream {
   }
 
   void formFieldsRefresh(List<dynamic> userData) {
-    print("?????????????????????? $userData");
+    if (kDebugMode) {
+      print("?????????????????????? $userData");
+    }
     _formFieldStreamController.sink.add(userData);
   }
 

@@ -17,7 +17,7 @@
         "keyboardRejex": "^[a-zA-Z-]+",
         "resetIcon": true,
         "minLine":1,
-        "maxLine": 2,
+        "maxLine": 1,
         "textCapitalization": "words"
       },
       "value": "",

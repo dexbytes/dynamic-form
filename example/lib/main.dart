@@ -2,6 +2,7 @@ import 'package:dynamic_json_form/dynamic_json_form.dart';
 import 'package:example/first_screen.dart';
 import 'package:example/http_service.dart';
 import 'package:example/time_duration.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
@@ -9,13 +10,33 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //Custom local configuration for Input field setup
-  TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration();
-  textFieldConfiguration.setBorder = const UnderlineInputBorder();
+  TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration(
+      cursorColor: Colors.yellow,
+      suffixIconColor: Colors.black,
+      fillColor: Colors.grey.shade200,
+  //contentPadding: const EdgeInsets.all(8),
+  filled: true,border: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
+          borderSide: BorderSide(color: Colors.transparent,)//BorderSide
+      ), focusedBorder: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
+          borderSide: BorderSide(color: Colors.grey,)//BorderSide
+      )
+  );
+
+  //textFieldConfiguration.setBorder = const UnderlineInputBorder();
   ConfigurationSetting.instance.setTextFieldViewConfig = textFieldConfiguration;
 
   //Custom local configuration for tel Input field setup
-  TelTextFieldConfiguration telTextFieldConfiguration =  TelTextFieldConfiguration();
-  telTextFieldConfiguration.setBorder = const UnderlineInputBorder();
+  TelTextFieldConfiguration telTextFieldConfiguration =  TelTextFieldConfiguration(
+      cursorColor: Colors.yellow,
+      suffixIconColor: Colors.black,
+      fillColor: Colors.grey.shade200,
+      filled: true,border: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
+      borderSide: BorderSide(color: Colors.transparent,)//BorderSide
+  ), focusedBorder: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
+      borderSide: BorderSide(color: Colors.grey,)//BorderSide
+  )
+  );
+  //telTextFieldConfiguration.setBorder = const UnderlineInputBorder();
   ConfigurationSetting.instance.setTelTextFieldViewConfig = telTextFieldConfiguration;
 
   //Set load form from json
@@ -54,7 +75,9 @@ class _MyFormState extends State<MyForm> {
   bool isLoading = false;
 
   _MyFormState(this.jsonString){
-    print("$jsonString");
+    if (kDebugMode) {
+      print("$jsonString");
+    }
 
   }
 
@@ -86,17 +109,22 @@ class _MyFormState extends State<MyForm> {
                     ConfigurationSetting.instance.setLoadFromApi = !ConfigurationSetting.instance.getLoadFromApi;
                   });
                 },),
-                SizedBox(height: 20,),
+                const SizedBox(height: 20,),
                 OutlinedButton(child: const Text("Get Data"),
                   onPressed: () async {
                     timeDuration.startTimeDuration();
                   setState(() {
                     isLoading = true;
                   });
+                  //get data which is stored in shared prefernce
                     String? jsonString = await ConfigurationSetting.instance.getFormDataLocal();
                     if(jsonString!.isEmpty) {
+                      // Comment this while get data from local json
                        String jsonStringResponse = await httpService.getPosts();
-                      // String jsonStringResponse = await localJsonRw.localRead();
+
+                       //== Uncomment while get data from local json
+                     // String jsonStringResponse = await localJsonRw.localRead();
+
                       jsonString = await ConfigurationSetting.instance.storeFormDataLocal(jsonStringResponse);
                     }
                   setState(() {

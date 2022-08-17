@@ -403,7 +403,7 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
                       child: Scrollbar(
                         radius: widget.scrollbarRadius,
                         thickness: widget.scrollbarThickness,
-                        trackVisibility: widget.scrollbarAlwaysShow,
+                        //trackVisibility: widget.scrollbarAlwaysShow,
                         child: ListView(
                           padding:
                           widget.dropdownPadding ?? kMaterialListPadding,
