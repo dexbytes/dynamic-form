@@ -164,7 +164,9 @@ class _DropDownState extends State<DropDown> {
         try {
           enableLabel = jsonData['elementConfig']['enableLabel'];
         } catch (e) {
-          print(e);
+          if (kDebugMode) {
+            print(e);
+          }
         }
       if (dropDownModel.elementConfig != null) {
         fieldKey = dropDownModel.elementConfig!.name!;
@@ -236,7 +238,9 @@ class _DropDownState extends State<DropDown> {
           }
 
         } catch (e) {
-          print(e);
+          if (kDebugMode) {
+            print(e);
+          }
         }
       }
     }

@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart';
 
 class HttpService {
@@ -18,7 +18,9 @@ class HttpService {
                   .toList();*/
         return body;
       } catch (e) {
-        print(e);
+        if (kDebugMode) {
+          print(e);
+        }
         return "";
       }
     } else {

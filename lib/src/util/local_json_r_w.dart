@@ -18,7 +18,9 @@ class LocalJsonRw{
           return jsonString;
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return "";
     }
   }
@@ -31,9 +33,11 @@ class LocalJsonRw{
     try {
       final file = await _localFile;
       String encodedData = jsonEncode(list);
-      await file.writeAsString('$encodedData');
+      await file.writeAsString(encodedData);
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
     return Future.value(true);
   }

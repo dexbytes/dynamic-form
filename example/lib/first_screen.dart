@@ -15,7 +15,7 @@ class _FirstScreenState extends State<FirstScreen> {
   final String jsonString;
   final _formKeyNew = GlobalKey<DynamicFormState>();
 
-  _FirstScreenState(this.jsonString) {}
+  _FirstScreenState(this.jsonString);
 
   @override
   Widget build(BuildContext context) {
@@ -29,12 +29,15 @@ class _FirstScreenState extends State<FirstScreen> {
             Column(
               children: [
                 Text(widget.apiCallingTime),
+
+                //Get all fields of form
                 DynamicForm(jsonString,dynamicFormKey: _formKeyNew, finalSubmitCallBack: (Map<String, dynamic> data) async {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => SecondScreen(data: data)),
                   );
                 },),
+
                 Align(alignment: Alignment.center,
                   child: ElevatedButton(clipBehavior: Clip.hardEdge,
                     onPressed: () async {

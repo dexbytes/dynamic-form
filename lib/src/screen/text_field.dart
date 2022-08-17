@@ -15,7 +15,7 @@ class _TextFieldsState extends State<TextFieldView> {
   bool obscureText = true;
   String formFieldType = "text";
   String textCapitalizeStr = "none";
-  final _formFieldKey = GlobalKey<FormState>();
+
   Map<String,dynamic> jsonData;
   final TextEditingController? _nameController =  TextEditingController();
   TextFieldModel? textFieldModel;
@@ -74,10 +74,11 @@ class _TextFieldsState extends State<TextFieldView> {
     currentFocusNode.addListener(() {
       if (isDoneOver && (Platform.isIOS)) {
         bool hasFocus = currentFocusNode.hasFocus;
-        if (hasFocus)
+        if (hasFocus) {
           showOverlay(context);
-        else
+        } else {
           removeOverlay();
+        }
       }
     });
    // _nameController = TextEditingController();
@@ -213,7 +214,7 @@ class _TextFieldsState extends State<TextFieldView> {
   //for ios done button callback
   onPressCallback() {
     removeOverlay();
-    FocusScope.of(context).requestFocus(new FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode());
     if(mounted && _nameController!=null && _nameController!.text.isNotEmpty && checkValid){
       setState(() {
         checkValidOnChange = true;
@@ -274,7 +275,7 @@ class _TextFieldsState extends State<TextFieldView> {
           obscureText = snapshot.data;
         }
         return SizedBox(
-          height:textFieldHeight,
+         // height:textFieldHeight,
           child: TextFormField(
           focusNode: currentFocusNode,strutStyle:StrutStyle(),
           readOnly: textFieldModel!.validation!.isReadOnly!,
@@ -304,11 +305,11 @@ class _TextFieldsState extends State<TextFieldView> {
                 onChangeValue.call(fieldKey,value);
                 String? validate = commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
 
-                if(validate !=null ){
-                  textFieldHeight = 70;
-                }else{
-                  textFieldHeight = 50;
-                }
+                // if(validate !=null ){
+                //   textFieldHeight = 80;
+                // }else{
+                //   textFieldHeight = 50;
+                // }
               }
           },
             onSaved: (value){
@@ -434,20 +435,20 @@ class ViewConfig{
    contentPadding: viewConfiguration!._contentPadding,
      border: viewConfiguration!._border,
      floatingLabelBehavior: FloatingLabelBehavior.never,
-     isDense:true,
+     //isDense:true,
      labelStyle: viewConfiguration!._labelStyle,
      errorStyle:  viewConfiguration!._errorStyle,
      counterStyle: viewConfiguration!._counterStyle,
      suffixStyle: viewConfiguration!._suffixStyle,
      prefixStyle: viewConfiguration!._prefixStyle,
      focusedBorder: viewConfiguration!._focusedBorder,
-     // suffixText: ,
-     // prefixText: ,
+     //suffixText: viewConfiguration!._suffixText,
+     //prefixText: viewConfiguration!._prefixText,
      // prefixIcon: ,
      // suffix: ,
      // suffixIconColor: ,
      // counter: ,
-     // prefix: ,
+     prefix: viewConfiguration!._prefix,
      alignLabelWithHint: true,
      filled: viewConfiguration!._filled,
      fillColor: viewConfiguration!._fillColor,
@@ -482,7 +483,9 @@ class ViewConfig{
           try {
             obscureTextStateCallBack?.call(visibleStatus);
           } catch (e) {
-            print(e);
+            if (kDebugMode) {
+              print(e);
+            }
           }
         },):null);
       }
@@ -501,7 +504,9 @@ class ViewConfig{
           try {
             textFieldCallBack?.call();
           } catch (e) {
-            print(e);
+            if (kDebugMode) {
+              print(e);
+            }
           }
         },):null);
         break ;

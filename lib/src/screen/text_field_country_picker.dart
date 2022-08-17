@@ -84,10 +84,11 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
     currentFocusNode.addListener(() {
       if (isDoneOver && (Platform.isIOS)) {
         bool hasFocus = currentFocusNode.hasFocus;
-        if (hasFocus)
+        if (hasFocus) {
           showOverlay(context);
-        else
+        } else {
           removeOverlay();
+        }
       }
     });
    // _nameController = TextEditingController();
@@ -333,7 +334,6 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   }
 
   Map<String, String> getData(String tel, String selectedCountryCode) {
-
     return {fieldKey:tel,"code":selectedCountryCode};
   }
 
@@ -363,20 +363,33 @@ class CountryPickerViewConfig{
     if(textFieldModel.elementConfig!.enableLabel != null){
       enableLabel = textFieldModel.elementConfig!.enableLabel!;
     }
-
- return InputDecoration(
+    return InputDecoration(
+        contentPadding: viewConfiguration!._contentPadding,
         border: viewConfiguration!._border,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        isDense:true,
+        labelStyle: viewConfiguration!._labelStyle,
+        errorStyle:  viewConfiguration!._errorStyle,
+        counterStyle: viewConfiguration!._counterStyle,
+        suffixStyle: viewConfiguration!._suffixStyle,
+        prefixStyle: viewConfiguration!._prefixStyle,
+        focusedBorder: viewConfiguration!._focusedBorder,
+        // suffixText: ,
+        // prefixText: ,
+        // prefixIcon: ,
+        // suffix: ,
+        // suffixIconColor: ,
+        // counter: ,
+        // prefix: ,
+        alignLabelWithHint: true,
+        filled: viewConfiguration!._filled,
+        fillColor: viewConfiguration!._fillColor,
+
+        /*   errorBorder: viewConfiguration!._errorBorder,
+        focusedErrorBorder: viewConfiguration!._errorBorder,*/
         enabledBorder: viewConfiguration!._border,
         hintText: textFieldModel.elementConfig!.placeholder??"",hintStyle: viewConfiguration!._hintStyle,
-        label: !enableLabel?null:
-                textFieldModel.elementConfig!.label != null &&
-                        textFieldModel.elementConfig!.label!.isNotEmpty
-                    ? Text(
-                        textFieldModel.elementConfig!.label!,
-                        style: viewConfiguration!._textStyle,
-                      )
-                    : null
-              ,suffixIcon: null,counterText: ""
+        label: !enableLabel?null:textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: viewConfiguration!._textStyle,):null,suffixIcon: null,counterText: "",errorMaxLines: 3
     );
 
   }
@@ -387,7 +400,7 @@ class CountryPickerViewConfig{
     Widget? prefixCountryView;
     if(textFieldModel.elementConfig!=null){
       if(textFieldModel.elementConfig!.resetIcon!){
-        suffixIcon = SuffixCloseIcon(textController: nameController,iconClicked: (){
+        suffixIcon = SuffixCloseIcon(iconColor:viewConfiguration?._suffixIconColor,textController: nameController,iconClicked: (){
           nameController.text = "";
         },);
       }
@@ -404,13 +417,17 @@ class CountryPickerViewConfig{
               ),
               initialSelection: enabledCountries[0].toString(),
               onChanged: (value){
-              countryCodeCallBack!.call(value.code.toString());
-                print("$value");
+              countryCodeCallBack!.call(value.dialCode.toString());
+                if (kDebugMode) {
+                  print("$value");
+                }
                 //countryCode = value.dialCode!;
               },
               onInit: (value){
-                print("$value");
-              countryCodeCallBack!.call(value!.code.toString());
+                if (kDebugMode) {
+                  print("$value");
+                }
+              countryCodeCallBack!.call(value!.dialCode.toString());
                 //countryCode = value!.dialCode!;
               },
             );
@@ -425,7 +442,9 @@ class CountryPickerViewConfig{
           try {
             obscureTextStateCallBack?.call(visibleStatus);
           } catch (e) {
-            print(e);
+            if (kDebugMode) {
+              print(e);
+            }
           }
         },):null);
       }

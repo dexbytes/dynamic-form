@@ -9,14 +9,14 @@ class DropDownModel {
 
   DropDownModel.fromJson(Map<String, dynamic> json) {
     elementType = json['elementType'];
-    elementConfig = json['elementConfig'] != null ? new ElementConfig.fromJson(json['elementConfig']) : null;
+    elementConfig = json['elementConfig'] != null ?  ElementConfig.fromJson(json['elementConfig']) : null;
     value = json['value'];
-    validation = json['validation'] != null ? new Validation.fromJson(json['validation']) : null;
+    validation = json['validation'] != null ?  Validation.fromJson(json['validation']) : null;
     valid = json['valid'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data =  Map<String, dynamic>();
     data['elementType'] = this.elementType;
     if (this.elementConfig != null) {
       data['elementConfig'] = this.elementConfig!.toJson();
@@ -104,7 +104,7 @@ class Validation {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data =  Map<String, dynamic>();
     data['required'] = this.required;
     data['isReadOnly'] = this.isReadOnly;
     data['isDisabled'] = this.isDisabled;

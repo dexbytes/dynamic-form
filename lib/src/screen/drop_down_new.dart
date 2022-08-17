@@ -1446,8 +1446,9 @@ class _DropdownButtonState<T> extends State<DropdownButtonNew<T>> with WidgetsBi
             // of each menu item before laying them out, not having the _DropdownRoute
             // collect each item's height to lay out is fine since the route is
             // already on its way out.
-            if (_dropdownRoute == null)
+            if (_dropdownRoute == null) {
               return;
+            }
 
             _dropdownRoute!.itemHeights[index] = size.height;
           },
@@ -1480,8 +1481,9 @@ class _DropdownButtonState<T> extends State<DropdownButtonNew<T>> with WidgetsBi
     focusNode?.requestFocus();
     navigator.push(_dropdownRoute!).then<void>((_DropdownRouteResult<T>? newValue) {
       _removeDropdownRoute();
-      if (!mounted || newValue == null)
+      if (!mounted || newValue == null) {
         return;
+      }
       widget.onChanged?.call(newValue.result);
     });
 
@@ -1500,8 +1502,9 @@ class _DropdownButtonState<T> extends State<DropdownButtonNew<T>> with WidgetsBi
   Color get _iconColor {
     // These colors are not defined in the Material Design spec.
     if (_enabled) {
-      if (widget.iconEnabledColor != null)
+      if (widget.iconEnabledColor != null) {
         return widget.iconEnabledColor!;
+      }
 
       switch (Theme.of(context).brightness) {
         case Brightness.light:
@@ -1510,8 +1513,9 @@ class _DropdownButtonState<T> extends State<DropdownButtonNew<T>> with WidgetsBi
           return Colors.white70;
       }
     } else {
-      if (widget.iconDisabledColor != null)
+      if (widget.iconDisabledColor != null) {
         return widget.iconDisabledColor!;
+      }
 
       switch (Theme.of(context).brightness) {
         case Brightness.light:
@@ -1567,8 +1571,9 @@ class _DropdownButtonState<T> extends State<DropdownButtonNew<T>> with WidgetsBi
     int? hintIndex;
     if (widget.hint != null || (!_enabled && widget.disabledHint != null)) {
       Widget displayedHint = _enabled ? widget.hint! : widget.disabledHint ?? widget.hint!;
-      if (widget.selectedItemBuilder == null)
+      if (widget.selectedItemBuilder == null) {
         displayedHint = _DropdownMenuItemContainer(child: displayedHint);
+      }
 
       hintIndex = items.length;
       items.add(DefaultTextStyle(

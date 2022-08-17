@@ -54,6 +54,9 @@ class TextFieldConfiguration {
   late TextDirection? _textDirection = TextDirection.ltr;
   late TextAlign? _textAlign = TextAlign.start;
   late TextAlignVertical? _textAlignVertical = TextAlignVertical.center;
+  late String _suffixText = '';
+ // late String _prefixText = '';
+  late Widget _prefix = Container();
   late bool _enableLabel = true;
   late bool _filled = true;
   late Color _fillColor = Colors.transparent;
@@ -69,6 +72,8 @@ class TextFieldConfiguration {
     TextStyle? prefixStyle,
     TextStyle? counterStyle,
     TextStyle? suffixStyle,
+    String? suffixText,
+   // String? prefixText,
     InputBorder? border,
     InputBorder? focusedBorder,
     bool? enableLabel,
@@ -76,6 +81,7 @@ class TextFieldConfiguration {
     Color? fillColor,
     Color? suffixIconColor,
     Color? cursorColor,
+    Widget? prefix,
     EdgeInsets? contentPadding,
     FloatingLabelBehavior? floatingLabelBehavior,
 
@@ -84,6 +90,9 @@ class TextFieldConfiguration {
   _cursorColor = cursorColor ?? _cursorColor;
   _suffixIconColor = suffixIconColor ?? _suffixIconColor;
   _filled = filled ?? _filled;
+  _prefix = prefix ?? _prefix;
+  _suffixText = suffixText ?? _suffixText;
+  //_prefixText = prefixText ?? _prefixText;
   _enableLabel = enableLabel ?? _enableLabel;
   _hintStyle = hintStyle ?? _hintStyle;
   _textStyle = textStyle ?? _textStyle;
@@ -105,6 +114,7 @@ class TextFieldConfiguration {
     TextStyle? prefixStyle,
     TextStyle? counterStyle,
     TextStyle? suffixStyle,
+  //  String? prefixText,
     InputBorder? border,
     InputBorder? focusedBorder,
     bool? enableLabel,
@@ -112,6 +122,7 @@ class TextFieldConfiguration {
     Color? fillColor,
     Color? cursorColor,
     Color? suffixIconColor,
+    Widget? prefix,
     EdgeInsets? contentPadding,
     FloatingLabelBehavior? floatingLabelBehavior,
   }) {
@@ -123,7 +134,9 @@ class TextFieldConfiguration {
         errorStyle : errorStyle ?? _errorStyle,
         counterStyle : counterStyle ?? _counterStyle,
         suffixStyle : suffixStyle ?? _suffixStyle,
+        prefix : prefix ?? _prefix,
         border : border ?? _border,
+        //prefixText : prefixText ?? _prefixText,
         focusedBorder : focusedBorder ?? _focusedBorder,
       fillColor : fillColor ?? _fillColor,
         suffixIconColor : suffixIconColor ?? _suffixIconColor,
