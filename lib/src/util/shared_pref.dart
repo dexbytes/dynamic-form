@@ -1,4 +1,4 @@
-part of dynamic_json_form;
+part of dynamic_form;
 
 class LocalStorage {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();

@@ -1,4 +1,4 @@
-part of dynamic_json_form;
+part of dynamic_form;
 
 class ConfigurationSetting extends TextFieldConfiguration{
   ConfigurationSetting._internal();

@@ -1,4 +1,4 @@
-part of dynamic_json_form;
+part of dynamic_form;
 // enum formFieldType {text,name,email,tel,url,number,textMultiline}
 class TextFieldView extends StatefulWidget {
   final Map<String,dynamic> jsonData;

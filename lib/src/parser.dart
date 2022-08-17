@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:dynamic_json_form/src/common_validation.dart';
-import 'package:dynamic_json_form/src/model/drop_down_field_model.dart';
-import 'package:dynamic_json_form/src/model/text_field_model.dart';
+import 'package:dynamic_form/src/common_validation.dart';
+import 'package:dynamic_form/src/model/drop_down_field_model.dart';
+import 'package:dynamic_form/src/model/text_field_model.dart';
 import 'package:flutter/foundation.dart';
-import '../dynamic_json_form.dart';
+import '../dynamic_form.dart';
 export 'model/text_field_model.dart';
 
 class ResponseParser{

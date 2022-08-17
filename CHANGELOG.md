@@ -1,3 +1,3 @@
-## 0.0.1
+## [1.0.0] - 17/08/2022
 
-* TODO: Describe initial release.
+Added initial dynamic form.

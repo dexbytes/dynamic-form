@@ -1,5 +1,5 @@
 //for Restaurant type dropdown
-part of dynamic_json_form;
+part of dynamic_form;
 
 class DropDown extends StatefulWidget {
   final List<Options>? optionList;

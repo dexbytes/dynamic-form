@@ -1,5 +1,5 @@
 // import 'package:flutter/material.dart';
-part of dynamic_json_form;
+part of dynamic_form;
 
 class DropdownConfiguration {
 

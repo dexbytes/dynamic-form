@@ -1,4 +1,4 @@
-part of dynamic_json_form;
+part of dynamic_form;
 
 enum COMPONENT_TYPE {all,email}
 class LocalJsonRw{

@@ -1,23 +1,22 @@
-// ignore_for_file: no_logic_in_create_state
-part of dynamic_json_form;
+part of dynamic_form;
 
-class DynamicForm extends StatefulWidget {
+class DynamicFormScreen extends StatefulWidget {
 final String jsonEncoded;
 final Function(Map<String,dynamic> data)? finalSubmitCallBack;
-final GlobalKey<DynamicFormState>? dynamicFormKey ;
-const DynamicForm(this.jsonEncoded,{this.dynamicFormKey,required this.finalSubmitCallBack}) : super(key: dynamicFormKey);
+final GlobalKey<DynamicFormScreenState>? dynamicFormKey ;
+const DynamicFormScreen(this.jsonEncoded,{this.dynamicFormKey,required this.finalSubmitCallBack}) : super(key: dynamicFormKey);
   @override
-  DynamicFormState createState() => DynamicFormState(jsonEncoded: jsonEncoded);
+  DynamicFormScreenState createState() => DynamicFormScreenState(jsonEncoded: jsonEncoded);
 }
 
-class DynamicFormState extends State<DynamicForm> {
+class DynamicFormScreenState extends State<DynamicFormScreen> {
   String jsonEncoded;
   Stream get onVariableChanged => DataRefreshStream.instance.getFormFieldsStream.stream;
   List<dynamic> _formFieldList = [];
   final _formKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
-  DynamicFormState({required this.jsonEncoded}){
+  DynamicFormScreenState({required this.jsonEncoded}){
     responseParser.setFormData = jsonEncoded;
     autovalidateMode = _autoValidate();
   }
