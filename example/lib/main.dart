@@ -118,15 +118,15 @@ class _MyFormState extends State<MyForm> {
                   });
                   //get data which is stored in shared prefernce
                     String? jsonString = await ConfigurationSetting.instance.getFormDataLocal();
-                    //if(jsonString!.isEmpty) {
+                    if(jsonString!.isEmpty) {
                       // Comment this while get data from local json
-                     //  String jsonStringResponse = await httpService.getPosts();
+                       String jsonStringResponse = await httpService.getPosts();
 
                        //== Uncomment while get data from local json
-                      String jsonStringResponse = await localJsonRw.localRead();
+                     // String jsonStringResponse = await localJsonRw.localRead();
 
                       jsonString = await ConfigurationSetting.instance.storeFormDataLocal(jsonStringResponse);
-                   // }
+                    }
                   setState(() {
                     isLoading = false;
                   });
