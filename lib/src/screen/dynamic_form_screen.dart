@@ -14,11 +14,11 @@ class DynamicFormScreenState extends State<DynamicFormScreen> {
   Stream get onVariableChanged => DataRefreshStream.instance.getFormFieldsStream.stream;
   List<dynamic> _formFieldList = [];
   final _formKey = GlobalKey<FormState>();
-  AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
+  AutovalidateMode autoValidateMode = AutovalidateMode.disabled;
 
   DynamicFormScreenState({required this.jsonEncoded}){
     responseParser.setFormData = jsonEncoded;
-    autovalidateMode = _autoValidate();
+    autoValidateMode = _autoValidate();
   }
 
   //We will include the entered values in the map from field on submit click
@@ -30,10 +30,7 @@ class DynamicFormScreenState extends State<DynamicFormScreen> {
     String nextFieldKey = "";
     String currentElementKey = "";
     String currentElementType = "";
-    String? _singleValue = "Text alignment right";
-    String _verticalGroupValue = "Pending";
 
-    List<String> _status = ["Pending", "Released", "Blocked"];
 
     if(data.containsKey("elementType") && data["elementType"].isNotEmpty)
     {
@@ -82,7 +79,7 @@ class DynamicFormScreenState extends State<DynamicFormScreen> {
   //Check Form field value
   bool validateFields(){
     setState(() {
-      autovalidateMode = _autoValidate(checkValidOnSubmit :true);
+      autoValidateMode = _autoValidate(checkValidOnSubmit :true);
     });
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
@@ -96,7 +93,7 @@ class DynamicFormScreenState extends State<DynamicFormScreen> {
   //Get form value
   Map<String,dynamic>?  getFormData(){
     setState(() {
-      autovalidateMode = _autoValidate(checkValidOnSubmit :true);
+      autoValidateMode = _autoValidate(checkValidOnSubmit :true);
     });
     if(_formKey.currentState!.validate()){
       return formSubmitData;
@@ -157,7 +154,7 @@ class DynamicFormScreenState extends State<DynamicFormScreen> {
         _formFieldList = responseParser.getFormData[responseParser.getCurrentFormNumber];
         return SizedBox(child:
         _formFieldList.isEmpty?Container():Form(
-          key: _formKey,autovalidateMode: autovalidateMode,
+          key: _formKey,autovalidateMode: autoValidateMode,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
