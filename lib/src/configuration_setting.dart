@@ -22,10 +22,16 @@ class ConfigurationSetting extends TextFieldConfiguration{
   }
 
   DropdownConfiguration _dropdownConfiguration = DropdownConfiguration();
+  RadioButtonConfiguration _radioButtonConfiguration = RadioButtonConfiguration();
 
   /*Set Dropdown field ui presentation*/
   set setDropdownConfiguration (DropdownConfiguration dropdownConfiguration){
     _dropdownConfiguration = dropdownConfiguration;
+  }
+
+  /*Set radio field ui presentation*/
+  set setRadioButtonConfiguration (RadioButtonConfiguration radioButtonConfiguration){
+    _radioButtonConfiguration = radioButtonConfiguration;
   }
 
 /*  textField({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border}){

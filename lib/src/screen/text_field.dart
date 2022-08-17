@@ -448,16 +448,18 @@ class ViewConfig{
      // suffix: ,
      // suffixIconColor: ,
      // counter: ,
-     prefix: viewConfiguration!._prefix,
+     //prefix: viewConfiguration!._prefix,
      alignLabelWithHint: true,
      filled: viewConfiguration!._filled,
      fillColor: viewConfiguration!._fillColor,
+     isDense: true,
 
      /*   errorBorder: viewConfiguration!._errorBorder,
         focusedErrorBorder: viewConfiguration!._errorBorder,*/
         enabledBorder: viewConfiguration!._border,
         hintText: textFieldModel.elementConfig!.placeholder??"",hintStyle: viewConfiguration!._hintStyle,
-        label: !enableLabel?null:textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: viewConfiguration!._textStyle,):null,suffixIcon: null,counterText: "",errorMaxLines: 3
+        label: !enableLabel?null
+            :textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: viewConfiguration!._textStyle,):null,suffixIcon: null,counterText: "",errorMaxLines: 3
     );
 
   }

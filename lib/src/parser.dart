@@ -4,6 +4,7 @@ import 'package:dynamic_json_form/src/model/drop_down_field_model.dart';
 import 'package:dynamic_json_form/src/model/text_field_model.dart';
 import 'package:flutter/foundation.dart';
 import '../dynamic_json_form.dart';
+import 'model/radio_button_model.dart';
 export 'model/text_field_model.dart';
 
 class ResponseParser{
@@ -71,6 +72,21 @@ class ResponseParser{
 
           }
       return dropDownModel;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return null;
+  }
+
+  RadioButtonModel? radioButtonFormFiledParsing({required Map<String,dynamic> jsonData,bool updateCommon = false}){
+    try {
+      RadioButtonModel radioButtonModel = RadioButtonModel.fromJson(jsonData);
+      if(updateCommon){
+
+          }
+      return radioButtonModel;
     } catch (e) {
       if (kDebugMode) {
         print(e);

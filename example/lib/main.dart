@@ -1,6 +1,6 @@
 import 'package:dynamic_json_form/dynamic_json_form.dart';
+import 'package:dynamic_json_form/parts.dart';
 import 'package:example/first_screen.dart';
-import 'package:example/http_service.dart';
 import 'package:example/time_duration.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -11,9 +11,10 @@ void main() async {
 
   //Custom local configuration for Input field setup
   TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration(
-      cursorColor: Colors.yellow,
+      cursorColor: Colors.black,
       suffixIconColor: Colors.black,
       fillColor: Colors.grey.shade200,
+  textStyle: const TextStyle(color: Colors.black),
   //contentPadding: const EdgeInsets.all(8),
   filled: true,border: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(color: Colors.transparent,)//BorderSide
@@ -38,6 +39,16 @@ void main() async {
   );
   //telTextFieldConfiguration.setBorder = const UnderlineInputBorder();
   ConfigurationSetting.instance.setTelTextFieldViewConfig = telTextFieldConfiguration;
+
+  RadioButtonConfiguration radioButtonConfiguration = RadioButtonConfiguration(
+      labelAndRadioButtonAlign: LabelAndRadioButtonAlign.vertical,
+    radioButtonsAlign:LabelAndRadioButtonAlign.vertical,
+      labelTextStyle: const TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: Colors.red,
+  ));
+  ConfigurationSetting.instance.setRadioButtonConfiguration = radioButtonConfiguration;
 
   //Set load form from json
   ConfigurationSetting.instance.setLoadFromApi = true;

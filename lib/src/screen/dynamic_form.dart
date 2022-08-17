@@ -32,7 +32,7 @@ class DynamicFormState extends State<DynamicForm> {
     String currentElementKey = "";
     String currentElementType = "";
     String? _singleValue = "Text alignment right";
-    String _verticalGroupValue = "Pending";
+    String? _verticalGroupValue = "Pending";
 
     List<String> _status = ["Pending", "Released", "Blocked"];
 
@@ -72,6 +72,11 @@ class DynamicFormState extends State<DynamicForm> {
 
         case "select":
           return DropDown(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
+            formSubmitData[fieldKey] = value;
+          });
+
+        case "radio":
+          return RadioButton(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
             formSubmitData[fieldKey] = value;
           });
 
@@ -128,7 +133,9 @@ class DynamicFormState extends State<DynamicForm> {
         nextData = formFieldList[nextItemIndex];
         nextItemIndex = nextItemIndex+1;
       }
-      return Column(mainAxisSize: MainAxisSize.min,
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           _getFormField(data: data,nextData:nextData),
           const SizedBox(height: 20,width: 10)
