@@ -25,9 +25,6 @@ This plugin relies on the flutter core.
 To use the plugin you just need to add dynamic_form: ^1.0.0 into your pubspec.yaml file and run pub get.
 
 
-#Images
-
-
 ## Add following into your package's pubspec.yaml (and run an implicit dart pub get):
 dynamic_form: ^1.0.0
 
@@ -68,5 +65,4 @@ All notable changes to this project will be documented in [this file](./CHANGELO
 To report your issues, submit them directly in the [Issues](https://github.com/dexbytes/dynamic-form/issues) section.
 
 ## License
-
-[Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+[this file](./LICENSE).
