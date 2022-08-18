@@ -279,8 +279,16 @@ class _TextFieldsState extends State<TextFieldView> {
           child: TextFormField(
           focusNode: currentFocusNode,
             //strutStyle:StrutStyle(),
-          readOnly: textFieldModel!.validation!.isReadOnly!,
+          readOnly: (formFieldType == 'date')?true:textFieldModel!.validation!.isReadOnly!,
           enabled: !textFieldModel!.validation!.isDisabled!,
+            onTap: (){
+              if (formFieldType == 'date') {
+                pickDate(context,
+                    initialDateTS: textFieldModel!.elementConfig!.initialDate,
+                    firstDateTS: textFieldModel!.elementConfig!.firstDate,
+                    lastDateTS:textFieldModel!.elementConfig!.lastDate );
+              }
+            },
           controller: _nameController,
           cursorColor: viewConfig!.viewConfiguration?._cursorColor??Colors.blue,
           textInputAction: TextInputAction.done,
@@ -374,26 +382,81 @@ class _TextFieldsState extends State<TextFieldView> {
 
 
   //Date of birth
-  void pickDate(BuildContext context) async {
+  void pickDate(BuildContext context,{firstDateTS,lastDateTS,initialDateTS}) async {
+    DateTime firstDate = DateTime(DateTime.now().year - 100);
+    DateTime initialDate = DateTime(DateTime.now().year - 100);
+    DateTime lastDate = DateTime(DateTime.now().year);
+    try {
+      if(firstDateTS != null){
+            firstDate = DateTime.fromMillisecondsSinceEpoch(int.parse(firstDateTS) * 1000);
+          }
+      if(lastDateTS != null){
+            lastDate = DateTime.fromMillisecondsSinceEpoch(int.parse(lastDateTS) * 1000);
+          } /*if(initialDateTS != null){
+        initialDate = DateTime.fromMillisecondsSinceEpoch(int.parse(initialDateTS) * 1000);
+          }*/
+    } catch (e) {
+      print(e);
+    }
     final newDate = await showDatePicker(
         context: context,
         fieldLabelText: "DOB",
-        initialDate: DateTime(DateTime.now().year - 10),
+        initialDate: initialDate,
         initialEntryMode: DatePickerEntryMode.calendarOnly,
-        initialDatePickerMode: DatePickerMode.day,
-        firstDate: DateTime(DateTime.now().year - 100),
-        lastDate: DateTime(DateTime.now().year),
-        confirmText: "Ok",
+        //initialDatePickerMode: DatePickerMode.,
+        firstDate: firstDate,
+        lastDate: lastDate,
+        confirmText: "OK",
         builder: (context ,child ) {
           return Theme(
               child: child!,
               data: ThemeData().copyWith(
                 // brightness:!isDarkMode? Brightness.light:Brightness.dark,
                   colorScheme: const ColorScheme.dark(
-                    /*primary: appColors.buttonColor2,
-                      onSurface: appColors.calendarSurfacebgColorBlack,
-                      onPrimary: appColors.calendarColorWhite,
-                      surface:appColors.buttonColor2,*/
+                    primary: Colors.blue,
+                      onSurface: Colors.blue,
+                      onPrimary: Colors.white,
+                     // surface:Colors.green,
+                      brightness: Brightness.light
+                  ),
+                  dialogBackgroundColor: Colors.white
+              )
+          );
+        }
+    );
+
+    if (newDate == null) return;
+    _nameController!.text = packageUtil.getText("dd MMMM, yyyy",newDate).toString();
+    /*setState(() {
+      date = newDate;
+      nameController?.text = getText().toString();
+      widget.selectedValue?.call(date);
+    });*/
+    // setState(() => date = newDate
+    // );
+  }
+
+  //Date of birth
+  void pickDate2(BuildContext context) async {
+    final newDate = await showDatePicker(
+        context: context,
+        fieldLabelText: "DOB",
+        initialDate: DateTime(DateTime.now().year - 10),
+        initialEntryMode: DatePickerEntryMode.calendarOnly,
+        //initialDatePickerMode: DatePickerMode.,
+        firstDate: DateTime(DateTime.now().year - 100),
+        lastDate: DateTime(DateTime.now().year),
+        confirmText: "OK",
+        builder: (context ,child ) {
+          return Theme(
+              child: child!,
+              data: ThemeData().copyWith(
+                // brightness:!isDarkMode? Brightness.light:Brightness.dark,
+                  colorScheme: const ColorScheme.dark(
+                    primary: Colors.blue,
+                      onSurface: Colors.blue,
+                      onPrimary: Colors.white,
+                     // surface:Colors.green,
                       brightness: Brightness.light
                   ),
                   dialogBackgroundColor: Colors.white

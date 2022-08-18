@@ -15,6 +15,7 @@ void main() async {
       suffixIconColor: Colors.black,
       fillColor: Colors.grey.shade200,
   textStyle: const TextStyle(color: Colors.black),
+  hintStyle: const TextStyle(color: Colors.black,fontSize: 16),
   //contentPadding: const EdgeInsets.all(8),
   filled: true,border: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
           borderSide: BorderSide(color: Colors.transparent,)//BorderSide
@@ -31,6 +32,7 @@ void main() async {
       cursorColor: Colors.yellow,
       suffixIconColor: Colors.black,
       fillColor: Colors.grey.shade200,
+      hintStyle: const TextStyle(color: Colors.black,fontSize: 16),
       filled: true,border: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
       borderSide: BorderSide(color: Colors.transparent,)//BorderSide
   ), focusedBorder: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
@@ -42,7 +44,7 @@ void main() async {
 
   RadioButtonConfiguration radioButtonConfiguration = RadioButtonConfiguration(
       labelAndRadioButtonAlign: LabelAndOptionsAlignment.vertical,
-    radioButtonsAlign:LabelAndOptionsAlignment.vertical,
+    radioButtonsAlign:LabelAndOptionsAlignment.horizontal,
     labelTextStyle: const TextStyle(color: Colors.black,fontSize: 16),
     optionTextStyle:  TextStyle(color: Colors.grey.shade800,fontSize: 14),
       );

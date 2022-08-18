@@ -54,8 +54,11 @@ class ElementConfig {
   String? nextName;
   int? minLine;
   int? maxLine;
+  String? firstDate;
+  String? lastDate;
+  String? initialDate;
 
-  ElementConfig({this.type,this.textCapitalization, this.name,this.keyboardRejex = "", this.label,this.enableLabel, this.placeholder, this.classProperty, this.resetIcon,this.nextName,this.minLine = 1,this.maxLine = 2});
+  ElementConfig({this.type,this.firstDate,this.initialDate,this.lastDate,this.textCapitalization, this.name,this.keyboardRejex = "", this.label,this.enableLabel, this.placeholder, this.classProperty, this.resetIcon,this.nextName,this.minLine = 1,this.maxLine = 2});
 
   ElementConfig.fromJson(Map<String, dynamic> json) {
   type = json['type'];
@@ -74,6 +77,9 @@ class ElementConfig {
   nextName = json['nextName'];
   maxLine = json.containsKey('maxLine')?json['maxLine']:1;
   minLine = json.containsKey('minLine')?json['minLine']:1;
+  firstDate = json.containsKey('firstDate')?json['firstDate']:'';
+  lastDate = json.containsKey('lastDate')?json['lastDate']:'';
+  initialDate = json.containsKey('initialDate')?json['initialDate']:'';
   }
 
   Map<String, dynamic> toJson() {
@@ -90,6 +96,9 @@ class ElementConfig {
   data['nextName'] = this.nextName;
   data['maxLine'] = this.maxLine;
   data['minLine'] = this.minLine;
+  data['firstDate'] = this.firstDate;
+  data['lastDate'] = this.lastDate;
+  data['initialDate'] = this.initialDate;
   return data;
   }
 }
