@@ -1,4 +1,4 @@
-import 'package:flutter_dynamic_form/parts.dart';
+import 'package:dynamic_multi_form/parts.dart';
 import 'package:example/second_screen.dart';
 
 class FirstScreen extends StatefulWidget {

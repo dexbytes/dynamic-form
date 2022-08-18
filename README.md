@@ -22,11 +22,11 @@ This plugin relies on the flutter core.
 
 ## Usage
 
-To use the plugin you just need to add flutter_dynamic_form: ^1.0.0 into your pubspec.yaml file and run pub get.
+To use the plugin you just need to add dynamic_multi_form: ^1.0.0 into your pubspec.yaml file and run pub get.
 
 
 ## Add following into your package's pubspec.yaml (and run an implicit dart pub get):
-flutter_dynamic_form: ^1.0.0
+dynamic_multi_form: ^1.0.0
 
 ## Example
 

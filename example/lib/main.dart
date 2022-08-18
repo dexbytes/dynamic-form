@@ -2,7 +2,7 @@ import 'package:example/first_screen.dart';
 import 'package:example/http_service.dart';
 import 'package:example/time_duration.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_dynamic_form/flutter_dynamic_form.dart';
+import 'package:dynamic_multi_form/dynamic_multi_form.dart';
 
 void main() async {
   // if you are using await in main function then add this line
@@ -51,7 +51,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Dynamic Form',
+      title: 'Dynamic Multi Form',
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -94,7 +94,7 @@ class _MyFormState extends State<MyForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      appBar: AppBar(centerTitle: true,title: const Text('Flutter Dynamic Form'),),
+      appBar: AppBar(centerTitle: true,title: const Text('Dynamic Multi Form'),),
       body: Center(
         child: Stack(alignment: Alignment.center,
           children: [

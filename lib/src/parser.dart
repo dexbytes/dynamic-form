@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:flutter_dynamic_form/src/common_validation.dart';
-import 'package:flutter_dynamic_form/src/model/drop_down_field_model.dart';
-import 'package:flutter_dynamic_form/src/model/text_field_model.dart';
+import 'package:dynamic_multi_form/src/common_validation.dart';
+import 'package:dynamic_multi_form/src/model/drop_down_field_model.dart';
+import 'package:dynamic_multi_form/src/model/text_field_model.dart';
 import 'package:flutter/foundation.dart';
-import '../flutter_dynamic_form.dart';
+import '../dynamic_multi_form.dart';
 export 'model/text_field_model.dart';
 
 class ResponseParser{

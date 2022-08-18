@@ -1,4 +1,4 @@
-part of flutter_dynamic_form;
+part of dynamic_multi_form;
 // enum formFieldType {text,name,email,tel,url,number,textMultiline}
 class TextFieldCountryPickerView extends StatefulWidget {
   final Map<String,dynamic> jsonData;

@@ -30,12 +30,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-  flutter_dynamic_form:
+  dynamic_multi_form:
     path: ..//
   http: ^0.13.3
-#  flutter_dynamic_form:
+#  dynamic_multi_form:
 #    git:
-#     url: https://github.com/dexbytes/flutter_dynamic_form.git
+#     url: https://github.com/dexbytes/dynamic_multi_form.git
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2

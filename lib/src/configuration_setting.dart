@@ -1,4 +1,4 @@
-part of flutter_dynamic_form;
+part of dynamic_multi_form;
 
 class ConfigurationSetting extends TextFieldConfiguration{
   ConfigurationSetting._internal();

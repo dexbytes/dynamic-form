@@ -1,4 +1,4 @@
-part of flutter_dynamic_form;
+part of dynamic_multi_form;
 
 class DynamicFormScreen extends StatefulWidget {
 final String jsonEncoded;
