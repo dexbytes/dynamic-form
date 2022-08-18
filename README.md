@@ -29,7 +29,7 @@ To use the plugin you just need to add dynamic_form: ^1.0.0 into your pubspec.ya
 
 
 ## Add following into your package's pubspec.yaml (and run an implicit dart pub get):
-dynamic_form: ^1.0.0
+dynamic_form: ^1.0.1
 
 ## Example
 
