@@ -23,6 +23,7 @@ class ConfigurationSetting extends TextFieldConfiguration{
 
   DropdownConfiguration _dropdownConfiguration = DropdownConfiguration();
   RadioButtonConfiguration _radioButtonConfiguration = RadioButtonConfiguration();
+  CheckBoxConfiguration _checkBoxConfiguration = CheckBoxConfiguration();
 
   /*Set Dropdown field ui presentation*/
   set setDropdownConfiguration (DropdownConfiguration dropdownConfiguration){
@@ -32,6 +33,11 @@ class ConfigurationSetting extends TextFieldConfiguration{
   /*Set radio field ui presentation*/
   set setRadioButtonConfiguration (RadioButtonConfiguration radioButtonConfiguration){
     _radioButtonConfiguration = radioButtonConfiguration;
+  }
+
+  /*Set check box ui presentation*/
+  set setCheckBoxConfiguration (CheckBoxConfiguration checkBoxConfiguration){
+    _checkBoxConfiguration = checkBoxConfiguration;
   }
 
 /*  textField({TextStyle? textStyle,TextStyle? hintStyle,InputBorder? border}){

@@ -1,13 +1,13 @@
-class RadioButtonModel {
+class CheckboxModel {
   String? elementType;
   ElementConfig? elementConfig;
   String? value;
   Validation? validation;
   bool? valid;
 
-  RadioButtonModel({this.elementType, this.elementConfig, this.value, this.validation, this.valid});
+  CheckboxModel({this.elementType, this.elementConfig, this.value, this.validation, this.valid});
 
-  RadioButtonModel.fromJson(Map<String, dynamic> json) {
+  CheckboxModel.fromJson(Map<String, dynamic> json) {
     elementType = json['elementType'];
     elementConfig = json['elementConfig'] != null ?  ElementConfig.fromJson(json['elementConfig']) : null;
     value = json['value'];
@@ -35,12 +35,11 @@ class ElementConfig {
   String? label;
   String? placeholder;
   String? classProperty;
-  String? initialValue;
   List<Options>? options;
   bool? isMultipleSelect;
   bool? isInline;
 
-  ElementConfig({this.name, this.label, this.placeholder, this.classProperty,this.initialValue, this.options, this.isMultipleSelect = false,this.isInline = false});
+  ElementConfig({this.name, this.label, this.placeholder, this.classProperty, this.options, this.isMultipleSelect = false,this.isInline = false});
 
   ElementConfig.fromJson(Map<String, dynamic> json) {
     name = json['name'];
@@ -53,7 +52,6 @@ class ElementConfig {
     }
     isMultipleSelect = json.containsKey('isMulitpleSelect')?json['isMulitpleSelect']:false;
     isInline = json.containsKey('isInline')?json['isInline']:false;
-    initialValue = json.containsKey('initialValue')?json['initialValue']:null;
   }
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  Map<String, dynamic>();
@@ -66,7 +64,6 @@ class ElementConfig {
     }
     data['isMultipleSelect'] = this.isMultipleSelect;
     data['isInline'] = this.isInline;
-    data['initialValue'] = this.initialValue;
     return data;
   }
 }

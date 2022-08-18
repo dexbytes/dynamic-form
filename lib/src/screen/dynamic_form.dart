@@ -31,10 +31,6 @@ class DynamicFormState extends State<DynamicForm> {
     String nextFieldKey = "";
     String currentElementKey = "";
     String currentElementType = "";
-    String? _singleValue = "Text alignment right";
-    String? _verticalGroupValue = "Pending";
-
-    List<String> _status = ["Pending", "Released", "Blocked"];
 
     if(data.containsKey("elementType") && data["elementType"].isNotEmpty)
     {
@@ -77,6 +73,11 @@ class DynamicFormState extends State<DynamicForm> {
 
         case "radio":
           return RadioButton(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
+            formSubmitData[fieldKey] = value;
+          });
+
+          case "checkbox":
+          return CheckBoxWidget(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
             formSubmitData[fieldKey] = value;
           });
 

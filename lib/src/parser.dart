@@ -4,6 +4,7 @@ import 'package:dynamic_json_form/src/model/drop_down_field_model.dart';
 import 'package:dynamic_json_form/src/model/text_field_model.dart';
 import 'package:flutter/foundation.dart';
 import '../dynamic_json_form.dart';
+import 'model/checkbox_model.dart';
 import 'model/radio_button_model.dart';
 export 'model/text_field_model.dart';
 
@@ -87,6 +88,21 @@ class ResponseParser{
 
           }
       return radioButtonModel;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return null;
+  }
+
+  CheckboxModel? checkBoxFormFiledParsing({required Map<String,dynamic> jsonData,bool updateCommon = false}){
+    try {
+      CheckboxModel checkBoxModel = CheckboxModel.fromJson(jsonData);
+      if(updateCommon){
+
+          }
+      return checkBoxModel;
     } catch (e) {
       if (kDebugMode) {
         print(e);

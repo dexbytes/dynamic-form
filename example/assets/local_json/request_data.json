@@ -6,6 +6,45 @@
   "formType": "single",
   "formFields":[
     {
+      "elementType":"checkbox",
+      "elementConfig":{
+        "name":"Hobbies",
+        "label":"Hobbies",
+        "enableLabel":true,
+        "placeholder":"Hobbies",
+        "class":"form-control",
+        "options":[
+          {
+            "checked":true,
+            "value":"book_reading",
+            "displayValue":"Book Reading"
+          },
+          {
+            "checked":false,
+            "value":"dancing",
+            "displayValue":"Dancing"
+          },
+          {
+            "checked":false,
+            "value":"playing",
+            "displayValue":"Playing"
+          },
+          {
+            "checked":false,
+            "value":"coding",
+            "displayValue":"Coding"
+          }
+        ]
+      },
+      "value":"",
+      "validation":{
+        "required":true,
+        "isReadOnly":false,
+        "isDisabled":false
+      },
+      "valid":false
+    },
+    {
       "elementType":"radio",
       "elementConfig":{
         "name":"Gender",
@@ -27,7 +66,7 @@
             "displayValue":"Other"
           }
         ],
-        "initialValue":null
+        "initialValue":"female"
       },
       "value":"",
       "validation":{
