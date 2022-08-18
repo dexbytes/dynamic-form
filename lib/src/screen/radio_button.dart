@@ -55,9 +55,7 @@ class _RadioButtonState extends State<RadioButton> {
         fieldKey = radioButtonModel.elementConfig!.name!;
         label = radioButtonModel.elementConfig!.label!;
         placeholder = radioButtonModel.elementConfig!.placeholder!;
-
-        //isMultipleSelect = radioButtonModel.elementConfig!.isMultipleSelect??false;
-        // isInline = radioButtonModel.elementConfig!.isInline??false;
+        
         value = radioButtonModel.value??"";
         _initialValue = radioButtonModel.elementConfig!.initialValue??"";
 
@@ -72,8 +70,7 @@ class _RadioButtonState extends State<RadioButton> {
               }
             }
           }).toList();
-
-
+          
 
           if(value.isNotEmpty){
             // _onSelect(isInit: true,displayValue: value);
@@ -86,7 +83,7 @@ class _RadioButtonState extends State<RadioButton> {
 
   @override
   Widget build(BuildContext context) {
-    var radioButtonAlignment = viewConfiguration!._radioButtonsAlign == LabelAndRadioButtonAlign.horizontal?Axis.horizontal:Axis.vertical;
+    var radioButtonAlignment = viewConfiguration!._radioButtonsAlign == LabelAndOptionsAlignment.horizontal?Axis.horizontal:Axis.vertical;
 
     //Label
     Widget label =  Text(radioButtonModel!.elementConfig!.label??'',style: viewConfiguration!._labelTextStyle);
@@ -109,10 +106,11 @@ class _RadioButtonState extends State<RadioButton> {
       }),
       items: displayList,
       itemBuilder: (item) => RadioButtonBuilder(item),
-      activeColor: Colors.red,
+      activeColor: viewConfiguration!._radioButtonActiveColor,
+      textStyle: viewConfiguration!._optionTextStyle,
     );
 
-    return LabelAndRadioButtonAlign.vertical == viewConfiguration!._labelAndRadioButtonAlign?
+    return LabelAndOptionsAlignment.vertical == viewConfiguration!._labelAndRadioButtonAlign?
     //Vertical alignment of radio buttons with label
     Row(
       children: [
@@ -257,10 +255,8 @@ class RadioButtonwidget<T> extends StatelessWidget {
         )
             : Container(),
 
-        SizedBox(
-          height:40,
-          width:30,
-          child: Radio<T>(
+
+          Radio<T>(
             visualDensity: VisualDensity.standard,
             groupValue: groupValue,
             onChanged: this.onChanged,
@@ -268,7 +264,7 @@ class RadioButtonwidget<T> extends StatelessWidget {
             activeColor: activeColor,
             //  splashRadius: 10.0,
             // materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),),
+          ),
 
         this.textPosition == RadioButtonTextPosition.right
             ? Padding(

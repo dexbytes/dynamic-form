@@ -277,7 +277,8 @@ class _TextFieldsState extends State<TextFieldView> {
         return SizedBox(
          // height:textFieldHeight,
           child: TextFormField(
-          focusNode: currentFocusNode,strutStyle:StrutStyle(),
+          focusNode: currentFocusNode,
+            //strutStyle:StrutStyle(),
           readOnly: textFieldModel!.validation!.isReadOnly!,
           enabled: !textFieldModel!.validation!.isDisabled!,
           controller: _nameController,

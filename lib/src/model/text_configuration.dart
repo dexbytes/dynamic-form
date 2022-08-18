@@ -62,7 +62,7 @@ class TextFieldConfiguration {
   late Color _fillColor = Colors.transparent;
   late Color _cursorColor = Colors.red;
   late Color _suffixIconColor = Colors.red;
-  late EdgeInsets _contentPadding =  const EdgeInsets.all(16);
+  late EdgeInsets _contentPadding =  const EdgeInsets.all(12);
   late FloatingLabelBehavior _floatingLabelBehavior = FloatingLabelBehavior.never;
 
   TextFieldConfiguration({TextStyle? textStyle,

@@ -41,14 +41,20 @@ void main() async {
   ConfigurationSetting.instance.setTelTextFieldViewConfig = telTextFieldConfiguration;
 
   RadioButtonConfiguration radioButtonConfiguration = RadioButtonConfiguration(
-      labelAndRadioButtonAlign: LabelAndRadioButtonAlign.vertical,
-    radioButtonsAlign:LabelAndRadioButtonAlign.vertical,
-      labelTextStyle: const TextStyle(
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
-    color: Colors.red,
-  ));
+      labelAndRadioButtonAlign: LabelAndOptionsAlignment.vertical,
+    radioButtonsAlign:LabelAndOptionsAlignment.vertical,
+    labelTextStyle: const TextStyle(color: Colors.black,fontSize: 16),
+    optionTextStyle:  TextStyle(color: Colors.grey.shade800,fontSize: 14),
+      );
   ConfigurationSetting.instance.setRadioButtonConfiguration = radioButtonConfiguration;
+
+  CheckBoxConfiguration checkBoxConfiguration = CheckBoxConfiguration(
+      labelAndRadioButtonAlign: LabelAndOptionsAlignment.vertical,
+    optionsAlign:LabelAndOptionsAlignment.vertical,
+    labelTextStyle: const TextStyle(color: Colors.black,fontSize: 16),
+    optionTextStyle:  TextStyle(color: Colors.grey.shade800,fontSize: 14,),
+  );
+  ConfigurationSetting.instance.setCheckBoxConfiguration = checkBoxConfiguration;
 
   //Set load form from json
   ConfigurationSetting.instance.setLoadFromApi = true;

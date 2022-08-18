@@ -71,15 +71,16 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
 
   @override
   Widget build(BuildContext context) {
-    var checkBoxAlignment = viewConfiguration!._radioButtonsAlign == LabelAndRadioButtonAlign.horizontal?Axis.horizontal:Axis.vertical;
+    var checkBoxAlignment = viewConfiguration!._optionsAlign == LabelAndOptionsAlignment.horizontal?Axis.horizontal:Axis.vertical;
 
     //Label
-    Widget label =  Text(checkBoxModel!.elementConfig!.label??'',style: viewConfiguration!._labelTextStyle);
+    Widget label =  Text(checkBoxModel!.elementConfig!.label??'',style: viewConfiguration!._labelTextStyle,  strutStyle: StrutStyle(),);
 
     //Create checkbox list
     Widget checkBoxOptions = CheckBoxGroup<String>.builder(
       direction: checkBoxAlignment,
       groupValue: _intialValue,
+      textStyle: viewConfiguration!._optionTextStyle,
       spacebetween: 30,
       horizontalAlignment: MainAxisAlignment.start,
       onChanged: (selectedValue) => setState(() {
@@ -95,10 +96,10 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
       }),
       items: optionList,
       itemBuilder: (item) => RadioButtonBuilder(item.displayValue??''),
-      activeColor: Colors.red,
+      activeColor: viewConfiguration!._checkboxActiveColor,
     );
 
-    return LabelAndRadioButtonAlign.vertical == viewConfiguration!._labelAndRadioButtonAlign?
+    return LabelAndOptionsAlignment.vertical == viewConfiguration!._labelAndRadioButtonAlign?
     //Vertical alignment of checkboxes with label
     Row(
       children: [
@@ -232,6 +233,7 @@ class CheckBoxWithText<T> extends StatelessWidget {
           child: Text(
             this.description,
             style: this.textStyle,
+            strutStyle: StrutStyle(),
             textAlign: TextAlign.left,
           ),
         )
@@ -239,6 +241,7 @@ class CheckBoxWithText<T> extends StatelessWidget {
 
        CheckBoxCustom(
             checkStatus: value.checked,
+  activeColor:activeColor,
             onClicked: (value1){
               value.checked = value1;
               if (this.onChanged != null) {
@@ -254,6 +257,7 @@ class CheckBoxWithText<T> extends StatelessWidget {
             this.description,
             style: this.textStyle,
             textAlign: TextAlign.right,
+            strutStyle: StrutStyle(),
           ),
         )
             : Container(),
@@ -265,19 +269,21 @@ class CheckBoxWithText<T> extends StatelessWidget {
 //Check box
 class CheckBoxCustom extends StatefulWidget {
   final bool? checkStatus;
+  final Color? activeColor;
   final Function(bool)? onClicked;
 
-  const CheckBoxCustom({Key? key,this.checkStatus = false,this.onClicked}) : super(key: key);
+  const CheckBoxCustom({Key? key,this.checkStatus = false,this.onClicked,this.activeColor}) : super(key: key);
 
   @override
-  _CheckBoxCustomState createState() => _CheckBoxCustomState(checkStatus: checkStatus,onClicked: onClicked);
+  _CheckBoxCustomState createState() => _CheckBoxCustomState(checkStatus: checkStatus,onClicked: onClicked,activeColor:activeColor);
 }
 
 class _CheckBoxCustomState extends State<CheckBoxCustom> {
   bool? checkStatus;
+  Color? activeColor;
   Function(bool)? onClicked;
 
-  _CheckBoxCustomState({this.checkStatus = false, this.onClicked});
+  _CheckBoxCustomState({this.checkStatus = false, this.onClicked, this.activeColor});
 
   @override
   void initState() {
@@ -305,7 +311,10 @@ class _CheckBoxCustomState extends State<CheckBoxCustom> {
   @override
   Widget build(BuildContext context) {
 
-    return Checkbox(value: checkStatus, onChanged: (value) {
+    return Checkbox(
+        //checkColor: activeColor,
+        activeColor: activeColor,
+        value: checkStatus, onChanged: (value) {
       debugPrint("$value");
       setState(() {
         checkStatus = value;

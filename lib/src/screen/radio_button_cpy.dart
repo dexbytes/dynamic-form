@@ -86,7 +86,7 @@
 //
 //   @override
 //   Widget build(BuildContext context) {
-//     var radioButtonAlignment = viewConfiguration!._radioButtonsAlign == LabelAndRadioButtonAlign.horizontal?Axis.horizontal:Axis.vertical;
+//     var radioButtonAlignment = viewConfiguration!._radioButtonsAlign == LabelAndOptionsAlignment.horizontal?Axis.horizontal:Axis.vertical;
 //
 //     //Label
 //     Widget label =  Text(radioButtonModel!.elementConfig!.label??'',style: viewConfiguration!._labelTextStyle);
@@ -112,7 +112,7 @@
 //       activeColor: Colors.red,
 //     );
 //
-//     return LabelAndRadioButtonAlign.vertical == viewConfiguration!._labelAndRadioButtonAlign?
+//     return LabelAndOptionsAlignment.vertical == viewConfiguration!._labelAndRadioButtonAlign?
 //     //Vertical alignment of radio buttons with label
 //     Row(
 //       children: [
