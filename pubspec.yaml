@@ -6,7 +6,7 @@ repository: https://github.com/dexbytes/standard-form.git
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
-  flutter: "2.0.6"
+  flutter: ">=2.0.6"
 
 dependencies:
   flutter:
