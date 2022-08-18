@@ -139,19 +139,7 @@ class DynamicFormScreenState extends State<DynamicFormScreen> {
     return Material(
       child: !commonValidation.isValidJsonEncoded(jsonEncoded)?Container():StreamBuilder(
         stream: onVariableChanged,builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        /*if (snapshot.connectionState == ConnectionState.waiting) {
-          //commonValidation.setFormData = jsonEncoded;
-          return const Center(
-            child: Text(""),
-          );
-        }
-        else{
-         // commonValidation.setFormData = jsonEncoded;
-        }*/
-        /*if(snapshot.hasData){
-          formFieldList = snapshot.data;
-        }*/
-        _formFieldList = responseParser.getFormData[responseParser.getCurrentFormNumber];
+       _formFieldList = responseParser.getFormData[responseParser.getCurrentFormNumber];
         return SizedBox(child:
         _formFieldList.isEmpty?Container():Form(
           key: _formKey,autovalidateMode: autoValidateMode,
