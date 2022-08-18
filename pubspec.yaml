@@ -2,7 +2,7 @@ name: dynamic_form
 description: A flutter package that render dynamic form.
 version: 1.0.0
 homepage: https://github.com/dexbytes
-repository: https://github.com/dexbytes/standard-form.git
+repository: https://github.com/dexbytes/dynamic_form.git
 
 environment:
   sdk: ">=2.15.0 <3.0.0"

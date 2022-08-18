@@ -35,7 +35,7 @@ dependencies:
   http: ^0.13.3
 #  dynamic_form:
 #    git:
-#     url: https://github.com/dexbytes/standard-form.git
+#     url: https://github.com/dexbytes/dynamic_form.git
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
