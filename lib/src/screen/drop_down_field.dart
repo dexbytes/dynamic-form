@@ -1,5 +1,5 @@
 //for Restaurant type dropdown
-part of dynamic_form;
+part of flutter_dynamic_form;
 
 class DropDown extends StatefulWidget {
   final List<Options>? optionList;

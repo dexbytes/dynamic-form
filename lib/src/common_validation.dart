@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/rendering.dart';
 
 class CommonValidation {
 
@@ -52,6 +51,7 @@ class CommonValidation {
         return errorMsg = isValidEmail(enteredValue,validationStr);
 
     }
+    return null;
   }
 
   //Text validation
@@ -63,10 +63,7 @@ class CommonValidation {
       Map<String,dynamic> validation = validationStr;
       Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
 
-      /*int minLine = 1;
-    int maxLine = 20;*/
-
-      bool required = validation.containsKey('required')?validation['required']: false;
+      // bool required = validation.containsKey('required')?validation['required']: false;
       int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
       int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
       String rejex = validation.containsKey('rejex')?validation['rejex']:"";
@@ -182,7 +179,7 @@ class CommonValidation {
       /*int minLine = 1;
     int maxLine = 20;*/
 
-      bool required = validation.containsKey('required')?validation['required']: false;
+      // bool required = validation.containsKey('required')?validation['required']: false;
       int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
       int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
       String rejex = validation.containsKey('rejex')?validation['rejex']:"";
@@ -262,7 +259,7 @@ class CommonValidation {
       /*int minLine = 1;
     int maxLine = 20;*/
 
-      bool required = validation.containsKey('required')?validation['required']: false;
+      // bool required = validation.containsKey('required')?validation['required']: false;
       int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
       int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
       String rejex = validation.containsKey('rejex')?validation['rejex']:"";
@@ -304,7 +301,7 @@ class CommonValidation {
       /*int minLine = 1;
     int maxLine = 20;*/
 
-      bool required = validation.containsKey('required')?validation['required']: false;
+      // bool required = validation.containsKey('required')?validation['required']: false;
       int minLength = validation.containsKey('minLength')?validation['minLength']: 1;
       int maxLength = validation.containsKey('maxLength')?validation['maxLength']: 2;
       String rejex = validation.containsKey('rejex')?validation['rejex']:"";

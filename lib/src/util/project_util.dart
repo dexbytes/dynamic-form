@@ -1,4 +1,4 @@
-import 'package:dynamic_form/parts.dart';
+import 'package:flutter_dynamic_form/parts.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 

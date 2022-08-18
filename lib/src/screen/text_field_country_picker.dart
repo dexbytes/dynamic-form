@@ -1,4 +1,4 @@
-part of dynamic_form;
+part of flutter_dynamic_form;
 // enum formFieldType {text,name,email,tel,url,number,textMultiline}
 class TextFieldCountryPickerView extends StatefulWidget {
   final Map<String,dynamic> jsonData;
@@ -199,7 +199,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   //for ios done button callback
   onPressCallback() {
     removeOverlay();
-    FocusScope.of(context).requestFocus(new FocusNode());
+    FocusScope.of(context).requestFocus(FocusNode());
     if(mounted && _nameController!=null && _nameController!.text.isNotEmpty && checkValid){
       setState(() {
         checkValidOnChange = true;

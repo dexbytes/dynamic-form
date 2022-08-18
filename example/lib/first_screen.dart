@@ -1,6 +1,5 @@
-import 'package:dynamic_form/parts.dart';
+import 'package:flutter_dynamic_form/parts.dart';
 import 'package:example/second_screen.dart';
-import 'package:flutter/material.dart';
 
 class FirstScreen extends StatefulWidget {
  final String jsonString;

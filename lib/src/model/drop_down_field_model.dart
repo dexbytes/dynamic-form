@@ -5,7 +5,7 @@ class DropDownModel {
   Validation? validation;
   bool? valid;
 
-  DropDownModel({this.elementType, this.elementConfig, this.value, this.validation, this.valid});
+  DropDownModel({elementType, elementConfig, value, validation, valid});
 
   DropDownModel.fromJson(Map<String, dynamic> json) {
     elementType = json['elementType'];
@@ -17,15 +17,15 @@ class DropDownModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  Map<String, dynamic>();
-    data['elementType'] = this.elementType;
-    if (this.elementConfig != null) {
-      data['elementConfig'] = this.elementConfig!.toJson();
+    data['elementType'] = elementType;
+    if (elementConfig != null) {
+      data['elementConfig'] = elementConfig!.toJson();
     }
-    data['value'] = this.value;
-    if (this.validation != null) {
-      data['validation'] = this.validation!.toJson();
+    data['value'] = value;
+    if (validation != null) {
+      data['validation'] = validation!.toJson();
     }
-    data['valid'] = this.valid;
+    data['valid'] = valid;
     return data;
   }
 }
@@ -39,7 +39,7 @@ class ElementConfig {
   bool? isMultipleSelect;
   bool? isInline;
 
-  ElementConfig({this.name, this.label, this.placeholder, this.classProperty, this.options, this.isMultipleSelect = false,this.isInline = false});
+  ElementConfig({name, label, placeholder, classProperty, options, isMultipleSelect = false,isInline = false});
 
   ElementConfig.fromJson(Map<String, dynamic> json) {
   name = json['name'];
@@ -48,22 +48,22 @@ class ElementConfig {
   classProperty = json.containsKey('class')?json['class']:"";
   if (json['options'] != null) {
   options = <Options>[];
-  json['options'].forEach((v) { options!.add(new Options.fromJson(v)); });
+  json['options'].forEach((v) { options!.add(Options.fromJson(v)); });
   }
   isMultipleSelect = json.containsKey('isMulitpleSelect')?json['isMulitpleSelect']:false;
   isInline = json.containsKey('isInline')?json['isInline']:false;
   }
   Map<String, dynamic> toJson() {
-  final Map<String, dynamic> data =  Map<String, dynamic>();
-  data['name'] = this.name;
-  data['label'] = this.label;
-  data['placeholder'] = this.placeholder;
-  data['class'] = this.classProperty;
-  if (this.options != null) {
-  data['options'] = this.options!.map((v) => v.toJson()).toList();
+  final Map<String, dynamic> data =  <String, dynamic>{};
+  data['name'] = name;
+  data['label'] = label;
+  data['placeholder'] = placeholder;
+  data['class'] = classProperty;
+  if (options != null) {
+  data['options'] = options!.map((v) => v.toJson()).toList();
   }
-  data['isMultipleSelect'] = this.isMultipleSelect;
-  data['isInline'] = this.isInline;
+  data['isMultipleSelect'] = isMultipleSelect;
+  data['isInline'] = isInline;
   return data;
   }
 }
@@ -73,7 +73,7 @@ class Options {
   String? displayValue;
   bool? checked;
 
-  Options({this.value, this.displayValue,this.checked = false});
+  Options({value, displayValue,checked = false});
 
   Options.fromJson(Map<String, dynamic> json) {
     value = json.containsKey('value')?json['value']:"";
@@ -82,10 +82,10 @@ class Options {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['value'] = this.value;
-    data['displayValue'] = this.displayValue;
-    data['checked'] = this.checked;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['value'] = value;
+    data['displayValue'] = displayValue;
+    data['checked'] = checked;
     return data;
   }
 }
@@ -95,7 +95,7 @@ class Validation {
   bool? isReadOnly;
   bool? isDisabled;
 
-  Validation({this.required, this.isReadOnly, this.isDisabled});
+  Validation({required, isReadOnly, isDisabled});
 
   Validation.fromJson(Map<String, dynamic> json) {
     required = json['required'];
@@ -104,10 +104,10 @@ class Validation {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  Map<String, dynamic>();
-    data['required'] = this.required;
-    data['isReadOnly'] = this.isReadOnly;
-    data['isDisabled'] = this.isDisabled;
+    final Map<String, dynamic> data =  <String, dynamic>{};
+    data['required'] = required;
+    data['isReadOnly'] = isReadOnly;
+    data['isDisabled'] = isDisabled;
     return data;
   }
 }

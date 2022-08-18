@@ -1,4 +1,4 @@
-part of dynamic_form;
+part of flutter_dynamic_form;
 // enum formFieldType {text,name,email,tel,url,number,textMultiline}
 class TextFieldView extends StatefulWidget {
   final Map<String,dynamic> jsonData;
@@ -277,7 +277,7 @@ class _TextFieldsState extends State<TextFieldView> {
         return SizedBox(
          // height:textFieldHeight,
           child: TextFormField(
-          focusNode: currentFocusNode,strutStyle:StrutStyle(),
+          focusNode: currentFocusNode,strutStyle:const StrutStyle(),
           readOnly: textFieldModel!.validation!.isReadOnly!,
           enabled: !textFieldModel!.validation!.isDisabled!,
           controller: _nameController,
@@ -366,7 +366,7 @@ class _TextFieldsState extends State<TextFieldView> {
   }
 
   void moveToNextField(String value) {
-    if(nextFocusNode!=null && commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType) == null){
+    if(commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType) == null){
       nextFocusNode.requestFocus();
     }
   }

@@ -1,4 +1,4 @@
-part of dynamic_form;
+part of flutter_dynamic_form;
 
 class LocalStorage {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();

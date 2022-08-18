@@ -1,4 +1,4 @@
-part of dynamic_form;
+part of flutter_dynamic_form;
 
 enum COMPONENT_TYPE {all,email}
 class LocalJsonRw{
