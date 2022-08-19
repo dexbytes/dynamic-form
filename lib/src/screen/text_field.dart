@@ -40,6 +40,8 @@ class _TextFieldsState extends State<TextFieldView> {
     if(textFieldModel!=null){
       _nameController!.text = textFieldModel!.value??"";
 
+
+
    if(textFieldModel!.elementConfig!=null){
         textCapitalizeStr = textFieldModel!.elementConfig!.textCapitalization??"none";
         formFieldType = textFieldModel!.elementConfig!.type??"text";
@@ -53,6 +55,12 @@ class _TextFieldsState extends State<TextFieldView> {
           obscureText = false;
         }
 
+        if(formFieldType == 'date'){
+          if(textFieldModel!.value != null && textFieldModel!.value!.toString().trim().isNotEmpty){
+          _nameController!.text = packageUtil.getText("dd MMMM, yyyy",commonValidation.getTimeFromTimeStamp(dateTimeStamp: textFieldModel!.value)).toString();
+          onChangeValue.call(fieldKey,textFieldModel!.value.toString());
+          }
+        }
 
         currentFocusNode = (responseParser.getFieldFocusNode.containsKey(fieldKey)? responseParser.getFieldFocusNode[fieldKey]:FocusNode())!;nextFocusNode = (responseParser.getFieldFocusNode.containsKey(nextFieldKey)? responseParser.getFieldFocusNode[nextFieldKey]:FocusNode())!;
 
@@ -61,7 +69,12 @@ class _TextFieldsState extends State<TextFieldView> {
           _fieldStreamControl.sink.add(obscureText);
         },
             textFieldCallBack: (){
-              pickDate(context);
+              if (formFieldType == 'date' && !(textFieldModel!.validation!.isReadOnly!)) {
+                pickDate(context,
+                    firstDateTS: textFieldModel!.elementConfig!.firstDate,
+                    initialDateTS: textFieldModel!.elementConfig!.initialDate,
+                    lastDateTS:textFieldModel!.elementConfig!.lastDate );
+              }
         });
       }
     }
@@ -282,10 +295,10 @@ class _TextFieldsState extends State<TextFieldView> {
           readOnly: (formFieldType == 'date')?true:textFieldModel!.validation!.isReadOnly!,
           enabled: !textFieldModel!.validation!.isDisabled!,
             onTap: (){
-              if (formFieldType == 'date') {
+              if (formFieldType == 'date' && !(textFieldModel!.validation!.isReadOnly!)) {
                 pickDate(context,
-                    initialDateTS: textFieldModel!.elementConfig!.initialDate,
                     firstDateTS: textFieldModel!.elementConfig!.firstDate,
+                    initialDateTS: textFieldModel!.elementConfig!.initialDate,
                     lastDateTS:textFieldModel!.elementConfig!.lastDate );
               }
             },
@@ -380,30 +393,31 @@ class _TextFieldsState extends State<TextFieldView> {
     }
   }
 
-
   //Date of birth
-  void pickDate(BuildContext context,{firstDateTS,lastDateTS,initialDateTS}) async {
-    DateTime firstDate = DateTime(DateTime.now().year - 100);
-    DateTime initialDate = DateTime(DateTime.now().year - 100);
-    DateTime lastDate = DateTime(DateTime.now().year);
+  void pickDate(BuildContext context,{firstDateTS,lastDateTS, initialDateTS}) async {
+
+    //get date from timestamp
+    DateTime firstDate = commonValidation.getTimeFromTimeStamp(dateTimeStamp: firstDateTS,date:  DateTime(DateTime.now().year - 100));
+    DateTime lastDate = commonValidation.getTimeFromTimeStamp(dateTimeStamp: lastDateTS,date:  DateTime(DateTime.now().year));
+    DateTime tempDate = commonValidation.getTimeFromTimeStamp(dateTimeStamp: initialDateTS,date:  DateTime(DateTime.now().year - 10));
+    DateTime initialDate = DateTime(DateTime.now().year - 10);
+
+    //check initial date, it must be after first date and before last date
     try {
-      if(firstDateTS != null){
-            firstDate = DateTime.fromMillisecondsSinceEpoch(int.parse(firstDateTS) * 1000);
-          }
-      if(lastDateTS != null){
-            lastDate = DateTime.fromMillisecondsSinceEpoch(int.parse(lastDateTS) * 1000);
-          } /*if(initialDateTS != null){
-        initialDate = DateTime.fromMillisecondsSinceEpoch(int.parse(initialDateTS) * 1000);
-          }*/
+      if ((firstDate.isBefore(tempDate) || firstDate.isAtSameMomentAs(tempDate)) && (tempDate.isBefore(lastDate) || lastDate.isAtSameMomentAs(tempDate))) {
+        initialDate = tempDate;
+      }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
+
     final newDate = await showDatePicker(
         context: context,
         fieldLabelText: "DOB",
         initialDate: initialDate,
         initialEntryMode: DatePickerEntryMode.calendarOnly,
-        //initialDatePickerMode: DatePickerMode.,
         firstDate: firstDate,
         lastDate: lastDate,
         confirmText: "OK",
@@ -423,10 +437,12 @@ class _TextFieldsState extends State<TextFieldView> {
               )
           );
         }
+
     );
 
     if (newDate == null) return;
     _nameController!.text = packageUtil.getText("dd MMMM, yyyy",newDate).toString();
+    onChangeValue.call(fieldKey,newDate.millisecondsSinceEpoch.toString());
     /*setState(() {
       date = newDate;
       nameController?.text = getText().toString();
@@ -436,45 +452,6 @@ class _TextFieldsState extends State<TextFieldView> {
     // );
   }
 
-  //Date of birth
-  void pickDate2(BuildContext context) async {
-    final newDate = await showDatePicker(
-        context: context,
-        fieldLabelText: "DOB",
-        initialDate: DateTime(DateTime.now().year - 10),
-        initialEntryMode: DatePickerEntryMode.calendarOnly,
-        //initialDatePickerMode: DatePickerMode.,
-        firstDate: DateTime(DateTime.now().year - 100),
-        lastDate: DateTime(DateTime.now().year),
-        confirmText: "OK",
-        builder: (context ,child ) {
-          return Theme(
-              child: child!,
-              data: ThemeData().copyWith(
-                // brightness:!isDarkMode? Brightness.light:Brightness.dark,
-                  colorScheme: const ColorScheme.dark(
-                    primary: Colors.blue,
-                      onSurface: Colors.blue,
-                      onPrimary: Colors.white,
-                     // surface:Colors.green,
-                      brightness: Brightness.light
-                  ),
-                  dialogBackgroundColor: Colors.white
-              )
-          );
-        }
-    );
-
-    if (newDate == null) return;
-    _nameController!.text = packageUtil.getText("dd MMMM, yyyy",newDate).toString();
-    /*setState(() {
-      date = newDate;
-      nameController?.text = getText().toString();
-      widget.selectedValue?.call(date);
-    });*/
-    // setState(() => date = newDate
-    // );
-  }
 }
 class ViewConfig{
   TextFieldConfiguration? viewConfiguration;

@@ -50,7 +50,6 @@ class CommonValidation {
 
       case 'text_multiline':
         return errorMsg = isValidEmail(enteredValue,validationStr);
-
     }
   }
 
@@ -333,6 +332,22 @@ class CommonValidation {
       }
     }
     return errorMsg;
+  }
+
+  //get time from timestamp
+  DateTime getTimeFromTimeStamp({required dateTimeStamp,DateTime? date}){
+    DateTime tempDate = date??DateTime.now();
+    if(dateTimeStamp != null && dateTimeStamp.toString().trim().isNotEmpty){
+      try {
+        tempDate = DateTime.fromMillisecondsSinceEpoch(int.parse(dateTimeStamp) * 1000);
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+       // return tempDate;
+      }
+    }
+    return tempDate;
   }
 
 }
