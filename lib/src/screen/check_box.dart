@@ -4,11 +4,13 @@ class CheckBoxCustom extends StatefulWidget {
   final bool? checkStatus;
   final Function(bool)? onClicked;
 
-  const CheckBoxCustom({Key? key,this.checkStatus = false,this.onClicked}) : super(key: key);
+  const CheckBoxCustom({Key? key, this.checkStatus = false, this.onClicked})
+      : super(key: key);
 
   @override
   // ignore: no_logic_in_create_state
-  _CheckBoxCustomState createState() => _CheckBoxCustomState(checkStatus: checkStatus,onClicked: onClicked);
+  _CheckBoxCustomState createState() =>
+      _CheckBoxCustomState(checkStatus: checkStatus, onClicked: onClicked);
 }
 
 class _CheckBoxCustomState extends State<CheckBoxCustom> {
@@ -42,13 +44,14 @@ class _CheckBoxCustomState extends State<CheckBoxCustom> {
 
   @override
   Widget build(BuildContext context) {
-
-    return Checkbox(value: checkStatus, onChanged: (value) {
-      debugPrint("$value");
-      setState(() {
-        checkStatus = value;
-      });
-      onClicked?.call(checkStatus!);
-    });
+    return Checkbox(
+        value: checkStatus,
+        onChanged: (value) {
+          debugPrint("$value");
+          setState(() {
+            checkStatus = value;
+          });
+          onClicked?.call(checkStatus!);
+        });
   }
 }
