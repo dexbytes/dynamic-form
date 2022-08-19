@@ -137,7 +137,7 @@
         "type": "date",
         "name" : "date_of_birth",
         "label" : "Date of Birth",
-        "enableLabel":true,
+        "enableLabel":false,
         "placeholder": "Date of Birth",
         "class" : "form-control",
         "resetIcon": true,
@@ -145,7 +145,7 @@
         "initialDate":"631201842",
         "lastDate":"1546350642"
       },
-      "value": "631201842",
+      "value": "",
       "validation": {
         "required": true,
         "isReadOnly": false,
@@ -188,10 +188,9 @@
     {
       "elementType":"checkbox",
       "elementConfig":{
-        "name":"Hobbies",
-        "label":"Hobbies",
+        "name":"hobbies",
+        "label":"My Hobbies",
         "enableLabel":true,
-        "placeholder":"Hobbies",
         "class":"form-control",
         "options":[
           {
@@ -220,7 +219,10 @@
       "validation":{
         "required":true,
         "isReadOnly":false,
-        "isDisabled":false
+        "isDisabled":false,
+        "errorMessage": {
+          "required":"Please select at least one"
+            }
       },
       "valid":false
     },
@@ -230,7 +232,6 @@
         "name":"Gender",
         "label":"Gender",
         "enableLabel":true,
-        "placeholder":"Gender",
         "class":"form-control",
         "options":[
           {
@@ -244,9 +245,22 @@
           {
             "value":"other",
             "displayValue":"Other"
+          },
+          {
+            "value":"123",
+            "displayValue":"Other"
+          },{
+            "value":"sad",
+            "displayValue":"Other"
+          },{
+            "value":"fd",
+            "displayValue":"Other"
+          },{
+            "value":"dss",
+            "displayValue":"Other"
           }
         ],
-        "initialValue":"female"
+        "initialValue":"other"
       },
       "value":"",
       "validation":{

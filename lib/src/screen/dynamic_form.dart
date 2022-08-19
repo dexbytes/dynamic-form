@@ -72,7 +72,7 @@ class DynamicFormState extends State<DynamicForm> {
           });
 
         case "radio":
-          return RadioButton(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
+          return RadioButton(jsonData: data,onChangeValue: (String fieldKey, String value){
             formSubmitData[fieldKey] = value;
           });
 

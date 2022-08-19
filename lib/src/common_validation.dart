@@ -50,6 +50,7 @@ class CommonValidation {
 
       case 'text_multiline':
         return errorMsg = isValidEmail(enteredValue,validationStr);
+
     }
   }
 

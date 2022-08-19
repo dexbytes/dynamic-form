@@ -1,10 +1,10 @@
 part of dynamic_json_form;
 
 class RadioButton extends StatefulWidget {
-  final List<Options>? optionList;
+  final List<RadioButtonOptions>? optionList;
   final Map<String,dynamic> jsonData;
   final RadioButtonConfiguration? viewConfiguration;
-  final Function (String fieldKey,List<String> fieldValue) onChangeValue ;
+  final Function (String fieldKey,String fieldValue) onChangeValue ;
 
   const RadioButton({Key? key,required this.jsonData,required this.onChangeValue,
     this.optionList = const [],
@@ -17,8 +17,7 @@ class RadioButton extends StatefulWidget {
 }
 
 class _RadioButtonState extends State<RadioButton> {
-  List<Options>? optionList;
-  List<String> displayList = [];
+  List<RadioButtonOptions>? optionList = [];
   RadioButtonModel? radioButtonModel;
   Map<String, dynamic> jsonData;
   RadioButtonConfiguration? viewConfiguration;
@@ -27,10 +26,10 @@ class _RadioButtonState extends State<RadioButton> {
   bool enableLabel = true;
   String placeholder = "";
   String value = "";
-  String _initialValue = '';
-  List<String>? selectedOption = [];
+  RadioButtonOptions _initialValue = RadioButtonOptions();
+  String? selectedOption;
 
-  Function (String fieldKey,List<String> fieldValue) onChangeValue ;
+  Function (String fieldKey,String fieldValue) onChangeValue ;
   _RadioButtonState(
       {required this.jsonData,this.optionList,required this.onChangeValue,this.viewConfiguration}) {
     radioButtonModel ??= responseParser.radioButtonFormFiledParsing(
@@ -54,29 +53,22 @@ class _RadioButtonState extends State<RadioButton> {
       if (radioButtonModel.elementConfig != null) {
         fieldKey = radioButtonModel.elementConfig!.name!;
         label = radioButtonModel.elementConfig!.label!;
-        placeholder = radioButtonModel.elementConfig!.placeholder!;
-        
+
         value = radioButtonModel.value??"";
-        _initialValue = radioButtonModel.elementConfig!.initialValue??"";
+        String tempVal = radioButtonModel.elementConfig!.initialValue??'';
 
         if (radioButtonModel.elementConfig!.options!.isNotEmpty) {
-          optionList = radioButtonModel.elementConfig!.options!.map((e) => Options(value: e.value,displayValue: e.displayValue,checked: e.checked)).toList();
+          optionList = radioButtonModel.elementConfig!.options!.map((e) => RadioButtonOptions(value: e.value,displayValue: e.displayValue)).toList();
           optionList!.map((e){
-            displayList.add(e.displayValue!);
-            if(_initialValue != null && _initialValue != ""){
-              if(e.displayValue == _initialValue){
-                selectedOption = [];
-                selectedOption!.add(_initialValue);
+            if(tempVal.toString().trim().isNotEmpty){
+              if(e.value == tempVal){
+                selectedOption = tempVal;
+                _initialValue = e;
               }
             }
           }).toList();
-          
-
-          if(value.isNotEmpty){
-            // _onSelect(isInit: true,displayValue: value);
-          }
         }
-        // onChangeValue.call(fieldKey,selectedOption!);
+         onChangeValue.call(fieldKey,selectedOption!);
       }
     }
   }
@@ -92,23 +84,20 @@ class _RadioButtonState extends State<RadioButton> {
     Widget radioButtons = RadioGroup<String>.builder(
       direction: radioButtonAlignment,
       groupValue: _initialValue,
-      spacebetween: 30,
+      spaceBetween: 30,
       horizontalAlignment: MainAxisAlignment.start,
-      onChanged: (value) => setState(() {
-        _initialValue = value as String;
-        optionList!.map((e){
-          if(e.displayValue == value){
-            selectedOption = [];
-            selectedOption!.add(e.value!.toString());
-          }
-        }).toList();
+      onChanged: (selectedValue) => setState(() {
+        _initialValue = selectedValue as RadioButtonOptions;
+        selectedOption = selectedValue.value!.toString();
         onChangeValue.call(fieldKey,selectedOption!);
       }),
-      items: displayList,
-      itemBuilder: (item) => RadioButtonBuilder(item),
+      items: optionList??[],
+      itemBuilder: (item) => RadioButtonBuilder(item.displayValue??""),
       activeColor: viewConfiguration!._radioButtonActiveColor,
       textStyle: viewConfiguration!._optionTextStyle,
     );
+
+   // Widget errorMessage = Text(radioButtonModel!.validationStr!);
 
     return LabelAndOptionsAlignment.vertical == viewConfiguration!._labelAndRadioButtonAlign?
     //Vertical alignment of radio buttons with label
@@ -157,15 +146,15 @@ class RadioGroup<T> extends StatelessWidget {
   /// The [items] are elements to contruct the group
   /// [onChanged] will called every time a radio is selected. The clouser return the selected item.
   /// [direction] most be horizontal or vertial.
-  /// [spacebetween] works only when [direction] is [Axis.vertical] and ignored when [Axis.horizontal].
+  /// [spaceBetween] works only when [direction] is [Axis.vertical] and ignored when [Axis.horizontal].
   /// and represent the space between elements
   /// [horizontalAlignment] works only when [direction] is [Axis.horizontal] and ignored when [Axis.vertical].
-  final T groupValue;
-  final List<T> items;
-  final RadioButtonBuilder Function(T value) itemBuilder;
-  final void Function(T?)? onChanged;
+  final RadioButtonOptions groupValue;
+  final List<RadioButtonOptions> items;
+  final RadioButtonBuilder Function(RadioButtonOptions value) itemBuilder;
+  final void Function(RadioButtonOptions?)? onChanged;
   final Axis direction;
-  final double spacebetween;
+  final double spaceBetween;
   final MainAxisAlignment horizontalAlignment;
   final Color? activeColor;
   final TextStyle? textStyle;
@@ -176,22 +165,24 @@ class RadioGroup<T> extends StatelessWidget {
     required this.items,
     required this.itemBuilder,
     this.direction = Axis.vertical,
-    this.spacebetween = 20,
+    this.spaceBetween = 20,
     this.horizontalAlignment = MainAxisAlignment.start,
     this.activeColor,
     this.textStyle,
   });
 
-  List<Widget> get _group => this.items.map(
+  List<Widget> get _group => items.map(
         (item) {
-      final radioButtonBuilder = this.itemBuilder(item);
-      return Container(
-          height: this.direction == Axis.vertical ? this.spacebetween : 30.0,
-          child: RadioButtonwidget(
+      final radioButtonBuilder = itemBuilder(item);
+      return SizedBox(
+          height: direction == Axis.vertical ? spaceBetween : 30.0,
+          child: RadioButtonWidget(
             description: radioButtonBuilder.description,
             value: item,
-            groupValue: this.groupValue,
-            onChanged: this.onChanged,
+            groupValue: groupValue,
+            onChanged: (option){
+              onChanged?.call(option as RadioButtonOptions);
+            },
             textStyle: textStyle,
             textPosition: radioButtonBuilder.textPosition ??
                 RadioButtonTextPosition.right,
@@ -202,7 +193,7 @@ class RadioGroup<T> extends StatelessWidget {
   ).toList();
 
   @override
-  Widget build(BuildContext context) => this.direction == Axis.vertical
+  Widget build(BuildContext context) => direction == Axis.vertical
       ? Column(
     mainAxisAlignment: MainAxisAlignment.start,
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -211,7 +202,7 @@ class RadioGroup<T> extends StatelessWidget {
   );
 }
 
-class RadioButtonwidget<T> extends StatelessWidget {
+class RadioButtonWidget<T> extends StatelessWidget {
   final String description;
   final T value;
   final T groupValue;
@@ -220,7 +211,7 @@ class RadioButtonwidget<T> extends StatelessWidget {
   final Color? activeColor;
   final TextStyle? textStyle;
 
-  const RadioButtonwidget({
+  const RadioButtonWidget({
     Key? key,
     required this.description,
     required this.value,
@@ -234,22 +225,22 @@ class RadioButtonwidget<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) => InkWell(
     onTap: () {
-      if (this.onChanged != null) {
-        this.onChanged!(value);
+      if (onChanged != null) {
+        onChanged!(value);
       }
     },
     child: Row(
       mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: this.textPosition == RadioButtonTextPosition.right
+      mainAxisAlignment: textPosition == RadioButtonTextPosition.right
           ? MainAxisAlignment.start
           : MainAxisAlignment.end,
       children: <Widget>[
-        this.textPosition == RadioButtonTextPosition.left
+        textPosition == RadioButtonTextPosition.left
             ? Padding(
           padding: const EdgeInsets.only(left: 10.0),
           child: Text(
-            this.description,
-            style: this.textStyle,
+            description,
+            style: textStyle,
             textAlign: TextAlign.left,
           ),
         )
@@ -259,19 +250,19 @@ class RadioButtonwidget<T> extends StatelessWidget {
           Radio<T>(
             visualDensity: VisualDensity.standard,
             groupValue: groupValue,
-            onChanged: this.onChanged,
-            value: this.value,
+            onChanged: onChanged,
+            value: value,
             activeColor: activeColor,
             //  splashRadius: 10.0,
             // materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
 
-        this.textPosition == RadioButtonTextPosition.right
+        textPosition == RadioButtonTextPosition.right
             ? Padding(
           padding: const EdgeInsets.only(right: 8.0),
           child: Text(
-            this.description,
-            style: this.textStyle,
+            description,
+            style: textStyle,
             textAlign: TextAlign.right,
           ),
         )

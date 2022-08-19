@@ -44,7 +44,7 @@ void main() async {
 
   RadioButtonConfiguration radioButtonConfiguration = RadioButtonConfiguration(
       labelAndRadioButtonAlign: LabelAndOptionsAlignment.vertical,
-    radioButtonsAlign:LabelAndOptionsAlignment.horizontal,
+    radioButtonsAlign:LabelAndOptionsAlignment.vertical,
     labelTextStyle: const TextStyle(color: Colors.black,fontSize: 16),
     optionTextStyle:  TextStyle(color: Colors.grey.shade800,fontSize: 14),
       );
