@@ -7,6 +7,7 @@ class SuffixVisibilityIcon extends StatefulWidget {
   const SuffixVisibilityIcon({Key? key,this.iconClicked,this.iconWidget,this.initialValue = true}) : super(key: key);
 
   @override
+  // ignore: no_logic_in_create_state
   _IconClearTextFormFiledState createState() => _IconClearTextFormFiledState(initialValue!);
 }
 

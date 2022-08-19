@@ -42,7 +42,6 @@ class TextFieldConfiguration {
   ///    rounded rectangle around the input decorator's container.
   late InputBorder? _border =  const OutlineInputBorder();
   late InputBorder? _focusedBorder =  const OutlineInputBorder();
-  late InputBorder? _errorBorder =  const OutlineInputBorder();
   late TextStyle? _textStyle =  const TextStyle();
   late TextStyle? _hintStyle =  const TextStyle();
   late TextStyle? _labelStyle =  const TextStyle();
@@ -50,10 +49,6 @@ class TextFieldConfiguration {
   late TextStyle? _prefixStyle =  const TextStyle();
   late TextStyle? _counterStyle =  const TextStyle();
   late TextStyle? _suffixStyle =  const TextStyle();
-  late StrutStyle? _strutStyle =  const StrutStyle();
-  late TextDirection? _textDirection = TextDirection.ltr;
-  late TextAlign? _textAlign = TextAlign.start;
-  late TextAlignVertical? _textAlignVertical = TextAlignVertical.center;
   late String _suffixText = '';
  // late String _prefixText = '';
   late Widget _prefix = Container();
@@ -159,10 +154,10 @@ class TextFieldConfiguration {
     _hintStyle = value;
   }
   set setStrutStyle (value){
-    _strutStyle = value;
+   // _strutStyle = value;
   }
   set setTextDirection (value){
-    _textDirection = value;
+   // _textDirection = value;
   }
   set setEnableLabel (value){
     _enableLabel = value;

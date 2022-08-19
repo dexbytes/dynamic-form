@@ -14,7 +14,8 @@ class DropDown extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DropDownState createState() => _DropDownState(optionList: this.optionList,jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration:viewConfiguration);
+  // ignore: no_logic_in_create_state
+  _DropDownState createState() => _DropDownState(optionList: optionList,jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration:viewConfiguration);
 }
 
 class _DropDownState extends State<DropDown> {
@@ -107,7 +108,6 @@ class _DropDownState extends State<DropDown> {
               itemHeight: viewConfiguration!._itemHeight,
               itemPadding: viewConfiguration!._itemPadding,
               dropdownMaxHeight: viewConfiguration!._dropdownMaxHeight,
-              // dropdownWidth: viewConfiguration!._dropdownWidth,
               dropdownPadding: null,
               dropdownDecoration: viewConfiguration!._dropdownDecoration,
               dropdownElevation: viewConfiguration!._dropdownElevation!,
@@ -310,10 +310,10 @@ class Options {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['value'] = this.value;
-    data['displayValue'] = this.displayValue;
-    data['checked'] = this.checked;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['value'] = value;
+    data['displayValue'] = displayValue;
+    data['checked'] = checked;
     return data;
   }
 }
@@ -327,7 +327,8 @@ class DropdownRowItem extends StatefulWidget {
   const DropdownRowItem({Key? key,required this.option,required this.selectedOption,required this.onClicked,this.isMultipleSelect = false}) : super(key: key);
 
   @override
-  _DropdownRowItemState createState() => _DropdownRowItemState(onClicked: onClicked,option: this.option, selectedOption: this.selectedOption);
+  // ignore: no_logic_in_create_state
+  _DropdownRowItemState createState() => _DropdownRowItemState(onClicked: onClicked,option: option, selectedOption: selectedOption);
 }
 
 class _DropdownRowItemState extends State<DropdownRowItem> {

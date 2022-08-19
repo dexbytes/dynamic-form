@@ -16,27 +16,27 @@ class TextFieldModel {
     help = !json.containsKey('help')?null:json['help'] != null ?  Help.fromJson(json['help']) : null;
     value = json['value'];
     validation = json['validation'] != null ?  Validation.fromJson(json['validation']) : null;
-    validationStr = json['validation'] != null ? json['validation'] : null;
+    validationStr = json['validation'];
     valid = json['valid'];
     onchange = json['onchange'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['elementType'] = this.elementType;
-    if (this.elementConfig != null) {
-      data['elementConfig'] = this.elementConfig!.toJson();
+    data['elementType'] = elementType;
+    if (elementConfig != null) {
+      data['elementConfig'] = elementConfig!.toJson();
     }
-    if (this.help != null) {
-      data['help'] = this.help!.toJson();
+    if (help != null) {
+      data['help'] = help!.toJson();
     }
-    data['value'] = this.value;
-    if (this.validation != null) {
-      data['validation'] = this.validation!.toJson();
+    data['value'] = value;
+    if (validation != null) {
+      data['validation'] = validation!.toJson();
     }
-    data['valid'] = this.valid;
-    data['onchange'] = this.onchange;
-    data['validationStr'] = this.validationStr;
+    data['valid'] = valid;
+    data['onchange'] = onchange;
+    data['validationStr'] = validationStr;
     return data;
   }
 }
@@ -77,19 +77,19 @@ class ElementConfig {
   }
 
   Map<String, dynamic> toJson() {
-  final Map<String, dynamic> data = new Map<String, dynamic>();
-  data['textCapitalization'] = this.textCapitalization;
-  data['type'] = this.type;
-  data['name'] = this.name;
-  data['keyboardRejex'] = this.keyboardRejex;
-  data['label'] = this.label;
-  data['enableLabel'] = this.enableLabel;
-  data['placeholder'] = this.placeholder;
-  data['class'] = this.classProperty;
-  data['resetIcon'] = this.resetIcon;
-  data['nextName'] = this.nextName;
-  data['maxLine'] = this.maxLine;
-  data['minLine'] = this.minLine;
+  final Map<String, dynamic> data = <String, dynamic>{};
+  data['textCapitalization'] = textCapitalization;
+  data['type'] = type;
+  data['name'] = name;
+  data['keyboardRejex'] = keyboardRejex;
+  data['label'] = label;
+  data['enableLabel'] = enableLabel;
+  data['placeholder'] = placeholder;
+  data['class'] = classProperty;
+  data['resetIcon'] = resetIcon;
+  data['nextName'] = nextName;
+  data['maxLine'] = maxLine;
+  data['minLine'] = minLine;
   return data;
   }
 }
@@ -98,7 +98,7 @@ class Help {
   String? text;
   String? placement;
 
-  Help({this.text, this.placement});
+  Help({text, this.placement});
 
   Help.fromJson(Map<String, dynamic> json) {
     text = json['text'];
@@ -106,9 +106,9 @@ class Help {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['text'] = this.text;
-    data['placement'] = this.placement;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['text'] = text;
+    data['placement'] = placement;
     return data;
   }
 }
@@ -135,15 +135,15 @@ class Validation {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['required'] = this.required;
-    data['minLength'] = this.minLength;
-    data['maxLength'] = this.maxLength;
-    data['rejex'] = this.rejex;
-    data['isReadOnly'] = this.isReadOnly;
-    data['isDisabled'] = this.isDisabled;
-    if (this.errorMessage != null) {
-      data['errorMessage'] = this.errorMessage!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['required'] = required;
+    data['minLength'] = minLength;
+    data['maxLength'] = maxLength;
+    data['rejex'] = rejex;
+    data['isReadOnly'] = isReadOnly;
+    data['isDisabled'] = isDisabled;
+    if (errorMessage != null) {
+      data['errorMessage'] = errorMessage!.toJson();
     }
     return data;
   }
@@ -165,11 +165,11 @@ class ErrorMessage {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  Map<String, dynamic>();
-    data['required'] = this.required;
-    data['minLength'] = this.minLength;
-    data['maxLength'] = this.maxLength;
-    data['rejex'] = this.rejex;
+    final Map<String, dynamic> data =  <String, dynamic>{};
+    data['required'] = required;
+    data['minLength'] = minLength;
+    data['maxLength'] = maxLength;
+    data['rejex'] = rejex;
     return data;
   }
 }

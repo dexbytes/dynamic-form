@@ -16,7 +16,7 @@ class DropDownModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  Map<String, dynamic>();
+    final Map<String, dynamic> data =  <String, dynamic>{};
     data['elementType'] = elementType;
     if (elementConfig != null) {
       data['elementConfig'] = elementConfig!.toJson();

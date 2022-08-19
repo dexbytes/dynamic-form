@@ -7,6 +7,7 @@ class CheckBoxCustom extends StatefulWidget {
   const CheckBoxCustom({Key? key,this.checkStatus = false,this.onClicked}) : super(key: key);
 
   @override
+  // ignore: no_logic_in_create_state
   _CheckBoxCustomState createState() => _CheckBoxCustomState(checkStatus: checkStatus,onClicked: onClicked);
 }
 

@@ -6,6 +6,7 @@ final Function(Map<String,dynamic> data)? finalSubmitCallBack;
 final GlobalKey<DynamicFormScreenState>? dynamicFormKey ;
 const DynamicFormScreen(this.jsonEncoded,{this.dynamicFormKey,required this.finalSubmitCallBack}) : super(key: dynamicFormKey);
   @override
+  // ignore: no_logic_in_create_state
   DynamicFormScreenState createState() => DynamicFormScreenState(jsonEncoded: jsonEncoded);
 }
 

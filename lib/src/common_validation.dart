@@ -27,29 +27,45 @@ class CommonValidation {
     String? errorMsg;
     switch(formFieldType){
       case 'text':
-       return errorMsg = isValidText(enteredValue,validationStr);
-
+        {
+          errorMsg = isValidText(enteredValue, validationStr);
+          return errorMsg;
+        }
       case 'password':
-        return errorMsg = isValidPassword(enteredValue,validationStr);
-
+        {
+          errorMsg = isValidPassword(enteredValue, validationStr);
+          return errorMsg;
+        }
       case 'name':
-       return errorMsg = isValidName(enteredValue,validationStr);
-
+        {
+          errorMsg = isValidName(enteredValue, validationStr);
+          return errorMsg;
+        }
       case 'email':
-        return errorMsg = isValidEmail(enteredValue,validationStr);
-
+        {
+          errorMsg = isValidEmail(enteredValue, validationStr);
+          return errorMsg;
+        }
       case 'tel':
-        return errorMsg = isValidTel(enteredValue,validationStr);
-
+        {
+          errorMsg = isValidTel(enteredValue, validationStr);
+          return errorMsg;
+        }
       case 'url':
-        return errorMsg = isValidUrl(enteredValue,validationStr);
-
+        {
+          errorMsg = isValidUrl(enteredValue, validationStr);
+          return errorMsg;
+        }
       case 'number':
-        return errorMsg = isValidNumber(enteredValue,validationStr);
-
+        {
+         errorMsg = isValidNumber(enteredValue, validationStr);
+         return errorMsg;
+        }
       case 'text_multiline':
-        return errorMsg = isValidEmail(enteredValue,validationStr);
-
+        {
+          errorMsg = isValidEmail(enteredValue, validationStr);
+          return errorMsg;
+        }
     }
     return null;
   }

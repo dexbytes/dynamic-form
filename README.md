@@ -12,7 +12,7 @@ A flutter package that render dynamic form with different input field which is m
 
 Use this plugin in your Flutter app to:
 
-* To manage dynamic from filed from server according to filed type.
+* To manage dynamic from field from server according to field type.
 * Auto manage field validation according to field type.
 * Easy to manage field decoration by developers.
 

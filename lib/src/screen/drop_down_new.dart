@@ -8,7 +8,6 @@ import 'dart:ui' show window;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 
 import '../../parts.dart';
 
@@ -462,7 +461,6 @@ class _DropdownMenuState<T> extends State<_DropdownMenu<T>> {
               child: PrimaryScrollController(
                 controller: widget.route.scrollController!,
                 child: Scrollbar(
-                  isAlwaysShown: true,
                   child: ListView(
                     padding: widget.dropdownPadding ?? kMaterialListPadding,
                     shrinkWrap: true,
@@ -589,8 +587,7 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
     this.menuMaxHeight,
     required this.enableFeedback,
     this.borderRadius,this.dropdownDecoration,
-  }) : assert(style != null),
-        itemHeights = List<double>.filled(items.length, itemHeight ?? kMinInteractiveDimension);
+  }) : itemHeights = List<double>.filled(items.length, itemHeight ?? kMinInteractiveDimension);
 
   final List<_MenuItem<T>> items;
   final EdgeInsetsGeometry padding;
@@ -701,8 +698,9 @@ class _DropdownRoute<T> extends PopupRoute<_DropdownRouteResult<T>> {
    /* double menuTop = (buttonTop - selectedItemOffset) - (itemHeights[selectedIndex] - buttonRect.height) / 2.0;*/
     double menuTop = showAboveButton ? buttonTop - offset.dy : buttonBottom - offset.dy;
     double preferredMenuHeight = kMaterialListPadding.vertical;
-    if (items.isNotEmpty)
+    if (items.isNotEmpty) {
       preferredMenuHeight += itemHeights.reduce((double total, double height) => total + height);
+    }
 
     // If there are too many elements in the menu, we need to shrink it down
     // so it is at most the computedMaxHeight.
@@ -854,7 +852,7 @@ class _MenuItem<T> extends SingleChildRenderObjectWidget {
     Key? key,
     required this.onLayout,
     required this.item,
-  }) : assert(onLayout != null), super(key: key, child: item);
+  }) :  super(key: key, child: item);
 
   final ValueChanged<Size> onLayout;
   final DropdownMenuItemNew<T>? item;
@@ -871,7 +869,7 @@ class _MenuItem<T> extends SingleChildRenderObjectWidget {
 }
 
 class _RenderMenuItem extends RenderProxyBox {
-  _RenderMenuItem(this.onLayout, [RenderBox? child]) : assert(onLayout != null), super(child);
+  _RenderMenuItem(this.onLayout, [RenderBox? child]) : super(child);
 
   ValueChanged<Size> onLayout;
 
@@ -893,8 +891,7 @@ class _DropdownMenuItemContainer extends StatelessWidget {
     Key? key,
     this.alignment = AlignmentDirectional.centerStart,
     required this.child,
-  }) : assert(child != null),
-        super(key: key);
+  }) : super(key: key);
 
   /// The widget below this widget in the tree.
   ///
@@ -938,8 +935,7 @@ class DropdownMenuItemNew<T> extends _DropdownMenuItemContainer {
     this.enabled = true,
     AlignmentGeometry alignment = AlignmentDirectional.centerStart,
     required Widget child,
-  }) : assert(child != null),
-        super(key: key, alignment:alignment, child: child);
+  }) : super(key: key, alignment:alignment, child: child);
 
   /// Called when the dropdown menu item is tapped.
   final VoidCallback? onTap;
@@ -967,8 +963,7 @@ class DropdownButtonHideUnderlineNew extends InheritedWidget {
   const DropdownButtonHideUnderlineNew({
     Key? key,
     required Widget child,
-  }) : assert(child != null),
-        super(key: key, child: child);
+  }) :  super(key: key, child: child);
 
   /// Returns whether the underline of [DropdownButtonNew] widgets should
   /// be hidden.
@@ -1084,11 +1079,6 @@ class DropdownButtonNew<T> extends StatefulWidget {
       'Either zero or 2 or more [DropdownMenuItemNew]s were detected '
       'with the same value',
   ),
-        assert(elevation != null),
-        assert(iconSize != null),
-        assert(isDense != null),
-        assert(isExpanded != null),
-        assert(autofocus != null),
         assert(itemHeight == null || itemHeight >=  kMinInteractiveDimension),
         super(key: key);
 
@@ -1765,12 +1755,7 @@ class DropdownButtonFormField<T> extends FormField<T> {
       'Either zero or 2 or more [DropdownMenuItemNew]s were detected '
       'with the same value',
   ),
-        assert(elevation != null),
-        assert(iconSize != null),
-        assert(isDense != null),
-        assert(isExpanded != null),
         assert(itemHeight == null || itemHeight >= kMinInteractiveDimension),
-        assert(autofocus != null),
         decoration = decoration ?? InputDecoration(focusColor: focusColor),
         super(
         key: key,

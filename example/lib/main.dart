@@ -46,7 +46,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  String jsonString = "";
+  final String jsonString;
   MyApp(this.jsonString);
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class MyApp extends StatelessWidget {
 }
 
 class MyForm extends StatefulWidget {
-  String jsonString = "";
+  final String jsonString;
   MyForm(this.jsonString);
   @override
   _MyFormState createState() => _MyFormState(jsonString);

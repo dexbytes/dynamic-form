@@ -8,6 +8,7 @@ class SuffixCloseIcon extends StatefulWidget {
   const SuffixCloseIcon({Key? key,this.textController,this.iconColor,this.iconClicked,this.iconWidget}) : super(key: key);
 
   @override
+  // ignore: no_logic_in_create_state
   _IconClearTextFormFiledState createState() => _IconClearTextFormFiledState(textController:textController);
 }
 

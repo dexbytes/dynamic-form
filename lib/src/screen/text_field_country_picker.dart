@@ -7,6 +7,7 @@ class TextFieldCountryPickerView extends StatefulWidget {
   final Function (String fieldKey,Map<String,String> fieldValue) onChangeValue ;
    const TextFieldCountryPickerView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration,this.nextFieldKey = ""}) : super(key: key);
   @override
+  // ignore: no_logic_in_create_state
   _TextFieldCountryPickerState createState() => _TextFieldCountryPickerState(jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration: viewConfiguration,nextFieldKey:nextFieldKey!);
 }
 class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
@@ -22,12 +23,12 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
   TelTextFieldConfiguration? viewConfiguration;
   CountryPickerViewConfig? viewConfig;
   Function (String fieldKey,Map<String,String> fieldValue) onChangeValue ;
-  final StreamController<bool> _fieldStreamControl = StreamController<bool>();
+  StreamController<bool> get _fieldStreamControl => StreamController<bool>();
 
   OverlayEntry? overlayEntry;
   Stream get onVariableChanged => _fieldStreamControl.stream;
   late FocusNode currentFocusNode;
-  late FocusNode nextFocusNode;
+  late FocusNode? nextFocusNode;
   bool checkValidOnChange = false;
   bool checkValid = true;
   bool checkValidOnSubmit = false;
@@ -234,7 +235,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
     }
   }
 
-  _autoValidate({bool checkValidOnSubmit = false}){
+  _autoValidate(){
     if(checkValidOnChange){
       return AutovalidateMode.onUserInteraction;
     }
@@ -264,7 +265,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
           obscureText = snapshot.data;
         }
         return TextFormField(
-        key: _formTelFieldKey,focusNode: currentFocusNode,strutStyle:StrutStyle(),
+        key: _formTelFieldKey,focusNode: currentFocusNode,strutStyle:const StrutStyle(),
         readOnly: textFieldModel!.validation!.isReadOnly!,
         enabled: !textFieldModel!.validation!.isDisabled!,
         controller: _nameController,
@@ -339,7 +340,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
 
   void moveToNextField(String value) {
     if(nextFocusNode!=null && commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType) == null){
-      nextFocusNode.requestFocus();
+      nextFocusNode!.requestFocus();
     }
   }
 }

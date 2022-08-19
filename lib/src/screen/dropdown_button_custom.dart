@@ -1001,7 +1001,7 @@ class DropdownButton2<T> extends StatefulWidget {
   /// If [value] is null and the button is disabled, [disabledHint] will be displayed
   /// if it is non-null. If [disabledHint] is null, then [hint] will be displayed
   /// if it is non-null.
-  DropdownButton2({
+  DropdownButton2({Key? key,
   // super.key,
   required this.items,
   this.selectedItemBuilder,
@@ -1069,7 +1069,7 @@ class DropdownButton2<T> extends StatefulWidget {
   'with the same value',
   ),
   _inputDecoration = null,
-  _isEmpty = false;
+  _isEmpty = false, super(key: key);
 
   DropdownButton2._formField({
   // super.key,
@@ -1886,7 +1886,7 @@ class DropdownButtonFormField2<T> extends FormField<T> {
   ///
   /// The `items`, `elevation`, `iconSize`, `isDense`, `isExpanded`,
   /// `autofocus`, and `decoration`  parameters must not be null.
-  DropdownButtonFormField2({
+  DropdownButtonFormField2({Key? key,
   // super.key,
   required List<DropdownMenuItem<T>>? items,
   DropdownButtonBuilder? selectedItemBuilder,
@@ -1955,7 +1955,7 @@ class DropdownButtonFormField2<T> extends FormField<T> {
   'with the same value',
   ),
   decoration = decoration ?? InputDecoration(focusColor: focusColor),
-  super(
+  super(key: key,
   initialValue: value,
   autovalidateMode: autovalidateMode ?? AutovalidateMode.disabled,
   builder: (FormFieldState<T> field) {

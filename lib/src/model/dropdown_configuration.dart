@@ -53,10 +53,7 @@ class DropdownConfiguration {
   /// The padding of menu items
   late EdgeInsetsGeometry? _itemPadding = const EdgeInsets.only(left: 14, right: 14);
   /// The width of the dropdown menu
-  late double? _dropdownWidth = -1;
   late double? _dropdownMaxHeight = 100;
-  /// The inner padding of the dropdown menu
-  late EdgeInsetsGeometry? _dropdownPadding;
   /// The highlight color of the current selected item
   late Color? _selectedItemHighlightColor;
 
@@ -134,6 +131,10 @@ class DropdownConfiguration {
   }
   set setDropdownElevation (int value){
     _dropdownElevation = value;
+  }
+
+  set setDropdownMaxHeight (double value){
+    _dropdownMaxHeight = value;
   }
 
 }

@@ -14,7 +14,7 @@ class ResponseParser{
     _currentFormNumber = value;
   }
 
-  static late Map<String,FocusNode> _fieldFocusNode = {};
+  static late final Map<String,FocusNode> _fieldFocusNode = {};
   Map<String,FocusNode> get getFieldFocusNode => _fieldFocusNode;
   set setFieldFocusNode (String fieldName){
     _fieldFocusNode[fieldName] = FocusNode();

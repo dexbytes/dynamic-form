@@ -7,6 +7,7 @@ class TextFieldView extends StatefulWidget {
   final Function (String fieldKey,String fieldValue) onChangeValue ;
    const TextFieldView({Key? key, required this.jsonData,required this.onChangeValue,this.viewConfiguration,this.nextFieldKey = ""}) : super(key: key);
   @override
+  // ignore: no_logic_in_create_state
   _TextFieldsState createState() => _TextFieldsState(jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration: viewConfiguration,nextFieldKey: nextFieldKey);
 }
 class _TextFieldsState extends State<TextFieldView> {
@@ -23,7 +24,7 @@ class _TextFieldsState extends State<TextFieldView> {
   TextFieldConfiguration? viewConfiguration;
   ViewConfig? viewConfig;
   Function (String fieldKey,String fieldValue) onChangeValue ;
-  final StreamController<bool> _fieldStreamControl = StreamController<bool>();
+  StreamController<bool> get _fieldStreamControl => StreamController<bool>();
 
   OverlayEntry? overlayEntry;
   Stream get onVariableChanged => _fieldStreamControl.stream;
@@ -247,7 +248,7 @@ class _TextFieldsState extends State<TextFieldView> {
     }
   }
 
-  _autoValidate({bool checkValidOnSubmit = false}){
+  _autoValidate(){
     if(checkValidOnChange){
       return AutovalidateMode.onUserInteraction;
     }
@@ -304,7 +305,7 @@ class _TextFieldsState extends State<TextFieldView> {
               if(mounted){
                 onChangeValue.call(fieldKey,value);
                 String? validate = commonValidation.checkValidation(enteredValue:value,validationStr: textFieldModel!.validationStr!,formFieldType:formFieldType);
-
+                debugPrint("$validate");
                 // if(validate !=null ){
                 //   textFieldHeight = 80;
                 // }else{
