@@ -150,6 +150,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
       filter = [];
       //filter.add(FilteringTextInputFormatter.digitsOnly);
       filter.add(FilteringTextInputFormatter.allow(RegExp(keyText)));
+      filter.add(FilteringTextInputFormatter.deny('+'));
       return filter;
     }
     return filter;

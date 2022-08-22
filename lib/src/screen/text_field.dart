@@ -292,7 +292,7 @@ class _TextFieldsState extends State<TextFieldView> {
           child: TextFormField(
           focusNode: currentFocusNode,
             //strutStyle:StrutStyle(),
-          readOnly: (formFieldType == 'date')?true:textFieldModel!.validation!.isReadOnly!,
+          readOnly: textFieldModel!.validation!.isReadOnly!,
           enabled: !textFieldModel!.validation!.isDisabled!,
             onTap: (){
               if (formFieldType == 'date' && !(textFieldModel!.validation!.isReadOnly!)) {
