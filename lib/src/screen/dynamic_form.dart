@@ -14,6 +14,7 @@ class DynamicFormState extends State<DynamicForm> {
   String jsonEncoded;
   Stream get onVariableChanged => DataRefreshStream.instance.getFormFieldsStream.stream;
   List<dynamic> _formFieldList = [];
+  List<String> fieldsForValidate = [];
   final _formKey = GlobalKey<FormState>();
   AutovalidateMode autovalidateMode = AutovalidateMode.disabled;
 
@@ -24,6 +25,11 @@ class DynamicFormState extends State<DynamicForm> {
 
   //We will include the entered values in the map from field on submit click
   Map<String,dynamic> formSubmitData = <String,dynamic>{};
+ 
+  Map<String,dynamic> autoValidateFieldList = <String,bool>{};
+  final StreamController<bool> _fieldStreamControl = StreamController<bool>.broadcast();
+
+  Stream get onAutoValidateChanged => _fieldStreamControl.stream;
 
   //Filter form field according type from json and return view
   Widget _getFormField({required Map<String,dynamic> data, Map<String,dynamic>? nextData}){
@@ -31,11 +37,16 @@ class DynamicFormState extends State<DynamicForm> {
     String nextFieldKey = "";
     String currentElementKey = "";
     String currentElementType = "";
+    bool isCurrentFieldRequired = false;
 
     if(data.containsKey("elementType") && data["elementType"].isNotEmpty)
     {
       currentElementType = data["elementType"].toString().toLowerCase();
       currentElementKey = data["elementConfig"]['name'];
+    }
+    if(data.containsKey("validation") && data["validation"] != null)
+    {
+      isCurrentFieldRequired = data["validation"]['required']??false;
     }
 
     if(nextData!=null && nextData.isNotEmpty && nextData.containsKey("elementType") && nextData["elementType"].isNotEmpty){
@@ -50,36 +61,66 @@ class DynamicFormState extends State<DynamicForm> {
     }
 
     if(currentElementType.isNotEmpty){
-      switch(currentElementType){
+      autoValidateFieldList[currentElementKey] = false;
+      if (currentElementType != "input" && isCurrentFieldRequired) {
+        fieldsForValidate.add(currentElementKey);
+      }
+
+      switch(currentElementType) {
         case "input":
           responseParser.setFieldFocusNode = currentElementKey;
-          if(nextFieldKey.isNotEmpty){
+          if (nextFieldKey.isNotEmpty) {
             responseParser.setFieldFocusNode = nextFieldKey;
           }
           //Open mobile field
-          if(data.containsKey("elementConfig") && data["elementConfig"].containsKey("type") && data["elementConfig"]["type"].toString().toLowerCase() == "tel"){
-            return TextFieldCountryPickerView(jsonData: data,onChangeValue: (String fieldKey, Map<String,String> value){
-              formSubmitData[fieldKey] = value;
-            },nextFieldKey: nextFieldKey);
+          if (data.containsKey("elementConfig") &&
+              data["elementConfig"].containsKey("type") &&
+              data["elementConfig"]["type"].toString().toLowerCase() == "tel") {
+            return TextFieldCountryPickerView(jsonData: data,
+                onChangeValue: (String fieldKey, Map<String, String> value) {
+                  formSubmitData[fieldKey] = value;
+                },
+                nextFieldKey: nextFieldKey);
           }
-          return TextFieldView(jsonData: data,onChangeValue: (String fieldKey, String value){
+          return TextFieldView(
+              jsonData: data, onChangeValue: (String fieldKey, String value) {
             formSubmitData[fieldKey] = value;
-          },nextFieldKey: nextFieldKey);
+          }, nextFieldKey: nextFieldKey);
 
         case "select":
-          return DropDown(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
-            formSubmitData[fieldKey] = value;
-          });
+          return StreamBuilder(
+              stream: onAutoValidateChanged,
+              builder: (BuildContext context,
+                  AsyncSnapshot<dynamic> snapshot) {
+                return DropDown(jsonData: data,
+                    autoValidate: snapshot.hasData??false,
+                    onChangeValue: (String fieldKey, List<String> value) {
+                      formSubmitData[fieldKey] = value;
+                    });
+              });
 
         case "radio":
-          return RadioButton(jsonData: data,onChangeValue: (String fieldKey, String value){
-            formSubmitData[fieldKey] = value;
-          });
+            return StreamBuilder(
+                stream: onAutoValidateChanged,
+                builder: (BuildContext context,
+                    AsyncSnapshot<dynamic> snapshot) {
+                  return RadioButton(jsonData: data,
+                      autoValidate: snapshot.hasData??false,
+                      onChangeValue: (String fieldKey, String value) {
+                        formSubmitData[fieldKey] = value;
+                      });
+                });
 
           case "checkbox":
-          return CheckBoxWidget(jsonData: data,onChangeValue: (String fieldKey, List<String> value){
+          return StreamBuilder(
+              stream: onAutoValidateChanged,
+              builder: (BuildContext context,
+                  AsyncSnapshot<dynamic> snapshot) {
+                return CheckBoxWidget(jsonData: data,
+                    autoValidate: snapshot.hasData??false,
+                    onChangeValue: (String fieldKey, List<String> value){
             formSubmitData[fieldKey] = value;
-          });
+          });  });
 
       }
     }
@@ -117,6 +158,18 @@ class DynamicFormState extends State<DynamicForm> {
     }
     else */
     if(checkValidOnSubmit) {
+      if(fieldsForValidate.isNotEmpty){
+        fieldsForValidate.map((e){
+          if(formSubmitData.containsKey(e)){
+            if(formSubmitData[e] == null || formSubmitData[e] == ''){
+              setState(() {
+                autoValidateFieldList[e] = true;
+              });
+              _fieldStreamControl.sink.add( autoValidateFieldList[e]);
+            }
+          }
+        }).toList();
+      }
       return AutovalidateMode.onUserInteraction;
     }
     return AutovalidateMode.disabled;

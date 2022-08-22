@@ -2,17 +2,19 @@ part of dynamic_json_form;
 
 class RadioButton extends StatefulWidget {
   final List<RadioButtonOptions>? optionList;
+  final bool autoValidate;
   final Map<String,dynamic> jsonData;
+
   final RadioButtonConfiguration? viewConfiguration;
   final Function (String fieldKey,String fieldValue) onChangeValue ;
 
   const RadioButton({Key? key,required this.jsonData,required this.onChangeValue,
     this.optionList = const [],
-    this.viewConfiguration
+    this.viewConfiguration, required this.autoValidate
   }) : super(key: key);
 
   @override
-  _RadioButtonState createState() => _RadioButtonState(optionList: this.optionList,jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration:viewConfiguration);
+  _RadioButtonState createState() => _RadioButtonState(optionList: this.optionList,autoValidate:autoValidate,jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration:viewConfiguration);
 
 }
 
@@ -27,20 +29,32 @@ class _RadioButtonState extends State<RadioButton> {
   String placeholder = "";
   String value = "";
   RadioButtonOptions _initialValue = RadioButtonOptions();
-  String? selectedOption;
+  String? selectedOption = '';
+  bool autoValidate = false;
 
-  Function (String fieldKey,String fieldValue) onChangeValue ;
+
+
+  Function (String fieldKey, String fieldValue) onChangeValue;
+
   _RadioButtonState(
-      {required this.jsonData,this.optionList,required this.onChangeValue,this.viewConfiguration}) {
+      {required this.jsonData, this.optionList, required this.onChangeValue, this.viewConfiguration, this.autoValidate = false}) {
     radioButtonModel ??= responseParser.radioButtonFormFiledParsing(
         jsonData: jsonData, updateCommon: true);
-    setValues(radioButtonModel,jsonData);
+    setValues(radioButtonModel, jsonData);
   }
 
-  //Initial value set
-  void setValues(RadioButtonModel? radioButtonModel, Map<String, dynamic> jsonData) {
+  @override
+  void didUpdateWidget(oldWidget) {
+    autoValidate = widget.autoValidate;
+    super.didUpdateWidget(oldWidget);
+  }
 
-    viewConfiguration  = viewConfiguration ?? ConfigurationSetting.instance._radioButtonConfiguration;
+
+  //Initial value set
+  void setValues(RadioButtonModel? radioButtonModel,
+      Map<String, dynamic> jsonData) {
+    viewConfiguration = viewConfiguration ??
+        ConfigurationSetting.instance._radioButtonConfiguration;
 
     if (radioButtonModel != null) {
       try {
@@ -54,31 +68,40 @@ class _RadioButtonState extends State<RadioButton> {
         fieldKey = radioButtonModel.elementConfig!.name!;
         label = radioButtonModel.elementConfig!.label!;
 
-        value = radioButtonModel.value??"";
-        String tempVal = radioButtonModel.elementConfig!.initialValue??'';
+        value = radioButtonModel.value ?? "";
+        String tempVal = radioButtonModel.elementConfig!.initialValue ?? '';
 
         if (radioButtonModel.elementConfig!.options!.isNotEmpty) {
-          optionList = radioButtonModel.elementConfig!.options!.map((e) => RadioButtonOptions(value: e.value,displayValue: e.displayValue)).toList();
-          optionList!.map((e){
-            if(tempVal.toString().trim().isNotEmpty){
-              if(e.value == tempVal){
+          optionList = radioButtonModel.elementConfig!
+              .options!
+              .map((e) =>
+              RadioButtonOptions(value: e.value, displayValue: e.displayValue))
+              .toList();
+          optionList!.map((e) {
+            if (tempVal
+                .toString()
+                .trim()
+                .isNotEmpty) {
+              if (e.value == tempVal) {
                 selectedOption = tempVal;
                 _initialValue = e;
               }
             }
           }).toList();
         }
-         onChangeValue.call(fieldKey,selectedOption!);
+        onChangeValue.call(fieldKey, selectedOption!);
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var radioButtonAlignment = viewConfiguration!._radioButtonsAlign == LabelAndOptionsAlignment.horizontal?Axis.horizontal:Axis.vertical;
+    var radioButtonAlignment = viewConfiguration!._radioButtonsAlign ==
+        LabelAndOptionsAlignment.horizontal ? Axis.horizontal : Axis.vertical;
 
     //Label
-    Widget label =  Text(radioButtonModel!.elementConfig!.label??'',style: viewConfiguration!._labelTextStyle);
+    Widget label = Text(radioButtonModel!.elementConfig!.label ?? '',
+        style: viewConfiguration!._labelTextStyle);
 
     //Create group of radio buttons
     Widget radioButtons = RadioGroup<String>.builder(
@@ -86,46 +109,60 @@ class _RadioButtonState extends State<RadioButton> {
       groupValue: _initialValue,
       spaceBetween: 30,
       horizontalAlignment: MainAxisAlignment.start,
-      onChanged: (selectedValue) => setState(() {
-        _initialValue = selectedValue as RadioButtonOptions;
-        selectedOption = selectedValue.value!.toString();
-        onChangeValue.call(fieldKey,selectedOption!);
-      }),
-      items: optionList??[],
-      itemBuilder: (item) => RadioButtonBuilder(item.displayValue??""),
+      onChanged: (selectedValue) =>
+          setState(() {
+            _initialValue = selectedValue as RadioButtonOptions;
+            selectedOption = selectedValue.value!.toString();
+            onChangeValue.call(fieldKey, selectedOption!);
+          }),
+      items: optionList ?? [],
+      itemBuilder: (item) => RadioButtonBuilder(item.displayValue ?? ""),
       activeColor: viewConfiguration!._radioButtonActiveColor,
       textStyle: viewConfiguration!._optionTextStyle,
     );
 
-   // Widget errorMessage = Text(radioButtonModel!.validationStr!);
+      Widget errorMessage = (selectedOption != null && selectedOption!.toString().trim().isNotEmpty)?Container():
+      Padding(
+        padding: const EdgeInsets.only(left: 15.0, top: 2),
+        child:Text(radioButtonModel!.validation!.errorMessage!.required.toString()??'',style: const TextStyle(color:  Color(0xFFD32F2F),fontSize: 12),));
 
-    return LabelAndOptionsAlignment.vertical == viewConfiguration!._labelAndRadioButtonAlign?
-    //Vertical alignment of radio buttons with label
-    Row(
-      children: [
-        Flexible( child:Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            label,
-            const SizedBox(height: 3,),
-            radioButtons
-          ],))
-      ],
-    ):
-    //Horizontal alignment of radio buttons with label
-    Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top:5.0),
-          child: label,
-        ),
-        const SizedBox(width: 15,),
-        Expanded(child: radioButtons,)
-      ],);
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              LabelAndOptionsAlignment.vertical ==
+                  viewConfiguration!._labelAndRadioButtonAlign ?
+              //Vertical alignment of radio buttons with label
+              Row(
+                children: [
+                  Flexible(child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      label,
+                      const SizedBox(height: 3,),
+                      radioButtons,
+                    ],))
+                ],
+              ) :
+              //Horizontal alignment of radio buttons with label
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: label,
+                  ),
+                  const SizedBox(width: 15,),
+                  Expanded(child: radioButtons,)
+                ],),
+              const SizedBox(height: 5,),
+              autoValidate ? errorMessage : Container()
+            ],
+          );
+
   }
 }
 

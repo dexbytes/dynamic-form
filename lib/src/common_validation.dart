@@ -48,6 +48,9 @@ class CommonValidation {
       case 'number':
         return errorMsg = isValidNumber(enteredValue,validationStr);
 
+        case 'dob':
+        return errorMsg = 'Please select';
+
       case 'text_multiline':
         return errorMsg = isValidEmail(enteredValue,validationStr);
 

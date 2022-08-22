@@ -31,7 +31,8 @@ class _FirstScreenState extends State<FirstScreen> {
                 Text(widget.apiCallingTime),
 
                 //Get all fields of form
-                DynamicForm(jsonString,dynamicFormKey: _formKeyNew, finalSubmitCallBack: (Map<String, dynamic> data) async {
+                DynamicForm(jsonString,dynamicFormKey: _formKeyNew,
+                  finalSubmitCallBack: (Map<String, dynamic> data) async {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => SecondScreen(data: data)),
@@ -43,6 +44,7 @@ class _FirstScreenState extends State<FirstScreen> {
                     onPressed: () async {
                       if(_formKeyNew.currentState!.validateFields()){
                      var data =  _formKeyNew.currentState!.getFormData();
+
                      if(data!.isNotEmpty){
                        Navigator.push(
                          context,

@@ -443,13 +443,6 @@ class _TextFieldsState extends State<TextFieldView> {
     if (newDate == null) return;
     _nameController!.text = packageUtil.getText("dd MMMM, yyyy",newDate).toString();
     onChangeValue.call(fieldKey,newDate.millisecondsSinceEpoch.toString());
-    /*setState(() {
-      date = newDate;
-      nameController?.text = getText().toString();
-      widget.selectedValue?.call(date);
-    });*/
-    // setState(() => date = newDate
-    // );
   }
 
 }
@@ -476,20 +469,12 @@ class ViewConfig{
    contentPadding: viewConfiguration!._contentPadding,
      border: viewConfiguration!._border,
      floatingLabelBehavior: FloatingLabelBehavior.never,
-     //isDense:true,
      labelStyle: viewConfiguration!._labelStyle,
      errorStyle:  viewConfiguration!._errorStyle,
      counterStyle: viewConfiguration!._counterStyle,
      suffixStyle: viewConfiguration!._suffixStyle,
      prefixStyle: viewConfiguration!._prefixStyle,
      focusedBorder: viewConfiguration!._focusedBorder,
-     //suffixText: viewConfiguration!._suffixText,
-     //prefixText: viewConfiguration!._prefixText,
-     // prefixIcon: ,
-     // suffix: ,
-     // suffixIconColor: ,
-     // counter: ,
-     //prefix: viewConfiguration!._prefix,
      alignLabelWithHint: true,
      filled: viewConfiguration!._filled,
      fillColor: viewConfiguration!._fillColor,

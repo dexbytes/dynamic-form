@@ -4,17 +4,18 @@ part of dynamic_json_form;
 class DropDown extends StatefulWidget {
   final List<Options>? optionList;
   final String? hint;
+  final bool autoValidate;
   final Map<String,dynamic> jsonData;
   final DropdownConfiguration? viewConfiguration;
   final Function (String fieldKey,List<String> fieldValue) onChangeValue ;
 
   const DropDown({Key? key,required this.jsonData,required this.onChangeValue,
     this.optionList = const [],
-    this.hint,this.viewConfiguration
+    this.hint,this.viewConfiguration, required this.autoValidate
   }) : super(key: key);
 
   @override
-  _DropDownState createState() => _DropDownState(optionList: this.optionList,jsonData: jsonData,onChangeValue: onChangeValue,viewConfiguration:viewConfiguration);
+  _DropDownState createState() => _DropDownState(optionList: this.optionList,jsonData: jsonData, autoValidate:autoValidate,onChangeValue: onChangeValue,viewConfiguration:viewConfiguration);
 }
 
 class _DropDownState extends State<DropDown> {
@@ -32,10 +33,11 @@ class _DropDownState extends State<DropDown> {
   String placeholder = "";
   String value = "";
   List<String>? selectedOption = [];
+  bool autoValidate = false;
 
   Function (String fieldKey,List<String> fieldValue) onChangeValue ;
   _DropDownState(
-      {required this.jsonData,this.optionList,required this.onChangeValue,this.viewConfiguration}) {
+      {required this.jsonData,this.optionList,required this.onChangeValue, this.autoValidate = false,this.viewConfiguration}) {
     dropDownModel ??= responseParser.dropDownFormFiledParsing(
         jsonData: jsonData, updateCommon: true);
 
@@ -45,11 +47,25 @@ class _DropDownState extends State<DropDown> {
   }
 
   @override
+  void didUpdateWidget(oldWidget) {
+    autoValidate = widget.autoValidate;
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    //ErrorMessage
+    Widget errorMessage = (selectedOption != null && selectedOption!.isNotEmpty)?Container():
+    Padding(
+      padding: const EdgeInsets.only(left: 15.0, top: 2),
+      child: Text(dropDownModel!.validation!.errorMessage!.required.toString()??'',style: const TextStyle(color: Color(0xFFD32F2F),fontSize: 12),),
+    );
+
     return Padding(
       padding: const EdgeInsets.only(left: 0, right: 0),
       child:
       Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           !enableLabel?const SizedBox(height: 0,):Row(
             children: [
@@ -117,6 +133,8 @@ class _DropDownState extends State<DropDown> {
               offset: const Offset(0, 0),
             ),
           ),
+          const SizedBox(height: 5,),
+          autoValidate ? errorMessage : Container()
         ],
       )
 

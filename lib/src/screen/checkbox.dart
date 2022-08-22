@@ -3,16 +3,17 @@ part of dynamic_json_form;
 class CheckBoxWidget extends StatefulWidget {
   final List<Options> optionList;
   final Map<String,dynamic> jsonData;
+  final bool autoValidate;
   final CheckBoxConfiguration? viewConfiguration;
   final Function (String fieldKey,List<String> fieldValue) onChangeValue ;
 
   const CheckBoxWidget({Key? key,required this.jsonData,required this.onChangeValue,
     this.optionList = const [],
-    this.viewConfiguration
+    this.viewConfiguration, required this.autoValidate
   }) : super(key: key);
 
   @override
-  _CheckBoxWidgetState createState() => _CheckBoxWidgetState(optionList: this.optionList,jsonData: jsonData,onChangeValue: onChangeValue,
+  _CheckBoxWidgetState createState() => _CheckBoxWidgetState(optionList: this.optionList,autoValidate:autoValidate,jsonData: jsonData,onChangeValue: onChangeValue,
       viewConfiguration:viewConfiguration);
 }
 
@@ -26,14 +27,21 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
   bool enableLabel = true;
   String value = "";
   List<String>? selectedOption = [];
+  bool autoValidate = false;
 
   Function (String fieldKey,List<String> fieldValue) onChangeValue ;
   Options _intialValue = Options();
 
-  _CheckBoxWidgetState({required this.jsonData,required this.optionList,required this.onChangeValue,this.viewConfiguration}) {
+  _CheckBoxWidgetState({required this.jsonData,required this.optionList,required this.onChangeValue,this.autoValidate = false,this.viewConfiguration}) {
     checkBoxModel ??= responseParser.checkBoxFormFiledParsing(jsonData: jsonData, updateCommon: true);
     setValues(checkBoxModel,jsonData);
 
+  }
+
+  @override
+  void didUpdateWidget(oldWidget) {
+    autoValidate = widget.autoValidate;
+    super.didUpdateWidget(oldWidget);
   }
 
   //Initial value set
@@ -76,6 +84,13 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
     //Label
     Widget label =  Text(checkBoxModel!.elementConfig!.label??'',style: viewConfiguration!._labelTextStyle,  strutStyle: StrutStyle(),);
 
+    //ErrorMessage
+    Widget errorMessage = (selectedOption != null && selectedOption!.isNotEmpty)?Container():
+    Padding(
+      padding: const EdgeInsets.only(left: 15.0, top: 2),
+      child:Text(checkBoxModel!.validation!.errorMessage!.required.toString()??'',style: const TextStyle(color:  Color(0xFFD32F2F),fontSize: 12)),);
+
+
     //Create checkbox list
     Widget checkBoxOptions = CheckBoxGroup<String>.builder(
       direction: checkBoxAlignment,
@@ -99,33 +114,40 @@ class _CheckBoxWidgetState extends State<CheckBoxWidget> {
       activeColor: viewConfiguration!._checkboxActiveColor,
     );
 
-    return LabelAndOptionsAlignment.vertical == viewConfiguration!._labelAndRadioButtonAlign?
-    //Vertical alignment of checkboxes with label
-    Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-       Flexible( child:Column(
-         mainAxisAlignment: MainAxisAlignment.start,
-         crossAxisAlignment: CrossAxisAlignment.start,
-         mainAxisSize: MainAxisSize.min,
-         children: [
-           label,
-           const SizedBox(height: 3,),
-           checkBoxOptions
-         ],))
-      ],
+    LabelAndOptionsAlignment.vertical == viewConfiguration!._labelAndRadioButtonAlign?
+      //Vertical alignment of checkboxes with label
+      Row(
+      children: [
+      Flexible( child:Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        label,
+        const SizedBox(height: 3,),
+        checkBoxOptions
+      ],))
+    ],
     ):
     //Horizontal alignment of checkboxes with label
     Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-      Padding(
-        padding: const EdgeInsets.only(top:5.0),
-        child: label,
-      ),
-      const SizedBox(width: 15,),
-      Expanded(child: checkBoxOptions,)
-    ],);
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: [
+    Padding(
+    padding: const EdgeInsets.only(top:5.0),
+    child: label,
+    ),
+    const SizedBox(width: 15,),
+    Expanded(child: checkBoxOptions,)
+    ],),
+    const SizedBox(height: 5,),
+    autoValidate ? errorMessage : Container()
+      ],
+    );
   }
 }
 
@@ -307,6 +329,8 @@ class _CheckBoxCustomState extends State<CheckBoxCustom> {
       }
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {

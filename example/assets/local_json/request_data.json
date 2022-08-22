@@ -135,7 +135,7 @@
       "elementType": "input",
       "elementConfig": {
         "type": "date",
-        "name" : "date_of_birth",
+        "name" : "dob",
         "label" : "Date of Birth",
         "enableLabel":false,
         "placeholder": "Date of Birth",
@@ -245,28 +245,18 @@
           {
             "value":"other",
             "displayValue":"Other"
-          },
-          {
-            "value":"123",
-            "displayValue":"Other"
-          },{
-            "value":"sad",
-            "displayValue":"Other"
-          },{
-            "value":"fd",
-            "displayValue":"Other"
-          },{
-            "value":"dss",
-            "displayValue":"Other"
           }
         ],
-        "initialValue":"other"
+        "initialValue":""
       },
       "value":"",
       "validation":{
         "required":true,
         "isReadOnly":false,
-        "isDisabled":false
+        "isDisabled":false,
+        "errorMessage": {
+          "required":"Please select at least one"
+        }
       },
       "valid":false
     },
@@ -290,11 +280,14 @@
         ],
         "isMulitpleSelect":false
       },
-      "value":"Salaried",
+      "value":"",
       "validation":{
         "required":true,
         "isReadOnly":false,
-        "isDisabled":false
+        "isDisabled":false,
+        "errorMessage": {
+          "required":"Please select at least one"
+        }
       },
       "valid":false
     },
@@ -322,8 +315,12 @@
       "validation":{
         "required":true,
         "isReadOnly":false,
-        "isDisabled":false
+        "isDisabled":false,
+        "errorMessage": {
+          "required":"Please select at least one"
+        }
       },
+
       "valid":false
     },
     {
