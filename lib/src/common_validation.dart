@@ -24,7 +24,7 @@ class CommonValidation {
   }
 
   //Check all field validation
-  String? checkValidation({required String enteredValue,required Map<String, dynamic> validationStr,required String formFieldType}){
+  String? checkValidation({required String enteredValue,required Map<String, dynamic> validationStr,required String formFieldType, isPickFromCalendar}){
     String? errorMsg;
     switch(formFieldType){
       case 'text':
@@ -48,8 +48,9 @@ class CommonValidation {
       case 'number':
         return errorMsg = isValidNumber(enteredValue,validationStr);
 
-        case 'dob':
-        return errorMsg = 'Please select';
+        case 'date':
+
+          return errorMsg = checkValidDate(enteredValue,validationStr,isPickFromCalendar:isPickFromCalendar);
 
       case 'text_multiline':
         return errorMsg = isValidEmail(enteredValue,validationStr);
@@ -325,6 +326,40 @@ class CommonValidation {
         RegExp regex = RegExp(rejex.trim());
         bool isMatched = regex.hasMatch(value);
         errorMsg = isMatched?null: errorMsg = errorMessage.containsKey('rejex')?errorMessage['rejex']:"rejex key missing";
+      }
+      else{
+        errorMsg = null;
+      }
+    }
+    catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return errorMsg;
+  }
+
+  //Number validation
+  String? checkValidDate(String value,Map<String, dynamic> validationStr,{isPickFromCalendar, dateFormat}){
+
+    String? errorMsg;
+    try {
+      Map<String,dynamic> validation = validationStr;
+      Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
+
+      /*int minLine = 1;
+    int maxLine = 20;*/
+
+      bool required = validation.containsKey('required')?validation['required']: false;
+
+      if(value.trim().isEmpty){
+        errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
+      }
+      if(!isPickFromCalendar && value.trim().isNotEmpty){
+        if(value.contains("/")){
+          value.split("/");
+        }
+        errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
       }
       else{
         errorMsg = null;

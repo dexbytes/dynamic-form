@@ -57,8 +57,10 @@ class ElementConfig {
   String? firstDate;
   String? lastDate;
   String? initialDate;
+  String? dateFormat;
+  bool? pickDateFromCalender;
 
-  ElementConfig({this.type,this.firstDate,this.initialDate,this.lastDate,this.textCapitalization, this.name,this.keyboardRejex = "", this.label,this.enableLabel, this.placeholder, this.classProperty, this.resetIcon,this.nextName,this.minLine = 1,this.maxLine = 2});
+  ElementConfig({this.type,this.firstDate,this.pickDateFromCalender,this.initialDate,this.lastDate,this.textCapitalization, this.name,this.keyboardRejex = "", this.label,this.enableLabel, this.placeholder, this.classProperty, this.resetIcon,this.nextName,this.minLine = 1,this.maxLine = 2,this.dateFormat});
 
   ElementConfig.fromJson(Map<String, dynamic> json) {
   type = json['type'];
@@ -80,6 +82,8 @@ class ElementConfig {
   firstDate = json.containsKey('firstDate')?json['firstDate']:'';
   lastDate = json.containsKey('lastDate')?json['lastDate']:'';
   initialDate = json.containsKey('initialDate')?json['initialDate']:'';
+  dateFormat = json.containsKey('dateFormat')?json['dateFormat']:'';
+  pickDateFromCalender = json.containsKey('pickDateFromCalender')?json['pickDateFromCalender']:false;
   }
 
   Map<String, dynamic> toJson() {
@@ -99,6 +103,8 @@ class ElementConfig {
   data['firstDate'] = this.firstDate;
   data['lastDate'] = this.lastDate;
   data['initialDate'] = this.initialDate;
+  data['dateFormat'] = this.dateFormat;
+  data['pickDateFromCalender'] = this.pickDateFromCalender;
   return data;
   }
 }

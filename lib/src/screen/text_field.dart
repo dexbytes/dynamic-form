@@ -31,6 +31,7 @@ class _TextFieldsState extends State<TextFieldView> {
   late FocusNode nextFocusNode;
   bool checkValidOnChange = false;
   bool checkValid = true;
+  bool isPickFromCalendar = true;
   bool checkValidOnSubmit = false;
   bool isDoneOver = false;
   double textFieldHeight = 50;
@@ -166,6 +167,49 @@ class _TextFieldsState extends State<TextFieldView> {
     return textCapitalization;
 }
 
+  getDateFormatter({dateFormat = "mm/dd/yy"}){
+    switch(dateFormat.toString().toLowerCase()){
+        case "mm/dd/yy":
+        return MaskedTextInputFormatter(mask: 'xx/xx/xx', separator: '/', maxLength: 8);
+
+        case "dd/mm/yy":
+        return MaskedTextInputFormatter(mask: 'xx/xx/xx', separator: '/', maxLength: 8);
+
+        case "yy/mm/dd":
+        return MaskedTextInputFormatter(mask: 'xx/xx/xx', separator: '/', maxLength: 8);
+
+        case "mm-dd-yy":
+        return MaskedTextInputFormatter(mask: 'xx-xx-xx', separator: '-', maxLength: 8);
+
+        case "dd-mm-yy":
+        return MaskedTextInputFormatter(mask: 'xx-xx-xx', separator: '-', maxLength: 8);
+
+        case "yy-mm-dd":
+        return MaskedTextInputFormatter(mask: 'xx-xx-xx', separator: '-', maxLength: 8);
+
+       case "mm/dd/yyyy":
+        return MaskedTextInputFormatter(mask: 'xx/xx/xxxx', separator: '/', maxLength: 10);
+
+       case "dd/mm/yyyy":
+        return MaskedTextInputFormatter(mask: 'xx/xx/xxxx', separator: '/', maxLength: 10);
+
+      case "yyyy/mm/dd":
+        return MaskedTextInputFormatter(mask: 'xx/xx/xx', separator: '/', maxLength: 10);
+
+      case "mm-dd-yyyy":
+        return MaskedTextInputFormatter(mask: 'xx-xx-xxxx', separator: '-', maxLength: 10);
+
+      case "dd-mm-yyyy":
+        return MaskedTextInputFormatter(mask: 'xx-xx-xxxx', separator: '-', maxLength: 10);
+
+      case "yyyy-mm-dd":
+        return MaskedTextInputFormatter(mask: 'xxxx-xx-xx', separator: '-', maxLength: 10);
+
+      default:
+        return MaskedTextInputFormatter(mask: 'xx/xx/xxxx', separator: '/', maxLength: 10);
+    }
+  }
+
   List<TextInputFormatter>? inputFormatter({required String formFieldType}){
      String keyText = textFieldModel!.elementConfig!.keyboardRejex!;
     // String keyText = "^[a-zA-Z '-]+";
@@ -179,6 +223,11 @@ class _TextFieldsState extends State<TextFieldView> {
       //Not apply regex in this case
       if(formFieldTypeTemp=="email"||formFieldTypeTemp=="password"){
         filter = [];
+      } //Not apply regex in this case
+      else if(formFieldTypeTemp=="date" && !isPickFromCalendar){
+        String dateFormat = textFieldModel!.elementConfig!.dateFormat!;
+        filter = [];
+        filter.add(getDateFormatter(dateFormat: dateFormat),);
       }
     return filter;
 }
@@ -278,6 +327,10 @@ class _TextFieldsState extends State<TextFieldView> {
     if(fieldKey.isEmpty){
       return const SizedBox(height: 0,width: 0,);
     }
+
+    if (formFieldType == "date") {
+      isPickFromCalendar = textFieldModel!.elementConfig!.pickDateFromCalender??true;
+    }
     return Column(
       mainAxisSize: MainAxisSize.min,
       verticalDirection: fieldHelpPosition(),
@@ -292,10 +345,10 @@ class _TextFieldsState extends State<TextFieldView> {
           child: TextFormField(
           focusNode: currentFocusNode,
             //strutStyle:StrutStyle(),
-          readOnly: textFieldModel!.validation!.isReadOnly!,
+          readOnly: (formFieldType == "date" && isPickFromCalendar)?true:textFieldModel!.validation!.isReadOnly!,
           enabled: !textFieldModel!.validation!.isDisabled!,
             onTap: (){
-              if (formFieldType == 'date' && !(textFieldModel!.validation!.isReadOnly!)) {
+              if (formFieldType == 'date' && !(textFieldModel!.validation!.isReadOnly!) && isPickFromCalendar) {
                 pickDate(context,
                     firstDateTS: textFieldModel!.elementConfig!.firstDate,
                     initialDateTS: textFieldModel!.elementConfig!.initialDate,
@@ -483,7 +536,8 @@ class ViewConfig{
      /*   errorBorder: viewConfiguration!._errorBorder,
         focusedErrorBorder: viewConfiguration!._errorBorder,*/
         enabledBorder: viewConfiguration!._border,
-        hintText: textFieldModel.elementConfig!.placeholder??"",hintStyle: viewConfiguration!._hintStyle,
+        hintText: textFieldModel.elementConfig!.placeholder??"",
+     hintStyle: viewConfiguration!._hintStyle,
         label: !enableLabel?null
             :textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: viewConfiguration!._textStyle,):null,suffixIcon: null,counterText: "",errorMaxLines: 3
     );
@@ -560,4 +614,80 @@ class ViewConfig{
 class ActionConfig{
 
 }
+
+
+class MaskedTextInputFormatter extends TextInputFormatter {
+  final String mask;
+  final String separator;
+  final int maxLength;
+
+  MaskedTextInputFormatter({
+    required this.mask,
+    required this.separator,
+    required this.maxLength,
+  });
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.text.length >= 0 && newValue.text.length <= maxLength) {
+      if (newValue.text.length > oldValue.text.length) {
+        if (newValue.text.length > mask.length) return oldValue;
+        if (newValue.text.length < mask.length &&
+            mask[newValue.text.length - 1] == separator) {
+          return TextEditingValue(
+            text:
+            '${oldValue.text}$separator${newValue.text.substring(newValue.text.length - 1)}',
+            selection: TextSelection.collapsed(
+              offset: newValue.selection.end + 1,
+            ),
+          );
+        } else {
+          return newValue;
+        }
+      }
+      return newValue;
+    }
+    return oldValue;
+  }
+}
+
+class CardNumberFormatter extends TextInputFormatter {
+  final String separator;
+  final int? maxLength;
+
+  int separatorCount = 0;
+
+  CardNumberFormatter({
+    required this.separator,
+    this.maxLength,
+  });
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.text.length >= 0) {
+      if (newValue.text.length > oldValue.text.length) {
+        List str = newValue.text.toString().split("-");
+        print("str length : ${str.length}");
+
+        if (newValue.text.length >= 4 &&
+            newValue.text.length <= 15 &&
+            (newValue.text.length - (str.length - 1)) % 4 == 0) {
+          return TextEditingValue(
+            text: '${newValue.text}$separator',
+            selection: TextSelection.collapsed(
+              offset: newValue.selection.end + 1,
+            ),
+          );
+          //}
+        }
+        return newValue;
+      }
+      return newValue;
+    }
+    return oldValue;
+  }
+}
+
 

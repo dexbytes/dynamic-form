@@ -143,7 +143,9 @@
         "resetIcon": true,
         "firstDate":"631201842",
         "initialDate":"631201842",
-        "lastDate":"1546350642"
+        "lastDate":"1546350642",
+        "pickDateFromCalender": true,
+        "dateFormat": "yy/mm/dd"
       },
       "value": "",
       "validation": {
