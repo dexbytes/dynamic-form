@@ -3,7 +3,7 @@ import 'package:dynamic_json_form/parts.dart';
 import 'package:example/first_screen.dart';
 import 'package:example/time_duration.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+
 
 void main() async {
   // if you are using await in main function then add this line

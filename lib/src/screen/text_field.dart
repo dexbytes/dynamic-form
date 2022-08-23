@@ -146,8 +146,6 @@ class _TextFieldsState extends State<TextFieldView> {
     return keyBoardType;
 }
 
-
-
   //Get TextCapitalization
   TextCapitalization textCapitalize({required String textCapitalizeStr}){
     TextCapitalization textCapitalization = TextCapitalization.none;
@@ -266,6 +264,7 @@ class _TextFieldsState extends State<TextFieldView> {
     }
     return Container();
 }
+
   VerticalDirection fieldHelpPosition(){
     if(textFieldModel!.help!=null && textFieldModel!.help!.text!.isEmpty){
       return VerticalDirection.up;
@@ -328,9 +327,9 @@ class _TextFieldsState extends State<TextFieldView> {
       return const SizedBox(height: 0,width: 0,);
     }
 
-    if (formFieldType == "date") {
-      isPickFromCalendar = textFieldModel!.elementConfig!.pickDateFromCalender??true;
-    }
+    // if (formFieldType == "date") {
+    //   isPickFromCalendar = textFieldModel!.elementConfig!.pickDateFromCalender??true;
+    // }
     return Column(
       mainAxisSize: MainAxisSize.min,
       verticalDirection: fieldHelpPosition(),
@@ -459,6 +458,19 @@ class _TextFieldsState extends State<TextFieldView> {
     try {
       if ((firstDate.isBefore(tempDate) || firstDate.isAtSameMomentAs(tempDate)) && (tempDate.isBefore(lastDate) || lastDate.isAtSameMomentAs(tempDate))) {
         initialDate = tempDate;
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+
+
+   //check first date and last date
+    try {
+      if (lastDate.isBefore(firstDate) || firstDate.isAfter(lastDate) ) {
+        firstDate =  DateTime(DateTime.now().year - 100);
+        lastDate =  DateTime.now();
       }
     } catch (e) {
       if (kDebugMode) {
@@ -669,7 +681,9 @@ class CardNumberFormatter extends TextInputFormatter {
     if (newValue.text.length >= 0) {
       if (newValue.text.length > oldValue.text.length) {
         List str = newValue.text.toString().split("-");
-        print("str length : ${str.length}");
+        if (kDebugMode) {
+          print("str length : ${str.length}");
+        }
 
         if (newValue.text.length >= 4 &&
             newValue.text.length <= 15 &&

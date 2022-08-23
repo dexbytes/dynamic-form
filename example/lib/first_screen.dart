@@ -1,6 +1,6 @@
 import 'package:dynamic_json_form/parts.dart';
 import 'package:example/second_screen.dart';
-import 'package:flutter/material.dart';
+
 
 class FirstScreen extends StatefulWidget {
  final String jsonString;
@@ -28,7 +28,7 @@ class _FirstScreenState extends State<FirstScreen> {
           children: [
             Column(
               children: [
-                Text(widget.apiCallingTime),
+                //Text(widget.apiCallingTime),
 
                 //Get all fields of form
                 DynamicForm(jsonString,dynamicFormKey: _formKeyNew,

@@ -124,7 +124,7 @@ class _RadioButtonState extends State<RadioButton> {
       Widget errorMessage = (selectedOption != null && selectedOption!.toString().trim().isNotEmpty)?Container():
       Padding(
         padding: const EdgeInsets.only(left: 15.0, top: 2),
-        child:Text(radioButtonModel!.validation!.errorMessage!.required.toString()??'',style: const TextStyle(color:  Color(0xFFD32F2F),fontSize: 12),));
+        child:Text(radioButtonModel!.validation!.errorMessage!.required.toString(),style: const TextStyle(color:  Color(0xFFD32F2F),fontSize: 12),));
 
 
           return Column(

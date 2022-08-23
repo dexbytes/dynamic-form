@@ -137,15 +137,13 @@
         "type": "date",
         "name" : "dob",
         "label" : "Date of Birth",
-        "enableLabel":false,
         "placeholder": "Date of Birth",
         "class" : "form-control",
         "resetIcon": true,
-        "firstDate":"631201842",
+        "firstDate":"1546350642",
         "initialDate":"631201842",
-        "lastDate":"1546350642",
-        "pickDateFromCalender": true,
-        "dateFormat": "yy/mm/dd"
+        "lastDate":"631201842",
+        "pickDateFromCalender": false
       },
       "value": "",
       "validation": {
@@ -217,7 +215,6 @@
           }
         ]
       },
-      "value":"",
       "validation":{
         "required":true,
         "isReadOnly":false,
@@ -231,7 +228,7 @@
     {
       "elementType":"radio",
       "elementConfig":{
-        "name":"Gender",
+        "name":"gender",
         "label":"Gender",
         "enableLabel":true,
         "class":"form-control",

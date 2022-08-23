@@ -93,7 +93,7 @@ class DynamicFormState extends State<DynamicForm> {
               builder: (BuildContext context,
                   AsyncSnapshot<dynamic> snapshot) {
                 return DropDown(jsonData: data,
-                    autoValidate: snapshot.hasData??false,
+                    autoValidate: snapshot.hasData,
                     onChangeValue: (String fieldKey, List<String> value) {
                       formSubmitData[fieldKey] = value;
                     });
@@ -105,7 +105,7 @@ class DynamicFormState extends State<DynamicForm> {
                 builder: (BuildContext context,
                     AsyncSnapshot<dynamic> snapshot) {
                   return RadioButton(jsonData: data,
-                      autoValidate: snapshot.hasData??false,
+                      autoValidate: snapshot.hasData,
                       onChangeValue: (String fieldKey, String value) {
                         formSubmitData[fieldKey] = value;
                       });
@@ -117,7 +117,7 @@ class DynamicFormState extends State<DynamicForm> {
               builder: (BuildContext context,
                   AsyncSnapshot<dynamic> snapshot) {
                 return CheckBoxWidget(jsonData: data,
-                    autoValidate: snapshot.hasData??false,
+                    autoValidate: snapshot.hasData,
                     onChangeValue: (String fieldKey, List<String> value){
             formSubmitData[fieldKey] = value;
           });  });

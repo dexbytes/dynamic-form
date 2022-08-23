@@ -17,9 +17,9 @@ class CheckboxModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data =  Map<String, dynamic>();
-    data['elementType'] = this.elementType;
+    data['elementType'] = elementType;
     if (this.elementConfig != null) {
-      data['elementConfig'] = this.elementConfig!.toJson();
+      data['elementConfig'] = elementConfig!.toJson();
     }
     data['value'] = this.value;
     if (this.validation != null) {

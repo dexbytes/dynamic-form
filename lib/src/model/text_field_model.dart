@@ -79,6 +79,7 @@ class ElementConfig {
   nextName = json['nextName'];
   maxLine = json.containsKey('maxLine')?json['maxLine']:1;
   minLine = json.containsKey('minLine')?json['minLine']:1;
+
   firstDate = json.containsKey('firstDate')?json['firstDate']:'';
   lastDate = json.containsKey('lastDate')?json['lastDate']:'';
   initialDate = json.containsKey('initialDate')?json['initialDate']:'';
@@ -100,6 +101,7 @@ class ElementConfig {
   data['nextName'] = this.nextName;
   data['maxLine'] = this.maxLine;
   data['minLine'] = this.minLine;
+
   data['firstDate'] = this.firstDate;
   data['lastDate'] = this.lastDate;
   data['initialDate'] = this.initialDate;
@@ -135,9 +137,10 @@ class Validation {
   String? rejex;
   bool? isReadOnly;
   bool? isDisabled;
+  int? minAge;
   ErrorMessage? errorMessage;
 
-  Validation({this.required, this.minLength, this.maxLength, this.rejex, this.isReadOnly = false, this.isDisabled = false,this.errorMessage});
+  Validation({this.required, this.minLength, this.minAge, this.maxLength, this.rejex, this.isReadOnly = false, this.isDisabled = false,this.errorMessage});
 
   Validation.fromJson(Map<String, dynamic> json) {
     required = json['required'];
@@ -146,6 +149,7 @@ class Validation {
     rejex = json.containsKey('rejex')?json['rejex']:"";
     isReadOnly = json.containsKey('isReadOnly')?json['isReadOnly']:false;
     isDisabled = json.containsKey('isDisabled')?json['isDisabled']:false;
+    minAge = json.containsKey('minAge')?json['minAge']:-1;
     errorMessage = json['errorMessage'] != null ? ErrorMessage.fromJson(json['errorMessage']) : null;
   }
 
@@ -157,6 +161,7 @@ class Validation {
     data['rejex'] = this.rejex;
     data['isReadOnly'] = this.isReadOnly;
     data['isDisabled'] = this.isDisabled;
+    data['minAge'] = this.minAge;
     if (this.errorMessage != null) {
       data['errorMessage'] = this.errorMessage!.toJson();
     }
