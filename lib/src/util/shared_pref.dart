@@ -14,7 +14,9 @@ return "";
       prefs ??= await _prefs;
       formData = prefs!.getString("form_data_local")??"";
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       formData = "";
     }
     return formData;
@@ -28,7 +30,9 @@ return "";
       bool?  formDataStored = await prefs!.setString("form_data_local", formJson);
       formData = formDataStored?formJson:"";
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       formData = "";
     }
     return formData;

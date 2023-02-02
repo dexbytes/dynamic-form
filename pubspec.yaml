@@ -1,17 +1,22 @@
 name: dynamic_json_form
 description: A new Flutter package project.
 version: 0.0.1
-#homepage:
+homepage: https://github.com/dexbytes
+repository: https://github.com/dexbytes/standard-form.git
 
 environment:
-  sdk: ">=2.16.2 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: "2.0.6"
 
 dependencies:
   flutter:
     sdk: flutter
 
   shared_preferences: ^2.0.15
+  country_code_picker: ^2.0.2
+  intl: ^0.17.0
+  flutter_cart: ^0.0.7
+
 
 dev_dependencies:
   flutter_test:
