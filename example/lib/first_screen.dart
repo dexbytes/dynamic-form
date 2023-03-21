@@ -24,7 +24,7 @@ class _FirstScreenState extends State<FirstScreen> {
       appBar: AppBar(centerTitle: true,title: Text('First Screen'),),
       body:
       Container(margin: const EdgeInsets.symmetric(horizontal: 5,vertical: 20),
-        child: ListView(
+        child: ListView(shrinkWrap: true,
           children: [
             Column(
               children: [
@@ -35,10 +35,10 @@ class _FirstScreenState extends State<FirstScreen> {
                     context,
                     MaterialPageRoute(builder: (context) => SecondScreen(data: data)),
                   );
+
                 },
                     currentStepCallBack:(int currentStepIndex,Map<String,dynamic> currentStepData){
-
-                    }),
+  },submitButtonAlignment:Alignment.bottomCenter),
 
              /*   Row(children: [Align(alignment: Alignment.center,
                   child: ElevatedButton(clipBehavior: Clip.hardEdge,

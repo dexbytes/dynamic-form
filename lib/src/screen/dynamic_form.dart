@@ -5,9 +5,10 @@ final String jsonEncoded;
 final Function(Map<String,dynamic> data)? finalSubmitCallBack;
 final Function(int,Map<String,dynamic>)? currentStepCallBack;
 final GlobalKey<DynamicFormState>? dynamicFormKey ;
+final Alignment? submitButtonAlignment;
 
 
-const DynamicForm(this.jsonEncoded,{this.dynamicFormKey,required this.finalSubmitCallBack,this.currentStepCallBack}) : super(key: dynamicFormKey);
+const DynamicForm(this.jsonEncoded,{this.submitButtonAlignment,this.dynamicFormKey,required this.finalSubmitCallBack,this.currentStepCallBack}) : super(key: dynamicFormKey);
   @override
   DynamicFormState createState() => DynamicFormState(jsonEncoded: jsonEncoded);
 }
@@ -75,11 +76,22 @@ class DynamicFormState extends State<DynamicForm> {
     }
   }
 
+  Widget formStepIndicator(){
+    int count = responseParser.getTotalFormsCount;
+    return count>1?Padding(padding: const EdgeInsets.only(bottom: 20,top: 5),child: StepProgressIndicator(
+      totalSteps: count,
+      currentStep: responseParser.getCurrentFormNumber+1,
+      selectedColor: Colors.red,
+      unselectedColor: Colors.yellow,
+    ),):const SizedBox(height: 0,);
+  }
   @override
   Widget build(BuildContext context) {
+   
     return Material(
       child: !commonValidation.isValidJsonEncoded(jsonEncoded)?Container():
       Column(mainAxisSize: MainAxisSize.min,children: [
+        formStepIndicator(),
       ListView.builder(shrinkWrap: true,physics: const ClampingScrollPhysics(),
           itemCount: formScreenList.length,
           itemBuilder: (BuildContext context, int index) {
@@ -88,7 +100,7 @@ class DynamicFormState extends State<DynamicForm> {
             }
             List<dynamic> _formFieldList =  formScreenList[index]!;
             final currentIndex = index;
-            return SingleForm(formFieldList:_formFieldList,
+            return SingleForm(submitButtonAlignment: widget.submitButtonAlignment,formFieldList:_formFieldList,
               nextPageButtonClick:(index,Map<String,dynamic> formSubmitData){
               this.formSubmitData ['$currentIndex'] = formSubmitData;
               widget.currentStepCallBack?.call(currentIndex,formSubmitData);

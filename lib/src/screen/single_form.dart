@@ -7,7 +7,8 @@ class SingleForm extends StatefulWidget {
   final Function(int,Map<String,dynamic>)? finalSubmitCallBack;
   final Function(Widget)? nextPageButton;
   final Function(Widget)? priPageButton;
-  const SingleForm({Key? key,this.formFieldList = const [],this.nextPageButtonClick,this.finalSubmitCallBack,this.nextPageButton,this.priPageButton,this.index = 0}) : super(key: key);
+  final Alignment? submitButtonAlignment;
+  const SingleForm({Key? key,this.submitButtonAlignment,this.formFieldList = const [],this.nextPageButtonClick,this.finalSubmitCallBack,this.nextPageButton,this.priPageButton,this.index = 0}) : super(key: key);
 
   @override
   State<SingleForm> createState() => _SingleFormState(index: index);
@@ -24,7 +25,7 @@ class _SingleFormState extends State<SingleForm> {
 
   Stream get onAutoValidateChanged => _fieldStreamControl.stream;
   Stream get onVariableChanged => DataRefreshStream.instance.getFormFieldsStream.stream;
-
+  Widget? formSubmitButton;
   _SingleFormState({int index = 0}) {
     _formKey = GlobalKey<FormState>(debugLabel: "$index");
     autovalidateMode = _autoValidate();
@@ -36,10 +37,15 @@ class _SingleFormState extends State<SingleForm> {
     return  StreamBuilder(
         stream: onVariableChanged,
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-
-          return Form(
-              key: _formKey,autovalidateMode: autovalidateMode,
-           child :  formFieldList(formFieldList: widget.formFieldList));
+          return
+            Column(mainAxisSize: MainAxisSize.max,
+              children: [
+                Form(
+                    key: _formKey,autovalidateMode: autovalidateMode,
+                    child :  formFieldList(formFieldList: widget.formFieldList)),
+                formSubmitButton!=null?formSubmitButton!:const SizedBox(height:0)
+              ],
+            );
 
 
         });
@@ -227,7 +233,8 @@ class _SingleFormState extends State<SingleForm> {
                     // formSubmitData[fieldKey] = value;
                   }):const SizedBox(height: 0,width: 0,));
 */
-            return StreamBuilder(
+
+            formSubmitButton = StreamBuilder(
                 stream: onAutoValidateChanged,
                 builder: (BuildContext context,
                     AsyncSnapshot<dynamic> snapshot) {
@@ -292,6 +299,8 @@ class _SingleFormState extends State<SingleForm> {
                             })
                       ],);
                 });
+
+            return const SizedBox(height: 0,);
           }
       }
     }
@@ -310,11 +319,14 @@ class _SingleFormState extends State<SingleForm> {
         nextData = formFieldList[nextItemIndex];
         nextItemIndex = nextItemIndex+1;
       }
+
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
           _getFormField(data: data,nextData:nextData),
+
+         // formSubmitButton!=null?(widget.submitButtonAlignment!=null?(Align(child: formSubmitButton!,alignment: widget.submitButtonAlignment!,)):formSubmitButton!):const SizedBox(),
           const SizedBox(height: 20,width: 10)
         ],
       );
