@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:dynamic_json_form/src/common_validation.dart';
 import 'package:dynamic_json_form/src/model/drop_down_field_model.dart';
+import 'package:dynamic_json_form/src/model/form_button_model.dart';
 import 'package:dynamic_json_form/src/model/text_field_model.dart';
 import 'package:flutter/foundation.dart';
 import '../dynamic_json_form.dart';
@@ -11,6 +12,7 @@ export 'model/text_field_model.dart';
 class ResponseParser{
   /*This will display current displayed form page it will change when user change form by clicking next or preview*/
   static int _currentFormNumber = 0;
+  static int totalFormsCount = 1;
   get getCurrentFormNumber => _currentFormNumber;
   set setCurrentFormNumber(value){
     _currentFormNumber = value;
@@ -28,6 +30,7 @@ class ResponseParser{
   /*This is formData will contain data according to form index*/
   static final Map<int,List<dynamic>> _formData = {};
   get getFormData => _formData;
+  get getTotalFormsCount => totalFormsCount;
   set setFormData(String jsonEncoded){
     if(commonValidation.isValidJsonEncoded(jsonEncoded)){
       Map<String,dynamic>? enteredJson = json.decode(jsonEncoded);
@@ -39,6 +42,14 @@ class ResponseParser{
         }
         //Multi form
         else{
+          Map<String,dynamic>? enteredJsonMap = enteredJson["step"];
+          int count = 0;
+          totalFormsCount = count;
+          enteredJsonMap!.forEach((key, value) {
+            _formData[count] = value["formFields"];
+            count = count+1;
+            totalFormsCount = count;
+          });
           _currentFormNumber = 0;
         }
         /*DataRefreshStream.instance.formFieldsRefresh(_formData[_currentFormNumber] as List<dynamic>);*/
@@ -103,6 +114,21 @@ class ResponseParser{
 
           }
       return checkBoxModel;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return null;
+  }
+
+  FormButtonModel? formButtonParsing({required Map<String,dynamic> jsonData,bool updateCommon = false}){
+    try {
+      FormButtonModel formButtonModel = FormButtonModel.fromJson(jsonData);
+      if(updateCommon){
+
+          }
+      return formButtonModel;
     } catch (e) {
       if (kDebugMode) {
         print(e);

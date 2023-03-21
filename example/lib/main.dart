@@ -3,12 +3,14 @@ import 'package:dynamic_json_form/parts.dart';
 import 'package:example/first_screen.dart';
 import 'package:example/time_duration.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 
 void main() async {
   // if you are using await in main function then add this line
   WidgetsFlutterBinding.ensureInitialized();
-
+  // Restrict for portrait mode only
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   //Custom local configuration for Input field setup
   TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration(
       cursorColor: Colors.black,

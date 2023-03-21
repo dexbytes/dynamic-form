@@ -12,7 +12,7 @@ class CommonValidation {
      // var enteredJsonN = json.decode(jsonEncoded);
         Map<String,dynamic>? enteredJson = json.decode(jsonEncoded);
         if(enteredJson!.isNotEmpty){
-                if(enteredJson.containsKey("formType") && enteredJson.containsKey("formFields") && enteredJson["formFields"].isNotEmpty){
+                if(enteredJson.containsKey("formType") && enteredJson.containsKey("step") && enteredJson["step"].isNotEmpty){
                   isValidate = true;
                 }
               }

@@ -28,8 +28,6 @@ class _FirstScreenState extends State<FirstScreen> {
           children: [
             Column(
               children: [
-                //Text(widget.apiCallingTime),
-
                 //Get all fields of form
                 DynamicForm(jsonString,dynamicFormKey: _formKeyNew,
                   finalSubmitCallBack: (Map<String, dynamic> data) async {
@@ -37,26 +35,29 @@ class _FirstScreenState extends State<FirstScreen> {
                     context,
                     MaterialPageRoute(builder: (context) => SecondScreen(data: data)),
                   );
-                },),
+                },
+                    currentStepCallBack:(int currentStepIndex,Map<String,dynamic> currentStepData){
 
-                Align(alignment: Alignment.center,
+                    }),
+
+                Row(children: [Align(alignment: Alignment.center,
                   child: ElevatedButton(clipBehavior: Clip.hardEdge,
                     onPressed: () async {
-                      if(_formKeyNew.currentState!.validateFields()){
-                     var data =  _formKeyNew.currentState!.getFormData();
-
-                     if(data!.isNotEmpty){
-                       Navigator.push(
-                         context,
-                         MaterialPageRoute(builder: (context) => SecondScreen(data: data)),
-                       );
-                     }
-                     }
+                      _formKeyNew.currentState!.previewStepCustomClick();
+                    },
+                    child: const Text('preview'),
+                    //color: Colors.green,
+                  ),
+                ),
+                  Align(alignment: Alignment.center,
+                  child: ElevatedButton(clipBehavior: Clip.hardEdge,
+                    onPressed: () async {
+                      _formKeyNew.currentState!.nextStepCustomClick();
                     },
                     child: const Text('Submit Form'),
                     //color: Colors.green,
                   ),
-                )
+                )],)
               ],
             ),
           ],
