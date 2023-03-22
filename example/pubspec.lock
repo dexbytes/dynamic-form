@@ -128,10 +128,17 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.6.4"
-  matcher:
+  lints:
     dependency: transitive
     description:
       name: matcher
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.12.11"
+  material_color_utilities:
+    dependency: transitive
+    description:
+      name: material_color_utilities
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.12.11"
@@ -345,4 +352,4 @@ packages:
     version: "0.2.0+1"
 sdks:
   dart: ">=2.17.0-0 <3.0.0"
-  flutter: ">=2.8.0"
+  flutter: ">=2.8.1"

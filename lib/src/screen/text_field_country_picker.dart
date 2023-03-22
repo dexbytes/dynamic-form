@@ -187,6 +187,7 @@ class _TextFieldCountryPickerState extends State<TextFieldCountryPickerView> {
       filter = [];
       //filter.add(FilteringTextInputFormatter.digitsOnly);
       filter.add(FilteringTextInputFormatter.allow(RegExp(keyText)));
+      filter.add(FilteringTextInputFormatter.deny('+'));
       return filter;
     }
     return filter;
@@ -460,20 +461,9 @@ class CountryPickerViewConfig {
         /*   errorBorder: viewConfiguration!._errorBorder,
         focusedErrorBorder: viewConfiguration!._errorBorder,*/
         enabledBorder: viewConfiguration!._border,
-        hintText: textFieldModel.elementConfig!.placeholder ?? "",
-        hintStyle: viewConfiguration!._hintStyle,
-        label: !enableLabel
-            ? null
-            : textFieldModel.elementConfig!.label != null &&
-                    textFieldModel.elementConfig!.label!.isNotEmpty
-                ? Text(
-                    textFieldModel.elementConfig!.label!,
-                    style: viewConfiguration!._textStyle,
-                  )
-                : null,
-        suffixIcon: null,
-        counterText: "",
-        errorMaxLines: 3);
+        hintText: textFieldModel.elementConfig!.placeholder??"",hintStyle: viewConfiguration!._hintStyle,
+        label: !enableLabel?null:textFieldModel.elementConfig!.label !=null && textFieldModel.elementConfig!.label!.isNotEmpty?Text(textFieldModel.elementConfig!.label!,style: viewConfiguration!._textStyle,):null,suffixIcon: null,counterText: "",errorMaxLines: 3
+    );
   }
 
   getInputDecoration() {

@@ -108,20 +108,41 @@ class Validation {
   bool? required;
   bool? isReadOnly;
   bool? isDisabled;
+  ErrorMessage? errorMessage;
 
-  Validation({required, isReadOnly, isDisabled});
+  Validation({this.required, this.isReadOnly, this.isDisabled, this.errorMessage});
 
   Validation.fromJson(Map<String, dynamic> json) {
     required = json['required'];
     isReadOnly = json['isReadOnly'];
     isDisabled = json['isDisabled'];
+    errorMessage = json['errorMessage'] != null ? ErrorMessage.fromJson(json['errorMessage']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['required'] = required;
-    data['isReadOnly'] = isReadOnly;
-    data['isDisabled'] = isDisabled;
+    final Map<String, dynamic> data =  Map<String, dynamic>();
+    data['required'] = this.required;
+    data['isReadOnly'] = this.isReadOnly;
+    data['isDisabled'] = this.isDisabled;
+    if (this.errorMessage != null) {
+      data['errorMessage'] = this.errorMessage!.toJson();
+    }
+    return data;
+  }
+}
+class ErrorMessage {
+  String? required;
+
+
+  ErrorMessage({this.required});
+
+  ErrorMessage.fromJson(Map<String, dynamic> json) {
+    required = json['required'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data =  Map<String, dynamic>();
+    data['required'] = this.required;
     return data;
   }
 }

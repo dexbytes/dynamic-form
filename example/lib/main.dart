@@ -1,58 +1,65 @@
+import 'package:dynamic_json_form/dynamic_json_form.dart';
+import 'package:dynamic_json_form/parts.dart';
 import 'package:example/first_screen.dart';
-import 'package:example/http_service.dart';
 import 'package:example/time_duration.dart';
 import 'package:flutter/foundation.dart';
-import 'package:dynamic_multi_form/dynamic_multi_form.dart';
+import 'package:flutter/services.dart';
+
 
 void main() async {
   // if you are using await in main function then add this line
   WidgetsFlutterBinding.ensureInitialized();
-
+  // Restrict for portrait mode only
+  await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   //Custom local configuration for Input field setup
   TextFieldConfiguration textFieldConfiguration = TextFieldConfiguration(
-      cursorColor: Colors.yellow,
+      cursorColor: Colors.black,
       suffixIconColor: Colors.black,
       fillColor: Colors.grey.shade200,
-      //contentPadding: const EdgeInsets.all(8),
-      filled: true,
-      border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          borderSide: BorderSide(
-            color: Colors.transparent,
-          ) //BorderSide
-          ),
-      focusedBorder: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(12)),
-          borderSide: BorderSide(
-            color: Colors.grey,
-          ) //BorderSide
-          ));
+  textStyle: const TextStyle(color: Colors.black),
+  hintStyle: const TextStyle(color: Colors.black,fontSize: 16),
+  //contentPadding: const EdgeInsets.all(8),
+  filled: true,border: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
+          borderSide: BorderSide(color: Colors.transparent,)//BorderSide
+      ), focusedBorder: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
+          borderSide: BorderSide(color: Colors.grey,)//BorderSide
+      )
+  );
 
   //textFieldConfiguration.setBorder = const UnderlineInputBorder();
   ConfigurationSetting.instance.setTextFieldViewConfig = textFieldConfiguration;
 
   //Custom local configuration for tel Input field setup
-  TelTextFieldConfiguration telTextFieldConfiguration =
-      TelTextFieldConfiguration(
-          cursorColor: Colors.yellow,
-          suffixIconColor: Colors.black,
-          fillColor: Colors.grey.shade200,
-          filled: true,
-          border: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(
-                color: Colors.transparent,
-              ) //BorderSide
-              ),
-          focusedBorder: const OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(12)),
-              borderSide: BorderSide(
-                color: Colors.grey,
-              ) //BorderSide
-              ));
+  TelTextFieldConfiguration telTextFieldConfiguration =  TelTextFieldConfiguration(
+      cursorColor: Colors.yellow,
+      suffixIconColor: Colors.black,
+      fillColor: Colors.grey.shade200,
+      hintStyle: const TextStyle(color: Colors.black,fontSize: 16),
+      filled: true,border: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
+      borderSide: BorderSide(color: Colors.transparent,)//BorderSide
+  ), focusedBorder: const OutlineInputBorder(borderRadius:  BorderRadius.all(Radius.circular(12)),
+      borderSide: BorderSide(color: Colors.grey,)//BorderSide
+  )
+  );
   //telTextFieldConfiguration.setBorder = const UnderlineInputBorder();
   ConfigurationSetting.instance.setTelTextFieldViewConfig =
       telTextFieldConfiguration;
+
+  RadioButtonConfiguration radioButtonConfiguration = RadioButtonConfiguration(
+      labelAndRadioButtonAlign: LabelAndOptionsAlignment.vertical,
+    radioButtonsAlign:LabelAndOptionsAlignment.vertical,
+    labelTextStyle: const TextStyle(color: Colors.black,fontSize: 16),
+    optionTextStyle:  TextStyle(color: Colors.grey.shade800,fontSize: 14),
+      );
+  ConfigurationSetting.instance.setRadioButtonConfiguration = radioButtonConfiguration;
+
+  CheckBoxConfiguration checkBoxConfiguration = CheckBoxConfiguration(
+      labelAndRadioButtonAlign: LabelAndOptionsAlignment.vertical,
+    optionsAlign:LabelAndOptionsAlignment.vertical,
+    labelTextStyle: const TextStyle(color: Colors.black,fontSize: 16),
+    optionTextStyle:  TextStyle(color: Colors.grey.shade800,fontSize: 14,),
+  );
+  ConfigurationSetting.instance.setCheckBoxConfiguration = checkBoxConfiguration;
 
   //Set load form from json
   ConfigurationSetting.instance.setLoadFromApi = true;

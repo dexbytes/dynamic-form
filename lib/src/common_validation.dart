@@ -7,15 +7,13 @@ class CommonValidation {
     bool isValidate = false;
     if (jsonEncoded.isNotEmpty) {
       try {
-        // var enteredJsonN = json.decode(jsonEncoded);
-        Map<String, dynamic>? enteredJson = json.decode(jsonEncoded);
-        if (enteredJson!.isNotEmpty) {
-          if (enteredJson.containsKey("formType") &&
-              enteredJson.containsKey("formFields") &&
-              enteredJson["formFields"].isNotEmpty) {
-            isValidate = true;
-          }
-        }
+     // var enteredJsonN = json.decode(jsonEncoded);
+        Map<String,dynamic>? enteredJson = json.decode(jsonEncoded);
+        if(enteredJson!.isNotEmpty){
+                if(enteredJson.containsKey("formType") && enteredJson.containsKey("step") && enteredJson["step"].isNotEmpty){
+                  isValidate = true;
+                }
+              }
       } catch (e) {
         debugPrint("$e");
       }
@@ -24,10 +22,7 @@ class CommonValidation {
   }
 
   //Check all field validation
-  String? checkValidation(
-      {required String enteredValue,
-      required Map<String, dynamic> validationStr,
-      required String formFieldType}) {
+  String? checkValidation({required String enteredValue,required Map<String, dynamic> validationStr,required String formFieldType, isPickFromCalendar}){
     String? errorMsg;
     switch (formFieldType) {
       case 'text':
@@ -61,10 +56,11 @@ class CommonValidation {
           return errorMsg;
         }
       case 'number':
-        {
-          errorMsg = isValidNumber(enteredValue, validationStr);
-          return errorMsg;
-        }
+        return errorMsg = isValidNumber(enteredValue,validationStr);
+
+        case 'date':
+          return errorMsg = validateDate(enteredValue,validationStr,isPickFromCalendar:isPickFromCalendar);
+
       case 'text_multiline':
         {
           errorMsg = isValidEmail(enteredValue, validationStr);
@@ -309,6 +305,7 @@ class CommonValidation {
     return errorMsg;
   }
 
+
   //Url validation
   String? isValidUrl(String value, Map<String, dynamic> validationStr) {
     String? errorMsg;
@@ -408,6 +405,161 @@ class CommonValidation {
     }
     return errorMsg;
   }
+
+  //method to calculate age on Today (in years)
+  int ageCalculate(String dateFormat, String input) {
+    if(dateFormat != null && (dateFormat == "dd.mm.yyyy" || dateFormat == "dd/mm/yyyy" || dateFormat == "dd-mm-yyyy" )){
+      // regex for validation of date format : dd.mm.yyyy, dd/mm/yyyy, dd-mm-yyyy
+      RegExp regExp =  RegExp(
+        r"^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$",
+        caseSensitive: true,
+        multiLine: false,
+      );
+
+      if (regExp.hasMatch(input)) {
+        DateTime _dateTime = DateTime(
+          int.parse(input.substring(6)),
+          int.parse(input.substring(3, 5)),
+          int.parse(input.substring(0, 2)),
+        );
+        return DateTime
+            .fromMillisecondsSinceEpoch(
+            DateTime
+                .now()
+                .difference(_dateTime)
+                .inMilliseconds)
+            .year -
+            1970;
+      }
+    }
+    else if( dateFormat == "mm.dd.yyyy" || dateFormat == "mm/dd/yyyy" || dateFormat == "mm-dd-yyyy" ){
+      // regex for validation of date format : mm.dd.yyyy, mm/dd/yyyy, mm-dd-yyyy
+      RegExp regExp =  RegExp(
+        r"(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)[0-9]{2}",
+        caseSensitive: true,
+        multiLine: false,
+      );
+
+      if (regExp.hasMatch(input)) {
+        DateTime _dateTime = DateTime(
+          int.parse(input.substring(6)),
+          int.parse(input.substring(0, 2)),
+          int.parse(input.substring(3, 5)),
+        );
+        return DateTime
+            .fromMillisecondsSinceEpoch(
+            DateTime
+                .now()
+                .difference(_dateTime)
+                .inMilliseconds)
+            .year -
+            1970;
+      }
+    }
+    else if(dateFormat != null && (dateFormat == "yyyy-MM-dd")){
+      // regex for validation of date format : yyyy-MM-dd
+      RegExp regExp =  RegExp(
+        r"((?:19|20)\\d\\d)-(0?[1-9]|1[012])-([12][0-9]|3[01]|0?[1-9])",
+        caseSensitive: true,
+        multiLine: false,
+      );
+
+      if (regExp.hasMatch(input)) {
+        DateTime _dateTime = DateTime(
+          int.parse(input.substring(0,5)),
+          int.parse(input.substring(0, 2)),
+          int.parse(input.substring(3, 5)),
+        );
+        return DateTime
+            .fromMillisecondsSinceEpoch(
+            DateTime
+                .now()
+                .difference(_dateTime)
+                .inMilliseconds)
+            .year -
+            1970;
+      }
+    }
+    else {
+      return -1;
+    }
+    return -1;
+  }
+
+  //Number validation
+  String? validateDate(String value,Map<String, dynamic> validationStr,{isPickFromCalendar, dateFormat}){
+    String? errorMsg;
+    try {
+      Map<String,dynamic> validation = validationStr;
+      Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
+
+      bool required = validation.containsKey('required')?validation['required']: false;
+      int minAge = validation.containsKey('minAge')?validation['minAge']: -1;
+
+      if(value.trim().isEmpty){
+        errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
+      }
+      else{
+        errorMsg = null;
+      }
+    }
+    catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+    return errorMsg;
+  }
+
+  //Number validation
+  // String? validateDate(String value,Map<String, dynamic> validationStr,{isPickFromCalendar, dateFormat}){
+  //   String? errorMsg;
+  //   try {
+  //     Map<String,dynamic> validation = validationStr;
+  //     Map<String,dynamic> errorMessage = validation.containsKey('errorMessage')?validation['errorMessage']:<String,dynamic>{};
+  //
+  //     bool required = validation.containsKey('required')?validation['required']: false;
+  //     int minAge = validation.containsKey('minAge')?validation['minAge']: -1;
+  //
+  //     if(value.trim().isEmpty){
+  //       errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
+  //     }
+  //     if(value.trim().isNotEmpty){
+  //       if(minAge != null && minAge != -1){
+  //         int age = ageCalculate(dateFormat,value);
+  //         if(age < minAge){
+  //           errorMsg = errorMessage.containsKey('required')?errorMessage['required']:"required key missing";
+  //         }
+  //       }
+  //     }
+  //     else{
+  //       errorMsg = null;
+  //     }
+  //   }
+  //   catch (e) {
+  //     if (kDebugMode) {
+  //       print(e);
+  //     }
+  //   }
+  //   return errorMsg;
+  // }
+
+  //get time from timestamp
+  DateTime getTimeFromTimeStamp({required dateTimeStamp,DateTime? date}){
+    DateTime tempDate = date??DateTime.now();
+    if(dateTimeStamp != null && dateTimeStamp.toString().trim().isNotEmpty){
+      try {
+        tempDate = DateTime.fromMillisecondsSinceEpoch(int.parse(dateTimeStamp) * 1000);
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+       // return tempDate;
+      }
+    }
+    return tempDate;
+  }
+
 }
 
 CommonValidation commonValidation = CommonValidation();
