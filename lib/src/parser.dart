@@ -28,7 +28,8 @@ class ResponseParser{
   }
 
   /*This is formData will contain data according to form index*/
-  static final Map<int,List<dynamic>> _formData = {};
+  // static final Map<int,List<dynamic>> _formData = {};
+  static final Map<int,dynamic> _formData = {};
   get getFormData => _formData;
   get getTotalFormsCount => totalFormsCount;
   set setFormData(String jsonEncoded){
@@ -37,7 +38,8 @@ class ResponseParser{
       if(enteredJson!["formType"].toString().isNotEmpty){
         //Single form
         if(enteredJson["formType"]=="single"){
-          _formData[0] = enteredJson["formFields"];
+          // _formData[0] = enteredJson["formFields"];
+          _formData[0] = enteredJson;
           _currentFormNumber = 0;
         }
         //Multi form
@@ -46,7 +48,8 @@ class ResponseParser{
           int count = 0;
           totalFormsCount = count;
           enteredJsonMap!.forEach((key, value) {
-            _formData[count] = value["formFields"];
+            // _formData[count] = value["formFields"];
+            _formData[count] = value;
             count = count+1;
             totalFormsCount = count;
           });

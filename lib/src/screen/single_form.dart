@@ -1,7 +1,7 @@
 part of dynamic_json_form;
 
 class SingleForm extends StatefulWidget {
-  final List<dynamic> formFieldList;
+  final Map<String,dynamic> formData;
   final int index;
   final Function(int,Map<String,dynamic>)? nextPageButtonClick;
   final Function(int,Map<String,dynamic>)? finalSubmitCallBack;
@@ -9,10 +9,10 @@ class SingleForm extends StatefulWidget {
   final Function(Widget)? priPageButton;
   final Alignment? submitButtonAlignment;
   final GlobalKey<SingleFormState>? singleFormKey ;
-  const SingleForm({Key? key,this.submitButtonAlignment,this.formFieldList = const [],this.nextPageButtonClick,this.finalSubmitCallBack,this.nextPageButton,this.priPageButton,this.index = 0,this.singleFormKey}) : super(key: singleFormKey);
+  const SingleForm({Key? key,this.submitButtonAlignment,required this.formData,this.nextPageButtonClick,this.finalSubmitCallBack,this.nextPageButton,this.priPageButton,this.index = 0,this.singleFormKey}) : super(key: singleFormKey);
 
   @override
-  State<SingleForm> createState() => SingleFormState(index: index);
+  State<SingleForm> createState() => SingleFormState(index: index,formData:formData);
 }
 
 class SingleFormState extends State<SingleForm> {
@@ -27,10 +27,25 @@ class SingleFormState extends State<SingleForm> {
   Stream get onAutoValidateChanged => _fieldStreamControl.stream;
   Stream get onVariableChanged => DataRefreshStream.instance.getFormFieldsStream.stream;
   Widget? formSubmitButton;
-  SingleFormState({int index = 0}) {
+  List<dynamic>? formFieldList;
+  Map<String,dynamic> formData;
+ String formName = "";
+ String title = "";
+ String description = "";
+  Map<String,dynamic> formInformation = {};
+
+  SingleFormState({int index = 0,required this.formData}) {
+    formFieldList = formData['formFields'];
+    try {
+      formName = formData['formName'];
+      title = formData['title'];
+      description = formData['description'];
+      formInformation = {"formName":formName,"title":title,"description":description};
+    } catch (e) {
+      print(e);
+    }
     _formKey = GlobalKey<FormState>(debugLabel: "$index");
     autovalidateMode = _autoValidate();
-
   }
 
   @override
@@ -43,12 +58,10 @@ class SingleFormState extends State<SingleForm> {
               children: [
                 Form(
                     key: _formKey,autovalidateMode: autovalidateMode,
-                    child :  formFieldList(formFieldList: widget.formFieldList)),
+                    child :  formFieldListView(formFieldList: formFieldList!)),
                 formSubmitButton!=null?formSubmitButton!:const SizedBox(height:0)
               ],
             );
-
-
         });
   }
 
@@ -297,7 +310,7 @@ class SingleFormState extends State<SingleForm> {
     return Container();
   }
 
-  Widget formFieldList({required List<dynamic> formFieldList}){
+  Widget formFieldListView({required List<dynamic> formFieldList}){
     int nextItemIndex = 1;
     responseParser.clearFieldFocusNode();
     return

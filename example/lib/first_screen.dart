@@ -34,9 +34,10 @@ class _FirstScreenState extends State<FirstScreen> {
                     MaterialPageRoute(builder: (context) => SecondScreen(data: data)),
                   );
                 },
-                currentStepCallBack:(int currentStepIndex,Map<String,dynamic>? currentStepData){
+                currentStepCallBack:({int? currentIndex,Map<String,dynamic>? formSubmitData,Map<String,dynamic>? formInformation}){
               setState(() {
-                currentPageIndex = currentStepIndex;
+                print("$formInformation");
+                currentPageIndex = currentIndex!;
               });
  },
            submitButtonAlignment:Alignment.bottomCenter)),

@@ -3,7 +3,7 @@ part of dynamic_json_form;
 class DynamicForm extends StatefulWidget {
 final String jsonEncoded;
 final Function(int currentFormNumber,Map<String,dynamic> data)? finalSubmitCallBack;
-final Function(int,Map<String,dynamic>?)? currentStepCallBack;
+final Function({int currentIndex,Map<String,dynamic>? formSubmitData,Map<String,dynamic>? formInformation})? currentStepCallBack;
 final GlobalKey<DynamicFormState>? dynamicFormKey ;
 final Alignment? submitButtonAlignment;
 final EdgeInsetsGeometry? formPadding;
@@ -18,7 +18,7 @@ class DynamicFormState extends State<DynamicForm> {
   String jsonEncoded;
   Stream get onVariableChanged => DataRefreshStream.instance.getFormFieldsStream.stream;
   Map<String,dynamic> formSubmitData = <String,dynamic>{};
-  Map<int,List<dynamic>> formScreenList = {};
+  Map<int,dynamic> formScreenList = {};
   List<SingleForm> formScreen = [];
 
   DynamicFormState({required this.jsonEncoded}){
@@ -29,21 +29,18 @@ class DynamicFormState extends State<DynamicForm> {
         formScreenList.entries.map( (entry) {
           currentIndex += 1;
           final _formKeyNew = GlobalKey<SingleFormState>();
-           return SingleForm(singleFormKey: _formKeyNew,formFieldList:entry.value, nextPageButtonClick:(index,Map<String,dynamic> formSubmitData){
+           return SingleForm(singleFormKey: _formKeyNew,formData:entry.value, nextPageButtonClick:(index,Map<String,dynamic> formSubmitData){
             this.formSubmitData ['$currentIndex'] = formSubmitData;
-            widget.currentStepCallBack?.call(currentIndex,formSubmitData);
-            print("$index == $currentIndex");
+            widget.currentStepCallBack?.call(currentIndex:currentIndex,formSubmitData:formSubmitData);
             setState(() {
             });
           }, finalSubmitCallBack:(index,Map<String,dynamic> formSubmitData){
                 this.formSubmitData ['$currentIndex'] = formSubmitData;
                 widget.finalSubmitCallBack?.call(index,this.formSubmitData);
-                print("$index == $currentIndex");
               });
         }
             ).toList();
   }
-  SingleForm? singleForm;
   //Next step button click event
   void nextStepCustomClick(){
     int currentPage = responseParser.getCurrentFormNumber;
@@ -51,10 +48,10 @@ class DynamicFormState extends State<DynamicForm> {
     if (responseParser.getTotalFormsCount-1 >
         responseParser.getCurrentFormNumber) {
       if (formScreen[currentPage].singleFormKey!.currentState!.validateFields()) {
-
         Map<String,dynamic>? data = formScreen[currentPage].singleFormKey!.currentState!.getFormData();
+        Map<String,dynamic>? formInformation = formScreen[currentPage].singleFormKey!.currentState!.formInformation;
         formSubmitData ['$currentPage'] = data;
-        widget.currentStepCallBack?.call(currentPage+1,data);
+        widget.currentStepCallBack?.call(currentIndex:currentPage+1,formSubmitData:data,formInformation:formInformation);
 
         if (data!.isNotEmpty) {
           setState(() {
@@ -68,8 +65,9 @@ class DynamicFormState extends State<DynamicForm> {
     else {
       if (formScreen[currentPage].singleFormKey!.currentState!.validateFields()) {
         Map<String,dynamic>? data = formScreen[currentPage].singleFormKey!.currentState!.getFormData();
+        Map<String,dynamic>? formInformation = formScreen[currentPage].singleFormKey!.currentState!.formInformation;
         formSubmitData ['$currentPage'] = data;
-        widget.currentStepCallBack?.call(currentPage+1,data);
+        widget.currentStepCallBack?.call(currentIndex:currentPage+1,formSubmitData:data,formInformation:formInformation);
         if (data!.isNotEmpty) {
          widget.finalSubmitCallBack?.call(responseParser.getCurrentFormNumber,formSubmitData);
         }
@@ -80,13 +78,14 @@ class DynamicFormState extends State<DynamicForm> {
   //Preview step button click event
   void previewStepCustomClick(){
     Map<String,dynamic>? data = formScreen[responseParser.getCurrentFormNumber].singleFormKey!.currentState!.getFormData();
+    Map<String,dynamic>? formInformation = formScreen[responseParser.getCurrentFormNumber].singleFormKey!.currentState!.formInformation;
     if (responseParser.getCurrentFormNumber > 0) {
       setState(() {
         responseParser.setCurrentFormNumber =
             responseParser.getCurrentFormNumber - 1;
       });
     }
-    widget.currentStepCallBack?.call(responseParser.getCurrentFormNumber,data);
+    widget.currentStepCallBack?.call(currentIndex:responseParser.getCurrentFormNumber,formSubmitData:data,formInformation:formInformation);
   }
 
   Widget formStepIndicator(){
