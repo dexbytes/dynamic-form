@@ -40,6 +40,7 @@ class ElementConfig {
   String? name;
   String? label;
   bool? enableLabel;
+  bool? isVisible;
   bool? resetIcon;
   int? minLine;
   int? maxLine;
@@ -50,6 +51,7 @@ class ElementConfig {
         this.name,
         this.label,
         this.enableLabel,
+        this.isVisible,
         this.resetIcon,
         this.minLine,
         this.maxLine,
@@ -60,6 +62,7 @@ class ElementConfig {
     name = json['name'];
     label = json['label'];
     enableLabel = json['enableLabel'];
+    isVisible = json.containsKey('isVisible')?json['isVisible']:true;
     resetIcon = json['resetIcon'];
     minLine = json['minLine'];
     maxLine = json['maxLine'];
@@ -68,14 +71,15 @@ class ElementConfig {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['type'] = this.type;
-    data['name'] = this.name;
-    data['label'] = this.label;
-    data['enableLabel'] = this.enableLabel;
-    data['resetIcon'] = this.resetIcon;
-    data['minLine'] = this.minLine;
-    data['maxLine'] = this.maxLine;
-    data['textCapitalization'] = this.textCapitalization;
+    data['type'] = type;
+    data['name'] = name;
+    data['label'] = label;
+    data['enableLabel'] = enableLabel;
+    data['isVisible'] = isVisible;
+    data['resetIcon'] = resetIcon;
+    data['minLine'] = minLine;
+    data['maxLine'] = maxLine;
+    data['textCapitalization'] = textCapitalization;
     return data;
   }
 }

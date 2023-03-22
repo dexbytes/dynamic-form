@@ -14,52 +14,51 @@ class FirstScreen extends StatefulWidget {
 class _FirstScreenState extends State<FirstScreen> {
   final String jsonString;
   final _formKeyNew = GlobalKey<DynamicFormState>();
-
+  int currentPageIndex = 0;
   _FirstScreenState(this.jsonString);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
-      appBar: AppBar(centerTitle: true,title: Text('First Screen'),),
+      appBar: AppBar(centerTitle: true,title: const Text('First Screen'),),
       body:
-      Container(margin: const EdgeInsets.symmetric(horizontal: 5,vertical: 20),
-        child: ListView(shrinkWrap: true,
+      Container(margin: const EdgeInsets.symmetric(horizontal: 0,vertical: 20),
+        child: Column(
           children: [
-            Column(
-              children: [
-                //Get all fields of form
-                DynamicForm(jsonString,dynamicFormKey: _formKeyNew,
-                  finalSubmitCallBack: (Map<String, dynamic> data) async {
+            //Get all fields of form
+            Expanded(child:DynamicForm(jsonString,dynamicFormKey: _formKeyNew,
+                finalSubmitCallBack: (int currentPage,Map<String, dynamic> data) async {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => SecondScreen(data: data)),
                   );
-
                 },
-                    currentStepCallBack:(int currentStepIndex,Map<String,dynamic> currentStepData){
-  },submitButtonAlignment:Alignment.bottomCenter),
-
-             /*   Row(children: [Align(alignment: Alignment.center,
-                  child: ElevatedButton(clipBehavior: Clip.hardEdge,
-                    onPressed: () async {
-                      _formKeyNew.currentState!.previewStepCustomClick();
-                    },
-                    child: const Text('preview'),
-                    //color: Colors.green,
-                  ),
-                ),
-                  Align(alignment: Alignment.center,
-                  child: ElevatedButton(clipBehavior: Clip.hardEdge,
-                    onPressed: () async {
-                      _formKeyNew.currentState!.nextStepCustomClick();
-                    },
-                    child: const Text('Submit Form'),
-                    //color: Colors.green,
-                  ),
-                )],)*/
-              ],
-            ),
+                currentStepCallBack:(int currentStepIndex,Map<String,dynamic>? currentStepData){
+              setState(() {
+                currentPageIndex = currentStepIndex;
+              });
+ },
+           submitButtonAlignment:Alignment.bottomCenter)),
+            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+              currentPageIndex>0?Align(alignment: Alignment.center,
+              child: ElevatedButton(clipBehavior: Clip.hardEdge,
+                onPressed: () async {
+                  _formKeyNew.currentState!.previewStepCustomClick();
+                },
+                child: const Text('preview'),
+                //color: Colors.green,
+              ),
+            ):const SizedBox(),
+              Align(alignment: Alignment.center,
+              child: ElevatedButton(clipBehavior: Clip.hardEdge,
+                onPressed: () async {
+                  _formKeyNew.currentState!.nextStepCustomClick();
+                },
+                child: const Text('Submit Form'),
+                //color: Colors.green,
+              ),
+            )],)
           ],
         ),
       ),

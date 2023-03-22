@@ -22,6 +22,7 @@ class _FormButtonWidgetState extends State<FormButtonWidget> {
   String fieldKey = "";
   String label = "";
   bool enableLabel = true;
+  bool isVisible = true;
   String value = "";
   List<String>? selectedOption = [];
   Function (String fieldKey,List<String> fieldValue) onChangeValue ;
@@ -54,6 +55,7 @@ class _FormButtonWidgetState extends State<FormButtonWidget> {
       if (radioButtonModel.elementConfig != null) {
         fieldKey = radioButtonModel.elementConfig!.name!;
         label = radioButtonModel.elementConfig!.label!;
+        isVisible = radioButtonModel.elementConfig!.isVisible!;
         value = radioButtonModel.value??"";
 
       }
@@ -76,32 +78,7 @@ class _FormButtonWidgetState extends State<FormButtonWidget> {
 */
 
 
-/*
-    //Create checkbox list
-    Widget checkBoxOptions = CheckBoxGroup<String>.builder(
-      direction: checkBoxAlignment,
-      groupValue: _intialValue,
-      textStyle: viewConfiguration!._optionTextStyle,
-      spacebetween: 30,
-      horizontalAlignment: MainAxisAlignment.start,
-      onChanged: (selectedValue) => setState(() {
-        if (selectedValue != null) {
-          _intialValue = selectedValue as Options;
-          if(selectedOption!.contains(selectedValue.value)){
-                    selectedOption!.remove(selectedValue.value!.toString());
-                  }else{
-                    selectedOption!.add(selectedValue.value!.toString());
-                  }
-        }
-        onChangeValue.call(fieldKey,selectedOption!);
-      }),
-      items: optionList,
-      itemBuilder: (item) => RadioButtonBuilder(item.displayValue??''),
-      activeColor: viewConfiguration!._checkboxActiveColor,
-    );
-*/
-
-    return ElevatedButton(clipBehavior: Clip.hardEdge,
+    return !isVisible?const SizedBox():ElevatedButton(clipBehavior: Clip.hardEdge,
       onPressed: () async {
         onChangeValue.call(fieldKey,selectedOption!);
        /* if(_formKeyNew.currentState!.validateFields()){

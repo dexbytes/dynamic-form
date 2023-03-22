@@ -8,13 +8,14 @@ class SingleForm extends StatefulWidget {
   final Function(Widget)? nextPageButton;
   final Function(Widget)? priPageButton;
   final Alignment? submitButtonAlignment;
-  const SingleForm({Key? key,this.submitButtonAlignment,this.formFieldList = const [],this.nextPageButtonClick,this.finalSubmitCallBack,this.nextPageButton,this.priPageButton,this.index = 0}) : super(key: key);
+  final GlobalKey<SingleFormState>? singleFormKey ;
+  const SingleForm({Key? key,this.submitButtonAlignment,this.formFieldList = const [],this.nextPageButtonClick,this.finalSubmitCallBack,this.nextPageButton,this.priPageButton,this.index = 0,this.singleFormKey}) : super(key: singleFormKey);
 
   @override
-  State<SingleForm> createState() => _SingleFormState(index: index);
+  State<SingleForm> createState() => SingleFormState(index: index);
 }
 
-class _SingleFormState extends State<SingleForm> {
+class SingleFormState extends State<SingleForm> {
   //We will include the entered values in the map from field on submit click
   Map<String,dynamic> formSubmitData = <String,dynamic>{};
   Map<String,dynamic> autoValidateFieldList = <String,bool>{};
@@ -26,7 +27,7 @@ class _SingleFormState extends State<SingleForm> {
   Stream get onAutoValidateChanged => _fieldStreamControl.stream;
   Stream get onVariableChanged => DataRefreshStream.instance.getFormFieldsStream.stream;
   Widget? formSubmitButton;
-  _SingleFormState({int index = 0}) {
+  SingleFormState({int index = 0}) {
     _formKey = GlobalKey<FormState>(debugLabel: "$index");
     autovalidateMode = _autoValidate();
 
@@ -94,8 +95,6 @@ class _SingleFormState extends State<SingleForm> {
     });
     if(_formKey.currentState!.validate()){
       _formKey.currentState!.save();
-      //widget.finalSubmitCallBack?.call(formSubmitData);
-
       return true;
     }
     return false;
@@ -246,19 +245,15 @@ class _SingleFormState extends State<SingleForm> {
                         FormButtonWidget(label:"Preview",jsonData: data,
                             onChangeValue: (String fieldKey,
                                 List<String> value) {
-                              print(">>Pre 1 >> ${responseParser
-                                  .getCurrentFormNumber}");
                               if (responseParser.getCurrentFormNumber > 0) {
-                                print(">>Pre 2 >> ${responseParser
-                                    .getCurrentFormNumber}");
+
                                 setState(() {
                                   responseParser.setCurrentFormNumber =
                                       responseParser.getCurrentFormNumber - 1;
                                 });
                                 widget.nextPageButtonClick?.call(
                                     responseParser.getCurrentFormNumber,formSubmitData);
-                                print(">>Pre 3 >> ${responseParser
-                                    .getCurrentFormNumber}");
+
                               }
                               else {
 
@@ -268,8 +263,6 @@ class _SingleFormState extends State<SingleForm> {
                         FormButtonWidget(jsonData: data,
                             onChangeValue: (String fieldKey,
                                 List<String> value) {
-                              print(">>Submit 1 >> ${responseParser
-                                  .getTotalFormsCount}");
                               if (responseParser.getTotalFormsCount-1 >
                                   responseParser.getCurrentFormNumber) {
                                 if (validateFields()) {
@@ -284,8 +277,6 @@ class _SingleFormState extends State<SingleForm> {
                                 }
                                 widget.nextPageButtonClick?.call(
                                     responseParser.getCurrentFormNumber,formSubmitData);
-                                print(">>Submit 2 >> ${responseParser
-                                    .getCurrentFormNumber}");
                               }
                               else {
                                 if (validateFields()) {
@@ -295,7 +286,6 @@ class _SingleFormState extends State<SingleForm> {
                                   }
                                 }
                               }
-                              // formSubmitData[fieldKey] = value;
                             })
                       ],);
                 });
@@ -312,24 +302,23 @@ class _SingleFormState extends State<SingleForm> {
     responseParser.clearFieldFocusNode();
     return
       Column(children: formFieldList.map((element) {
-      Map<String,dynamic> data = element;
-      Map<String,dynamic> nextData = {};
+        Map<String,dynamic> data = element;
+        Map<String,dynamic> nextData = {};
 
-      if(nextItemIndex<formFieldList.length){
-        nextData = formFieldList[nextItemIndex];
-        nextItemIndex = nextItemIndex+1;
-      }
+        if(nextItemIndex<formFieldList.length){
+          nextData = formFieldList[nextItemIndex];
+          nextItemIndex = nextItemIndex+1;
+        }
 
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _getFormField(data: data,nextData:nextData),
-
-         // formSubmitButton!=null?(widget.submitButtonAlignment!=null?(Align(child: formSubmitButton!,alignment: widget.submitButtonAlignment!,)):formSubmitButton!):const SizedBox(),
-          const SizedBox(height: 20,width: 10)
-        ],
-      );
-    }).toList());
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _getFormField(data: data,nextData:nextData),
+            // formSubmitButton!=null?(widget.submitButtonAlignment!=null?(Align(child: formSubmitButton!,alignment: widget.submitButtonAlignment!,)):formSubmitButton!):const SizedBox(),
+            const SizedBox(height: 20,width: 10)
+          ],
+        );
+      }).toList());
   }
 }

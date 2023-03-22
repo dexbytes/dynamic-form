@@ -2,13 +2,14 @@ part of dynamic_json_form;
 
 class DynamicForm extends StatefulWidget {
 final String jsonEncoded;
-final Function(Map<String,dynamic> data)? finalSubmitCallBack;
-final Function(int,Map<String,dynamic>)? currentStepCallBack;
+final Function(int currentFormNumber,Map<String,dynamic> data)? finalSubmitCallBack;
+final Function(int,Map<String,dynamic>?)? currentStepCallBack;
 final GlobalKey<DynamicFormState>? dynamicFormKey ;
 final Alignment? submitButtonAlignment;
+final EdgeInsetsGeometry? formPadding;
+final EdgeInsetsGeometry? formIndicatorPadding;
 
-
-const DynamicForm(this.jsonEncoded,{this.submitButtonAlignment,this.dynamicFormKey,required this.finalSubmitCallBack,this.currentStepCallBack}) : super(key: dynamicFormKey);
+const DynamicForm(this.jsonEncoded,{this.submitButtonAlignment,this.dynamicFormKey,required this.finalSubmitCallBack,this.currentStepCallBack,this.formPadding = const EdgeInsets.only(left: 15,right: 15),this.formIndicatorPadding = const EdgeInsets.only(left: 0,right: 0,bottom: 15,top: 15)}) : super(key: dynamicFormKey);
   @override
   DynamicFormState createState() => DynamicFormState(jsonEncoded: jsonEncoded);
 }
@@ -18,29 +19,43 @@ class DynamicFormState extends State<DynamicForm> {
   Stream get onVariableChanged => DataRefreshStream.instance.getFormFieldsStream.stream;
   Map<String,dynamic> formSubmitData = <String,dynamic>{};
   Map<int,List<dynamic>> formScreenList = {};
-  Map<int,Widget> formScreen = {};
+  List<SingleForm> formScreen = [];
 
   DynamicFormState({required this.jsonEncoded}){
     responseParser.setFormData = jsonEncoded;
     formScreenList = responseParser.getFormData;
-/* formScreen[0] = SingleForm(formFieldList:formScreenList[0]!,nextPageButtonClick:(index){
-     // print("$index == $currentIndex");
-      formScreen[0] = formScreen[0]!;
-      setState(() {
-      });
-    });
-    formScreen[1] = SingleForm(formFieldList:formScreenList[1]!,nextPageButtonClick:(index){
-     // print("$index == $currentIndex");
-      setState(() {
-      });
-    });*/
+    int currentIndex = -1;
+    formScreen =
+        formScreenList.entries.map( (entry) {
+          currentIndex += 1;
+          final _formKeyNew = GlobalKey<SingleFormState>();
+           return SingleForm(singleFormKey: _formKeyNew,formFieldList:entry.value, nextPageButtonClick:(index,Map<String,dynamic> formSubmitData){
+            this.formSubmitData ['$currentIndex'] = formSubmitData;
+            widget.currentStepCallBack?.call(currentIndex,formSubmitData);
+            print("$index == $currentIndex");
+            setState(() {
+            });
+          }, finalSubmitCallBack:(index,Map<String,dynamic> formSubmitData){
+                this.formSubmitData ['$currentIndex'] = formSubmitData;
+                widget.finalSubmitCallBack?.call(index,this.formSubmitData);
+                print("$index == $currentIndex");
+              });
+        }
+            ).toList();
   }
   SingleForm? singleForm;
+  //Next step button click event
   void nextStepCustomClick(){
-    /*if (responseParser.getTotalFormsCount-1 >
+    int currentPage = responseParser.getCurrentFormNumber;
+
+    if (responseParser.getTotalFormsCount-1 >
         responseParser.getCurrentFormNumber) {
-      if (validateFields()) {
-        var data = getFormData();
+      if (formScreen[currentPage].singleFormKey!.currentState!.validateFields()) {
+
+        Map<String,dynamic>? data = formScreen[currentPage].singleFormKey!.currentState!.getFormData();
+        formSubmitData ['$currentPage'] = data;
+        widget.currentStepCallBack?.call(currentPage+1,data);
+
         if (data!.isNotEmpty) {
           setState(() {
             responseParser.setCurrentFormNumber =
@@ -49,40 +64,39 @@ class DynamicFormState extends State<DynamicForm> {
           });
         }
       }
-      widget.nextPageButtonClick?.call(
-          responseParser.getCurrentFormNumber,formSubmitData);
-      print(">>Submit 2 >> ${responseParser
-          .getCurrentFormNumber}");
     }
     else {
-      if (validateFields()) {
-        var data = getFormData();
+      if (formScreen[currentPage].singleFormKey!.currentState!.validateFields()) {
+        Map<String,dynamic>? data = formScreen[currentPage].singleFormKey!.currentState!.getFormData();
+        formSubmitData ['$currentPage'] = data;
+        widget.currentStepCallBack?.call(currentPage+1,data);
         if (data!.isNotEmpty) {
-          widget.finalSubmitCallBack?.call(responseParser.getCurrentFormNumber,formSubmitData);
+         widget.finalSubmitCallBack?.call(responseParser.getCurrentFormNumber,formSubmitData);
         }
       }
-    }*/
+    }
   }
+
+  //Preview step button click event
   void previewStepCustomClick(){
+    Map<String,dynamic>? data = formScreen[responseParser.getCurrentFormNumber].singleFormKey!.currentState!.getFormData();
     if (responseParser.getCurrentFormNumber > 0) {
-      print(">>Pre 2 >> ${responseParser
-          .getCurrentFormNumber}");
       setState(() {
         responseParser.setCurrentFormNumber =
             responseParser.getCurrentFormNumber - 1;
       });
-      print(">>Pre 3 >> ${responseParser
-          .getCurrentFormNumber}");
     }
+    widget.currentStepCallBack?.call(responseParser.getCurrentFormNumber,data);
   }
 
   Widget formStepIndicator(){
     int count = responseParser.getTotalFormsCount;
-    return count>1?Padding(padding: const EdgeInsets.only(bottom: 20,top: 5),child: StepProgressIndicator(
+    int currentPage = responseParser.getCurrentFormNumber;
+    return count>1?Padding(padding: widget.formIndicatorPadding!,child: StepProgressIndicator(
       totalSteps: count,
-      currentStep: responseParser.getCurrentFormNumber+1,
-      selectedColor: Colors.red,
-      unselectedColor: Colors.yellow,
+      currentStep: currentPage,
+      selectedColor: Colors.green,
+      unselectedColor: Colors.grey,
     ),):const SizedBox(height: 0,);
   }
   @override
@@ -92,28 +106,18 @@ class DynamicFormState extends State<DynamicForm> {
       child: !commonValidation.isValidJsonEncoded(jsonEncoded)?Container():
       Column(mainAxisSize: MainAxisSize.min,children: [
         formStepIndicator(),
-      ListView.builder(shrinkWrap: true,physics: const ClampingScrollPhysics(),
-          itemCount: formScreenList.length,
+      Flexible(child:
+      ListView.builder(shrinkWrap: true,padding: widget.formPadding!,
+          physics: const ClampingScrollPhysics(),
+          itemCount: formScreen.length,
           itemBuilder: (BuildContext context, int index) {
             if(responseParser.getCurrentFormNumber!=index){
               return const SizedBox(height: 0,);
             }
-            List<dynamic> _formFieldList =  formScreenList[index]!;
-            final currentIndex = index;
-            return SingleForm(submitButtonAlignment: widget.submitButtonAlignment,formFieldList:_formFieldList,
-              nextPageButtonClick:(index,Map<String,dynamic> formSubmitData){
-              this.formSubmitData ['$currentIndex'] = formSubmitData;
-              widget.currentStepCallBack?.call(currentIndex,formSubmitData);
-              print("$index == $currentIndex");
-              setState(() {
-              });
-            },
-              finalSubmitCallBack:(index,Map<String,dynamic> formSubmitData){
-              this.formSubmitData ['$currentIndex'] = formSubmitData;
-              widget.finalSubmitCallBack?.call(this.formSubmitData);
-              print("$index == $currentIndex");
-            },index: index,);
-          })],)
+            return formScreen[index];
+          })),
+        // formScreen[selectedPageIndex].singleFormKey!=null && formScreen[selectedPageIndex].singleFormKey!.currentState!=null && formScreen[selectedPageIndex].singleFormKey!.currentState!.formSubmitButton!=null?formScreen[selectedPageIndex].singleFormKey!.currentState!.formSubmitButton!:const SizedBox(height:0),
+      ],),
     );
   }
 }
